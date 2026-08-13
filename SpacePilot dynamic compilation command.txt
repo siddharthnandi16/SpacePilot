@@ -1,0 +1,2 @@
+gcc spacepilot.c -o spacepilot.exe -I/ucrt64/include/pdcurses -lpdcurses -lgdi32 -luser32 -ladvapi32 -lcomdlg32 -lwinmm -lole32 -lpthread -lm
+ntldd -R yourfile.exe | grep -i '=> /' | grep -vi '/c/windows' | awk '{print $3}' | xargs -I{} cp -u {} dist/

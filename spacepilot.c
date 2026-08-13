@@ -9,16 +9,46 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
  multiple playable characters with different abilities, sound effects, TTS Voice acting  */
 #include <pdcurses.h>
 #include <windows.h>
-int main(){
-    
+#include "titlescreen.h"
+void syncConsoleBufferToWindow() {
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hOut, &csbi);
+
+    // Visible window dimensions (not buffer dimensions)
+    int windowWidth  = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    int windowHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+
+    COORD newSize;
+    newSize.X = windowWidth;
+    newSize.Y = windowHeight;
+
+    SetConsoleScreenBufferSize(hOut, newSize);
+}
+int main(){    
 initscr();
-    nodelay(stdscr, TRUE);
-    HWND ConsoleWindow;
+curs_set(0);
+noecho();
+    /* HWND ConsoleWindow;
 ConsoleWindow = GetConsoleWindow();
-ShowWindow(ConsoleWindow, SW_MAXIMIZE);
-    resize_term(0,0);
-    //napms(10000); 
-    // Debug only line
+ShowWindow(ConsoleWindow, SW_MAXIMIZE); 
+resize_term(0,0); 
+touchwin(stdscr);
+refresh(); */
+// This was commented out because it froze the program. It is intended to maximise the window.
+syncConsoleBufferToWindow();
+resize_term(0,0);
+touchwin(stdscr);
+refresh();
+// mvprintw(0, 0, "LINES=%d COLS=%d", LINES, COLS);
+// mvprintw(10, 10, "TEST");
+drawTitleScreen();
+refresh();
+getch();
+int max_x, max_y;
+getmaxyx(stdscr, max_y, max_x);
+    
     endwin();
     return 0;
 }

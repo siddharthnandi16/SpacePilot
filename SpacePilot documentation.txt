@@ -1,10 +1,38 @@
 1. Basic Concept
 This is a vertical scrolling bullet hell game that uses ASCII graphics. The gameplay is divded 
 into stages. The player can move freely within the screen boundaries.
- During each stage the player faces many enemies who shoot bullets at them. There are two
+During each stage the player faces many enemies who shoot bullets at them. There are two
 minibosses and one final boss in each stage. 
 Getting hit by a bullet causes the player to lose a life.
-If all lives are lost, you get a game over and have to start over.
+If all lives are lost, you get a game over and can choose between continuing and starting over.
+If you continue after a game over, you will be locked out of the game's secret level and true ending.
+Beating the game without continues will unlock a secret level.
 RED= ENEMY, YELLOW= BULLET, GREEN= PLAYER, BLUE=POWER-UPs
 Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clearing bombs,
  multiple playable characters with different abilities, sound effects, TTS Voice acting
+2. List of small problems to solve:
+i. Create player movement
+ii. Create enemies with hardcoded movement paths and behaviour
+iii. Create bullets that move in a particular direction
+iv. Add collision detection between the various entities
+v. Make the screen scroll automatically
+vi. Add audio and sound effects to the game using winmh.h 
+vii. Add a lives system and make the player get a game over upon hitting zero lives.
+viii. Add different types of bullets: lasers, bombs etc.
+ix. Add multi-tile enemies. They will be shaped like fighters, bombers etc.
+x. Add a scoring system and a way to record your score
+xi. Add a way to upgrade the player's abilities by collecting certain items during the level
+xii. Add a character select that lets you choose characters with different abilities
+xiii. Add voice acting to the game using TTS.
+3. List of subsystems that  will have their own header files:
+i. Movement
+ii. Enemies
+iii. Collision
+iv. Bullets
+v. Title Screen
+vi. Audio and Sound effects
+vii. Lives and continue system
+viii. Scoring system
+ix. Player upgrades
+x. Character select
+xi. Voice clips
