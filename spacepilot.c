@@ -40,21 +40,10 @@ initscr();
 scrollok(stdscr, TRUE);
 curs_set(0);
 noecho();
-    /* 
-    HWND ConsoleWindow;
-ConsoleWindow = GetConsoleWindow();
-ShowWindow(ConsoleWindow, SW_MAXIMIZE);
-touchwin(stdscr);
-resize_term(0,0); 
-refresh();
- */
-// This was commented out because it froze the program. It is intended to maximise the window.
 syncConsoleBufferToWindow();
 resize_term(0,0);
 touchwin(stdscr);
 refresh();
-// mvprintw(0, 0, "LINES=%d COLS=%d", LINES, COLS);
-// mvprintw(10, 10, "TEST");
 drawTitleScreen();
 setplayermovement(&player);
 refresh();
