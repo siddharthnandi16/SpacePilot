@@ -9,7 +9,15 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
  multiple playable characters with different abilities, sound effects, TTS Voice acting  */
 #include <pdcurses.h>
 #include <windows.h>
+#include <stdbool.h>
 #include "titlescreen.h"
+#include "player.h"
+#include "movement.h"
+//This function sets the player's current movement speed to their top speed
+void setplayermovement(struct Player *player){
+player->dx = player->vx;
+player->dy = player->vy;
+}
 void syncConsoleBufferToWindow() {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -27,15 +35,19 @@ void syncConsoleBufferToWindow() {
     SetConsoleScreenBufferSize(hOut, newSize);
 }
 int main(){    
+     
 initscr();
+scrollok(stdscr, TRUE);
 curs_set(0);
 noecho();
-    /* HWND ConsoleWindow;
+    /* 
+    HWND ConsoleWindow;
 ConsoleWindow = GetConsoleWindow();
-ShowWindow(ConsoleWindow, SW_MAXIMIZE); 
-resize_term(0,0); 
+ShowWindow(ConsoleWindow, SW_MAXIMIZE);
 touchwin(stdscr);
-refresh(); */
+resize_term(0,0); 
+refresh();
+ */
 // This was commented out because it froze the program. It is intended to maximise the window.
 syncConsoleBufferToWindow();
 resize_term(0,0);
@@ -44,6 +56,7 @@ refresh();
 // mvprintw(0, 0, "LINES=%d COLS=%d", LINES, COLS);
 // mvprintw(10, 10, "TEST");
 drawTitleScreen();
+setplayermovement(&player);
 refresh();
 getch();
 int max_x, max_y;

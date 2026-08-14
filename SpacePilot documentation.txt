@@ -36,3 +36,4 @@ viii. Scoring system
 ix. Player upgrades
 x. Character select
 xi. Voice clips
+xii. Background
