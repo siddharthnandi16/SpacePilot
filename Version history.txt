@@ -1,0 +1,8 @@
+Alpha versions
+V0.1:
+ Added automatic vertical scroll and basic movement
+V0.2:
+ Fixed after-image bug
+V0.3:
+Made it so that the game area automatically adjusts to screen resizing
+Made the player green

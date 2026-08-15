@@ -14,6 +14,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "gamedata.h"
 #include "movement.h"
 #include "scroll.h"
+#include "window.h"
 //This function sets the player's current movement speed to their top speed
 
 void setplayermovement(struct Player *player){
@@ -29,27 +30,13 @@ int gameloop(Player *player, int max_x, int max_y){
        // printf("%d", a);
     scrollanddraw();
     move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
+    getmaxyx(stdscr, max_y, max_x);
     napms(34); //Controls frame rate and refresh rate
     }
     return 0;
 }
 int seed; //Variable that stores the RNG seed. Used for various rng calls
-void syncConsoleBufferToWindow() {
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(hOut, &csbi);
-
-    // Visible window dimensions (not buffer dimensions)
-    int windowWidth  = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    int windowHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-
-    COORD newSize;
-    newSize.X = windowWidth;
-    newSize.Y = windowHeight;
-
-    SetConsoleScreenBufferSize(hOut, newSize);
-}
 int main(){    
      
 initscr();

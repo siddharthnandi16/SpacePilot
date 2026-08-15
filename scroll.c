@@ -17,19 +17,25 @@ bool should_draw_cell(int max_y, int max_x){
 }
 
 int scrollanddraw(void){
+    int unsigned long tick=0;
+    tick++;
+    start_color();
+    init_pair(1, COLOR_GREEN, COLOR_BLACK); //1=green, reserved for players
     static int old_px = -1, old_py = -1;
 
-    // erase the player's previous position before anything else moves
+    // Erase the player's previous position before anything else moves
     if (old_px != -1) {
         mvaddch(old_py, old_px, ' ');
     }
 
     scrollok(stdscr, TRUE);
+    if (tick % 5 == 0){
     wscrl(stdscr, -1);
-
-    // draw the player at its current position, on top of whatever's there
+    }
+    // Draw the player at its current position, on top of whatever's there
+    attron(COLOR_PAIR(1));
     mvaddch((int)player.py, (int)player.px, player.symbol);
-
+    attroff(COLOR_PAIR(1));
     old_px = (int)player.px;
     old_py = (int)player.py;
 

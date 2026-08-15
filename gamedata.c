@@ -1,6 +1,6 @@
 #include <pdcurses.h>
 #include "gamedata.h"
-// This header file stores info related to the player
+// This file stores data on players, enemies and bullets
 struct Player{
     float px, py; //Stores the player's position
     float vx, vy; // Stores the player's standard movement speed
