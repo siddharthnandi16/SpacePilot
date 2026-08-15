@@ -7,17 +7,33 @@ If all lives are lost, you get a game over and have to start over.
 RED= ENEMY, YELLOW= BULLET, GREEN= PLAYER, BLUE=POWER-UPs
 Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clearing bombs,
  multiple playable characters with different abilities, sound effects, TTS Voice acting  */
+#include <stdbool.h>
 #include <pdcurses.h>
 #include <windows.h>
-#include <stdbool.h>
 #include "titlescreen.h"
-#include "player.h"
+#include "gamedata.h"
 #include "movement.h"
+#include "scroll.h"
 //This function sets the player's current movement speed to their top speed
+
 void setplayermovement(struct Player *player){
 player->dx = player->vx;
 player->dy = player->vy;
 }
+int a=0;
+int quit = 0; //1= true, 0= false
+int gameloop(Player *player, int max_x, int max_y){
+    while(1){
+        //Debug code to see how fast the function is running
+       // a++;
+       // printf("%d", a);
+    scrollanddraw();
+    move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
+    napms(34); //Controls frame rate and refresh rate
+    }
+    return 0;
+}
+int seed; //Variable that stores the RNG seed. Used for various rng calls
 void syncConsoleBufferToWindow() {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -37,6 +53,8 @@ void syncConsoleBufferToWindow() {
 int main(){    
      
 initscr();
+int max_x, max_y;
+getmaxyx(stdscr, max_y, max_x);
 scrollok(stdscr, TRUE);
 curs_set(0);
 noecho();
@@ -44,13 +62,14 @@ syncConsoleBufferToWindow();
 resize_term(0,0);
 touchwin(stdscr);
 refresh();
-drawTitleScreen();
+drawTitleScreen(quit);
 setplayermovement(&player);
-refresh();
-getch();
-int max_x, max_y;
-getmaxyx(stdscr, max_y, max_x);
-    
+player.px = max_x/2, player.py = max_y/2;
+seed = max_x + max_y;
+srand(seed);
+    refresh();
+    erase();
+    gameloop(&player, max_x, max_y);
     endwin();
     return 0;
 }

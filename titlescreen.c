@@ -3,7 +3,7 @@
 #include <pdcurses.h>
 #include <string.h>
 #include "titlescreen.h"
-int drawTitleScreen(){
+int drawTitleScreen(int quit){
     start_color();
     init_pair(1, COLOR_GREEN, COLOR_BLACK);
     const char *titlescreen[] = {
@@ -30,7 +30,17 @@ for (int i = 0; i < num_lines; i++) {
 mvprintw(start_y + 12, start_x + 6, "Press any key to start the game");
 attroff(COLOR_PAIR(1));
 refresh();
+while(1){
 char choice;
 choice = getch();
+switch(choice){
+    case 'q':
+    quit = 1;
+    break;
+    default:
+    break;
+}
+break;
+}
  //More functionality TBA 
 }

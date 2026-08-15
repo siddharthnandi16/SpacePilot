@@ -1,5 +1,5 @@
 #include <pdcurses.h>
-#include "player.h"
+#include "gamedata.h"
 // This header file stores info related to the player
 struct Player{
     float px, py; //Stores the player's position

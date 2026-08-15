@@ -1,4 +1,4 @@
 #ifndef TITLESCREEN_H
 #define TITLESCREEN_H
-int drawTitleScreen();
+int drawTitleScreen(int quit);
 #endif

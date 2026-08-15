@@ -1,5 +1,6 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef GAMEDATA_H
+#define GAMEDATA_H
+// This header file stores data about the game's current state
 typedef struct Player{
     float px, py; //Stores the player's position
     float vx, vy; // Stores the player's standard movement speed
