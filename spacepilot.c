@@ -13,8 +13,9 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "titlescreen.h"
 #include "gamedata.h"
 #include "movement.h"
-#include "scroll.h"
+#include "level.h"
 #include "window.h"
+#include "enemy.h"
 //This function sets the player's current movement speed to their top speed
 
 void setplayermovement(struct Player *player){

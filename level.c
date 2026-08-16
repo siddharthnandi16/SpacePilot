@@ -1,7 +1,7 @@
 #include <pdcurses.h>
 #include <stdlib.h>
 #include "gamedata.h"
-#include "scroll.h"
+#include "level.h"
 
 float density = 0.2;
 extern int max_x, max_y;

@@ -1,5 +1,6 @@
 #include <pdcurses.h>
 #include <stdlib.h>
+#include "gamedata.h"
 #define MAX_ENEMIES 100
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
 Enemy enemies[MAX_ENEMIES] = {
@@ -83,12 +84,12 @@ static const Enemy hunter_template = {
 };
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
-    for(int i=0, i < MAX_ENEMIES, i++){
-        if (enemies[i].state = inactive){
+    for(int i=0; i < MAX_ENEMIES; i++){
+        if (enemies[i].state = INACTIVE){
             return i;
         }
     }
-return -1 //No valid slot found
+return -1; //No valid slot found
 }
 //Finds the address of a template and returns it. Add a new case each time a new template is made
 const Enemy* get_template(EnemyType type) {
@@ -98,7 +99,8 @@ const Enemy* get_template(EnemyType type) {
         case LASER:     return &laser_template;
         case BOMBER:    return &bomber_template;
         case HUNTER:    return &hunter_template;
-        case JET:       return &jet_template;
+  //      case JET:       return &jet_template;
+  // Commented out since it is not yet implemented
         default:        return NULL;
     }
 }
