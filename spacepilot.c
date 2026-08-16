@@ -25,13 +25,19 @@ player->dy = player->vy;
 int a=0;
 int quit = 0; //1= true, 0= false
 int gameloop(Player *player, int max_x, int max_y){
+    //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(1){
         //Debug code to see how fast the function is running
        // a++;
        // printf("%d", a);
     scrollanddraw();
-    move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
     getmaxyx(stdscr, max_y, max_x);
+    move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
+    move_enemy(enemies, max_x, max_y);
+    render_enemies(enemies);
+    refresh();
+    // level() 
+    // Placeholder for TBA level function
     napms(34); //Controls frame rate and refresh rate
     }
     return 0;
@@ -49,6 +55,12 @@ noecho();
 syncConsoleBufferToWindow();
 resize_term(0,0);
 touchwin(stdscr);
+ start_color();
+    init_pair(1, COLOR_GREEN,COLOR_BLACK); //Player
+    init_pair(2, COLOR_RED, COLOR_BLACK); //Enemies
+    init_pair(3, COLOR_YELLOW, COLOR_BLACK); //Enemy projectiles
+    init_pair(4, COLOR_CYAN, COLOR_BLACK); //Player projectiles
+    init_pair(5, COLOR_WHITE, COLOR_BLACK); //Background objects
 refresh();
 drawTitleScreen(quit);
 setplayermovement(&player);

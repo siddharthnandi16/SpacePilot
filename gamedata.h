@@ -1,6 +1,5 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
-
 // This header file stores data about the game's current state
 typedef struct Player{
     float px, py; //Stores the player's position
@@ -25,7 +24,7 @@ typedef struct TileLayout {
 } TileLayout;
 typedef enum type{ GRUNT, RAPIDFIRE, LASER, BOMBER, HUNTER, JET } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
-typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, HUNT_PLAYER, ZIGZAG } EnemyBehavior;
+typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL, STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG } EnemyBehavior;
 typedef struct Enemy{
 float px, py; //Stores current position
 float dx, dy; //Stores the enemy's speed
@@ -37,6 +36,10 @@ EnemyType type;
 EnemyState state;
 EnemyBehavior behavior;
 const TileLayout *shape; //Shape of enemy. Is always NULL for single-tile enemies
+int age; //Increments every frame, determines some enemy behaviors
+float anchor_px, anchor_py; //Sets an "anchor point" for strafing enemies
+float strafe; //Sets how far a strafing enemy is willing to go from their anchor point
+float old_px, old_py; //Stores old positions of enemy for purpose of drawing
 }Enemy;
 extern Enemy enemies[];
 #endif

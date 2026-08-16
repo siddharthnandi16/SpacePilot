@@ -1,8 +1,15 @@
 Alpha versions
-V0.1:
+V0.1: 15th August 2026
  Added automatic vertical scroll and basic movement
 V0.2:
  Fixed after-image bug
 V0.3:
 Made it so that the game area automatically adjusts to screen resizing
 Made the player green
+v0.4: 
+Added definitions for enemy structs supporting both multi tile and single tile enemies
+v0.5: 16th August 2026
+1. Added five basic enemy templates
+2. Added a function to spawn enemies
+3. Added a function to move enemies
+4. Added a function render enemies

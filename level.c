@@ -19,8 +19,6 @@ bool should_draw_cell(int max_y, int max_x){
 int scrollanddraw(void){
     int unsigned long tick=0;
     tick++;
-    start_color();
-    init_pair(1, COLOR_GREEN, COLOR_BLACK); //1=green, reserved for players
     static int old_px = -1, old_py = -1;
 
     // Erase the player's previous position before anything else moves

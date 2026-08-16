@@ -1,5 +1,6 @@
 #include <pdcurses.h>
 #include <stdlib.h>
+#include <math.h>
 #include "gamedata.h"
 #define MAX_ENEMIES 100
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
@@ -85,7 +86,7 @@ static const Enemy hunter_template = {
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
     for(int i=0; i < MAX_ENEMIES; i++){
-        if (enemies[i].state = INACTIVE){
+        if (enemies[i].state == INACTIVE){
             return i;
         }
     }
@@ -104,21 +105,82 @@ const Enemy* get_template(EnemyType type) {
         default:        return NULL;
     }
 }
-//Spawns enemies. Can take arguments to set their type, behavior and spawn point
-void spawn_enemy(EnemyType type, EnemyBehavior behavior, float px, float py){
+//Spawns enemies. Can take arguments to set their type, behavior, spawn point, anchor point, and strafe values
+void spawn_enemy(EnemyType type, EnemyBehavior behavior, float px, float py, float strafe){
 int slot = findfreeslot();
 if (slot == -1){
     return;
 }
 const Enemy *template = get_template(type);
 if (template == NULL) {
-    return; //Unknown type, breaks the function
+    return; //Unknown type, exits the function
 }
 enemies[slot] = *template;
 enemies[slot].px = px;
 enemies[slot].py = py;
+enemies[slot].old_px = px;
+enemies[slot].old_py = py;
+enemies[slot].strafe = strafe;
+enemies[slot].anchor_px = enemies[slot].px;
+enemies[slot].anchor_py = enemies[slot].py;
 enemies[slot].behavior = behavior;
 enemies[slot].state = ALIVE;
 }
-
-
+//Function that moves living enemies based on their behavior type
+void move_enemy(Enemy *enemies, int max_x, int max_y){
+for (int i =0; i < MAX_ENEMIES; i++ ){
+    enemies[i].age++;
+    if (enemies[i].state == ALIVE){
+switch(enemies[i].behavior){
+    case STATIC:
+    break; //No need to move them since they are stationary by design
+    case MOVEVERTICALLY: //Moves vertically downwards and then despawns
+    enemies[i].py = enemies[i].py + enemies[i].dy;
+    if (enemies[i].py >= max_y - 1) {
+enemies[i].state = DEAD; //Despawns upon hitting the bottom edge of the screen
+    }
+break;
+case MOVEHORIZONTALLY: //Moves from left to right and then despawms
+enemies[i].px = enemies[i].px + enemies[i].dx;
+ if (enemies[i].py >= max_x - 1) {
+enemies[i].state = DEAD; //Despawns upon hitting the right edge of the screen
+ }
+break;
+case STRAFE_HORIZONTAL:
+enemies[i].px = enemies[i].px + enemies[i].dx;
+//Reverses direction if it goes too far from its anchor point or hits a border
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe || enemies[i].px == max_x-1 || enemies[i].px == 0){
+enemies[i].dx = -enemies[i].dx;
+}
+break;
+case STRAFE_VERTICAL:
+enemies[i].py = enemies[i].py + enemies[i].dy;
+//Reverses direction if it goes too far from its anchor point or hits a border
+if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || enemies[i].px == max_x-1 || enemies[i].px == 0){
+enemies[i].dy = -enemies[i].dy;
+}
+break;
+default:
+break;
+    }
+}
+}
+}
+//Function that renders enemies and deletes their old positions every frame
+void render_enemies(Enemy *enemies){
+    for(int i=0; i < MAX_ENEMIES; i++){
+        if (enemies[i].state == ALIVE){
+if (enemies[i].shape == NULL){   
+    mvaddch(enemies[i].old_py, enemies[i].old_px, ' ');
+     enemies[i].old_px = enemies[i].px;
+    enemies[i].old_py = enemies[i].py;
+     attron(COLOR_PAIR(2));
+     mvaddch(enemies[i].py, enemies[i].px, enemies[i].symbol);
+     attroff(COLOR_PAIR(2));
+     refresh();
+}
+//Placeholder for multi-tile enemies
+//else
+        }
+    }
+}
