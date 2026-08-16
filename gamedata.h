@@ -24,7 +24,7 @@ typedef struct TileLayout {
     const int  *color_rows[MAX_TILE_HEIGHT];     // Parallel color_pair IDs, one int array per row
 } TileLayout;
 typedef enum type{ GRUNT, RAPIDFIRE, LASER, BOMBER, HUNTER, JET } EnemyType;
-typedef enum state{ DEAD, ALIVE, INACTIVE, DYING } EnemyState;
+typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
 typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, HUNT_PLAYER, ZIGZAG } EnemyBehavior;
 typedef struct Enemy{
 float px, py; //Stores current position
