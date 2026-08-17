@@ -1,7 +1,20 @@
-#ifndef SCROLL_H
-#define SCROLL_H
-#include <stdbool.h>
+#ifndef LEVEL_H
+#define LEVEL_H
+#include "spawn.h"
+#include "sound.h"
+#include "dialogue.h"
+//Defintion of struct that stores level data
+typedef struct {
+    spawn_entry *spawn_table;
+    int spawn_count;
+    sound_entry *sound_table;
+    int sound_count;
+    dialogue_entry *dialogue_table;
+    int dialogue_count;
+}Level_Data;
+extern Level_Data level_1;
 char bgchar(int max_x, int max_y);
 bool should_draw_cell(int max_y, int max_x);
-int scrollanddraw(void);
+int scrollanddraw(int rows_scrolled);
+void level(int rows_scrolled, const Level_Data *level);
 #endif
