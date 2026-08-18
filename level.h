@@ -15,6 +15,7 @@ typedef struct {
 extern Level_Data level_1;
 char bgchar(int max_x, int max_y);
 bool should_draw_cell(int max_y, int max_x);
-int scrollanddraw(int rows_scrolled);
-void level(int rows_scrolled, const Level_Data *level);
+int scrollanddraw();
+void level(const Level_Data *level);
+extern int rows_scrolled;
 #endif

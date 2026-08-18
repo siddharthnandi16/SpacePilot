@@ -7,6 +7,8 @@
 #include "dialogue.h"
 #include "enemy.h"
 extern int unsigned long tick;
+extern int spawn_table_count_1;
+int rows_scrolled;
 float density = 0.2;
 extern int max_x, max_y;
 //Currently unimplemented functions to draw a background with a given density
@@ -20,15 +22,11 @@ bool should_draw_cell(int max_y, int max_x){
     return (rand() / (double)RAND_MAX) < density;
 }
 //Scrolls the game and renders the player. Also returns the number of rows scrolled
-int scrollanddraw(int rows_scrolled){
-    int unsigned long tick=0;
-    tick++;
+int scrollanddraw(){
     static int old_px = -1, old_py = -1;
-
     // Erase the player's previous position before anything else moves
     if (old_px != -1) {
         mvaddch(old_py, old_px, ' ');
-        rows_scrolled++;
     }
 
     scrollok(stdscr, TRUE);
@@ -41,7 +39,7 @@ int scrollanddraw(int rows_scrolled){
     attroff(COLOR_PAIR(1));
     old_px = (int)player.px;
     old_py = (int)player.py;
-
+rows_scrolled++;
     refresh();
     return rows_scrolled;
 }
@@ -49,23 +47,26 @@ int scrollanddraw(int rows_scrolled){
 //Data for level 1
 Level_Data level_1={
 .spawn_table = spawn_table_1,
-    .spawn_count = 1,          //Should be equal to number of entries in corresponding spawn_table
+.spawn_count = 5,
     .sound_table = sound_table_1,
     .sound_count = 0,          
     .dialogue_table = dialogue_table_1,
     .dialogue_count = 0
 };
 //Function that handles level progression (enemy spawning, sound, dialogue)
-void level(int rows_scrolled, const Level_Data *level){
+void level(const Level_Data *level){
     for (int i = 0; i < level->spawn_count; i++) {
-        if (level->spawn_table[i].fired) continue; // Skips entries that are already fired
+        if (level->spawn_table[i].fired){
+        continue; // Skips entries that are already fired
+        }
         switch (level->spawn_table[i].trigger) {
             case TICK:
-                if (tick >= level->spawn_table[i].trigger_time) {
+                if (tick = level->spawn_table[i].trigger_time) {
                     spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior,
                                 level->spawn_table[i].px, level->spawn_table[i].py,
                                 level->spawn_table[i].strafe);
-                    level->spawn_table[i].fired = true;
+                    level->spawn_table[i].fired = TRUE;
+                    
                 }
                 break;
             case ROW:
@@ -73,7 +74,8 @@ void level(int rows_scrolled, const Level_Data *level){
                     spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior,
                                 level->spawn_table[i].px, level->spawn_table[i].py,
                                 level->spawn_table[i].strafe);
-                    level->spawn_table[i].fired = true;
+                    level->spawn_table[i].fired = TRUE;
+                    fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
                 }
                 break;
         }

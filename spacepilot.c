@@ -16,11 +16,14 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "level.h"
 #include "window.h"
 #include "enemy.h"
+#include "spawn.h"
+#include "sound.h"
+#include "dialogue.h"
 //This function sets the player's current movement speed to their top speed
 
 int quit = 0; //1= true, 0= false
 int unsigned long tick=0;
-int unsigned long rows_scrolled =0;
+int spawn_table_1_count;
 void setplayermovement(struct Player *player){
 player->dx = player->vx;
 player->dy = player->vy;
@@ -32,12 +35,12 @@ int gameloop(Player *player, int max_x, int max_y){
        // a++;
        // printf("%d", a);
     tick++;
-    scrollanddraw(rows_scrolled);
+    scrollanddraw();
     getmaxyx(stdscr, max_y, max_x);
     move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
     move_enemy(enemies, max_x, max_y);
     render_enemies(enemies);
-    level(rows_scrolled, &level_1);
+    level(&level_1);
     refresh();
     napms(34); //Controls frame rate and refresh rate
     }
