@@ -13,3 +13,6 @@ v0.5: 16th August 2026
 2. Added a function to spawn enemies
 3. Added a function to move enemies
 4. Added a function render enemies
+v0.6-v0.8: 19th August 2026
+1. Got all parts of the enemy spawning system working correctly
+2. Fixed a bug that caused trailing afterimages due to enemy movement

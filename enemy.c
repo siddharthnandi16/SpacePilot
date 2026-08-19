@@ -166,21 +166,26 @@ break;
 }
 }
 }
-//Function that renders enemies and deletes their old positions every frame
-void render_enemies(Enemy *enemies){
+//Function that erases the old positions of enemies each frame
+void erase_enemies(Enemy *enemies){
     for(int i=0; i < MAX_ENEMIES; i++){
         if (enemies[i].state == ALIVE){
 if (enemies[i].shape == NULL){   
-    mvaddch(enemies[i].old_py, enemies[i].old_px, ' ');
+    mvaddch(enemies[i].py, enemies[i].px, ' ');
      enemies[i].old_px = enemies[i].px;
     enemies[i].old_py = enemies[i].py;
-     attron(COLOR_PAIR(2));
-     mvaddch(enemies[i].py, enemies[i].px, enemies[i].symbol);
-     attroff(COLOR_PAIR(2));
-     refresh();
-}
-//Placeholder for multi-tile enemies
-//else
+     }
         }
     }
 }
+void render_enemies(Enemy *enemies){
+for(int i=0; i < MAX_ENEMIES; i++){
+    if (enemies[i].state == ALIVE){
+    attron(COLOR_PAIR(2));
+     mvaddch(enemies[i].py, enemies[i].px, enemies[i].symbol);
+     attroff(COLOR_PAIR(2));
+     refresh();
+    }
+}
+}
+    

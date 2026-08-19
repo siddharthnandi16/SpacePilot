@@ -35,6 +35,7 @@ int gameloop(Player *player, int max_x, int max_y){
        // a++;
        // printf("%d", a);
     tick++;
+    erase_enemies(enemies);
     scrollanddraw();
     getmaxyx(stdscr, max_y, max_x);
     move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
