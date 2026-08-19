@@ -13,7 +13,34 @@ Projectile projectiles[MAX_PROJECTILES] = {
     .type = BULLET, .state=NORMAL
     }
 };
-//
-static const WeaponType rapid_pistol = {
+//List of basic weapon types
+static const WeaponType autopistol = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+};
+static const WeaponType machinegun = {
+    .cooldown_frames = 10, .number = 2, .angle= 90, .type= BULLET, .modes = NORMAL
+};
+static const WeaponType laserrifle = {
+    .cooldown_frames = 60, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+};
+static const WeaponType bomblauncher = {
+    .cooldown_frames = 60, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+};
+static const WeaponType missilelauncher = {
+    .cooldown_frames = 60, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
+};
+static const WeaponType plasmarifle = {
+    .cooldown_frames = 60, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+};
+static const WeaponType empbomb = {
+    .cooldown_frames = 600, .number = 1, .angle= 90, .type= EMP, .modes = NORMAL
+};
+static const WeaponType lightning = {
+    .cooldown_frames = 240, .number = 5, .angle= 90, .type= CHAINLIGHTNING, .modes = NORMAL
+};
+static const WeaponType shotgun = {
+    .cooldown_frames = 75, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+};
+static const WeaponType lasercannon = {
+    .cooldown_frames = 30, .number = 3, .angle= 90, .type= LASER, .modes = NORMAL
 };
