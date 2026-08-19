@@ -43,4 +43,28 @@ float strafe; //Sets how far a strafing enemy is willing to go from their anchor
 float old_px, old_py; //Stores old positions of enemy for purpose of drawing
 }Enemy;
 extern Enemy enemies[];
+typedef enum proj_type{BULLET,LASER,BOMB,MISSILE,PLASMA,EMP,CHAINLIGHTNING}ProjType;
+typedef enum proj_state{NORMAL,SPENT,EXPLODING}ProjState;
+//This struct stores data on the projectile
+typedef struct Projectile{
+    float px,py;
+    float dx,dy;
+    char symbol;
+    int width, height;
+    int age; //Used for bomb detionation timers
+    int pierce; //Tells you how many enemies a projectile can pierce before being spent
+    float strafe; //Used for special bullets that travel in sine-wave pattern
+    float turn_rate; //Used for homing projectiles
+    ProjType type; //Used for storing the type of weapon this is 
+    ProjState state;
+}Projectile;
+//This struct defines the behavior of weapons which fire projectiles
+typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE}FireModes;
+typedef struct WeaponType{
+    int cooldown_frames;
+    int number; //Number of projectiles fired
+    float angle; //Angle at which projectiles are fired in radians. 90 for standard weapons, only deviates from that for secondary shots of weapons that fire multiple projectiles at one
+    ProjType type;
+    FireModes modes;
+}WeaponType;
 #endif
