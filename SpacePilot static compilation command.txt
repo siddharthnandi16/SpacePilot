@@ -1,1 +1,1 @@
-gcc spacepilot.c titlescreen.c movement.c gamedata.c level.c window.c enemy.c spawn.c sound.c dialogue.c -o spacepilot.exe -I/ucrt64/include/pdcurses -static -lpdcurses -lgdi32 -luser32 -ladvapi32 -lcomdlg32 -lwinmm -lm
+gcc spacepilot.c titlescreen.c movement.c gamedata.c level.c window.c enemy.c spawn.c sound.c dialogue.c projectile.c -o spacepilot.exe -I/ucrt64/include/pdcurses -static -lpdcurses -lgdi32 -luser32 -ladvapi32 -lcomdlg32 -lwinmm -lm

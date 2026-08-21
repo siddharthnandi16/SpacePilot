@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "gamedata.h"
+#include "projectile.h"
 #define MAX_ENEMIES 100
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
 Enemy enemies[MAX_ENEMIES] = {
@@ -11,11 +12,12 @@ Enemy enemies[MAX_ENEMIES] = {
     .hp = 1,
     .symbol = '%',
     .width = 1, .height = 1,
-    .cooldown_frames = 120,
+    .cooldown_frames = 120, //Unused since fire rate is based on weapon type
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
-    .shape = NULL   
+    .shape = NULL,
+    .weapon = &GRUNT_RIFLE
     }
 };
 //Slowly fires bullets. Low-threat enemy, mostly just scoring fodder
@@ -29,7 +31,8 @@ static const Enemy grunt_template = {
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
-    .shape = NULL
+    .shape = NULL,
+    .weapon = &GRUNT_RIFLE
 };
 // Rapidly fires bullets. Meant to be dangerous in swarms
 static const Enemy rapidfire_template = {
@@ -42,7 +45,8 @@ static const Enemy rapidfire_template = {
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
-    .shape = NULL
+    .shape = NULL,
+    .weapon = &RAPIDFIRE_RIFLE
 };
 //Shoots lasers that travel in a straight line. A dangerous, high-priority target
 static const Enemy laser_template = {
@@ -55,7 +59,8 @@ static const Enemy laser_template = {
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
-    .shape = NULL
+    .shape = NULL,
+    .weapon = &LASER_RIFLE
 };
 //Fire bombs that explode into circles of bullets.A dangerous, high-priority target
 static const Enemy bomber_template = {
@@ -68,7 +73,8 @@ static const Enemy bomber_template = {
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
-    .shape = NULL
+    .shape = NULL,
+    .weapon = &BOMB_ENEMY_WEAPON
 };
 //Hunts the player while rapidly firing bullets. The most dangerous basic enemy
 static const Enemy hunter_template = {
@@ -81,7 +87,8 @@ static const Enemy hunter_template = {
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
-    .shape = NULL
+    .shape = NULL,
+    .weapon = &HUNTER_RIFLE
 };
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
@@ -97,7 +104,7 @@ const Enemy* get_template(EnemyType type) {
     switch (type) {
         case GRUNT:     return &grunt_template;
         case RAPIDFIRE: return &rapidfire_template;
-        case LASER:     return &laser_template;
+        case LASER_ENEMY:     return &laser_template;
         case BOMBER:    return &bomber_template;
         case HUNTER:    return &hunter_template;
   //      case JET:       return &jet_template;

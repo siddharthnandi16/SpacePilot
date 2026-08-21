@@ -10,37 +10,112 @@ Projectile projectiles[MAX_PROJECTILES] = {
     .width = 1, .height = 1,
     .age = 0, .strafe=0,
     .pierce = 1, .turn_rate=1,
-    .type = BULLET, .state=NORMAL
+    .type = BULLET, .state=SPENT,
+     .color=4, .player_owned = TRUE
     }
 };
-//List of basic weapon types
-static const WeaponType autopistol = {
+//List of player weapon types. All player weapons are in lowercase
+const WeaponType autopistol = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+,.weapon_id = AUTOPISTOL_ID
 };
-static const WeaponType machinegun = {
+const WeaponType machinegun = {
     .cooldown_frames = 10, .number = 2, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = MACHINEGUN_ID
 };
-static const WeaponType laserrifle = {
+const WeaponType laserrifle = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+    ,.weapon_id = LASRIFLE_PLAYER_ID
 };
-static const WeaponType bomblauncher = {
+const WeaponType bomblauncher = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+    ,.weapon_id = BOMB_PLAYER_ID
 };
-static const WeaponType missilelauncher = {
+const WeaponType missilelauncher = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
+    ,.weapon_id = MISSILE_PLAYER_ID
 };
-static const WeaponType plasmarifle = {
+const WeaponType plasmarifle = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+    ,.weapon_id = PLASMARIFLE_PLAYER_ID
 };
-static const WeaponType empbomb = {
+const WeaponType empbomb = {
     .cooldown_frames = 600, .number = 1, .angle= 90, .type= EMP, .modes = NORMAL
+    ,.weapon_id = EMP_ID
 };
-static const WeaponType lightning = {
+const WeaponType lightning = {
     .cooldown_frames = 240, .number = 5, .angle= 90, .type= CHAINLIGHTNING, .modes = NORMAL
+    ,.weapon_id = LIGHTNING_ID
 };
-static const WeaponType shotgun = {
+const WeaponType shotgun = {
     .cooldown_frames = 75, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = SHOTGUN_ID
 };
-static const WeaponType lasercannon = {
+const WeaponType lasercannon = {
     .cooldown_frames = 30, .number = 3, .angle= 90, .type= LASER, .modes = NORMAL
+    ,.weapon_id = LASERCANNON_ID
 };
+const WeaponType plasmacannon = {
+    .cooldown_frames = 90, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
+    ,.weapon_id = PLASMACANNON_ID
+};
+//List of enemy weapon types. All enemy weapon types are capitalised
+const WeaponType GRUNT_RIFLE = {
+    .cooldown_frames = 90, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = GRUNT_WEAPON_ID
+};
+const WeaponType RAPIDFIRE_RIFLE = {
+    .cooldown_frames = 30, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = RAPIDFIRE_RIFLE_ID
+};
+const WeaponType LASER_RIFLE = {
+    .cooldown_frames = 180, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+    ,.weapon_id = LASER_RIFLE_ENEMY_ID
+};
+const WeaponType BOMB_ENEMY_WEAPON = {
+    .cooldown_frames = 180, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+    ,.weapon_id = BOMB_ENEMY_ID
+};
+const WeaponType HUNTER_RIFLE = {
+    .cooldown_frames = 20, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = HUNTER_RIFLE_ID
+};
+//Function to find a free slot in the enemy pool
+int findfreeprojectileslot(void){
+    for(int i=0; i < MAX_PROJECTILES; i++){
+        if (enemies[i].state == SPENT){
+            return i;
+        }
+    }
+    return -1;
+}
+//Finds the address of a weapon and returns it. 
+//Add a new case each time a new weapon is made
+    const WeaponType* get_weapon_template(WeaponID weapon_id) {
+    switch (weapon_id) {
+        case AUTOPISTOL_ID:          return &autopistol;
+        case MACHINEGUN_ID:          return &machinegun;
+        case LASRIFLE_PLAYER_ID:     return &laserrifle;
+        case BOMB_PLAYER_ID:         return &bomblauncher;
+        case PLASMARIFLE_PLAYER_ID:  return &plasmarifle;
+        case MISSILE_PLAYER_ID:      return &missilelauncher;
+        case EMP_ID:                 return &empbomb;
+        case LIGHTNING_ID:           return &lightning;
+        case SHOTGUN_ID:             return &shotgun;
+        case LASERCANNON_ID:         return &lasercannon;
+        case PLASMACANNON_ID:        return &plasmacannon;
+        case GRUNT_WEAPON_ID:        return &GRUNT_WEAPON;
+        case RAPIDFIRE_RIFLE_ID:     return &RAPIDFIRE_RIFLE;
+        case LASER_RIFLE_ENEMY_ID:   return &LASER_RIFLE_ENEMY;
+        case BOMB_ENEMY_ID:          return &BOMB_ENEMY;
+        case HUNTER_RIFLE_ID:        return &HUNTER_RIFLE;
+        default:                     return NULL;
+    }
+}
+//Function that fires one projectile at a given angle, returns cooldown timer
+int fire_weapon(const WeaponType *weapon, float px, float py, float angle, bool player_owned){
+int slot = findfreeprojectileslot();
+if (slot == -1){
+    return; //Stops execution if there are no free projectile slots
+}
+}
