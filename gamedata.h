@@ -14,6 +14,7 @@ typedef struct Projectile{
     int color; // Is 3 for enemy projectiles and 4 for player projectiles
     float strafe; //Used for special bullets that travel in sine-wave pattern
     float turn_rate; //Used for homing projectiles
+    float angle;
     ProjType type; //Used for storing the type of weapon this is 
     ProjState state;
     bool player_owned;

@@ -5,15 +5,24 @@
 Projectile projectiles[MAX_PROJECTILES] = {
     [0] = {
 .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
-    .symbol = '%',
+    .dx = 1, .dy = 1, .angle = 90,
+    .symbol = '*',
     .width = 1, .height = 1,
     .age = 0, .strafe=0,
-    .pierce = 1, .turn_rate=1,
+    .pierce = 1, .turn_rate=0,
     .type = BULLET, .state=SPENT,
-     .color=4, .player_owned = TRUE
+     .color=3, .player_owned = FALSE
     }
 };
+/*Chart of symbols based on projectile type
+Bullet = +
+Laser = |
+Bomb = O
+Missile = ^
+Plasma = *
+EMP = -
+Chain Lighting = ~
+*/
 //List of player weapon types. All player weapons are in lowercase
 const WeaponType autopistol = {
     .cooldown_frames = 60, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
@@ -113,9 +122,88 @@ int findfreeprojectileslot(void){
     }
 }
 //Function that fires one projectile at a given angle, returns cooldown timer
-int fire_weapon(const WeaponType *weapon, float px, float py, float angle, bool player_owned){
+void fire_weapon(const WeaponType *weapon, float px, float py, float angle, bool player_owned){
 int slot = findfreeprojectileslot();
 if (slot == -1){
     return; //Stops execution if there are no free projectile slots
 }
+projectiles[slot].state = NORMAL;
+projectiles[slot].px = px;
+projectiles[slot].py = py;
+projectiles[slot].type = weapon->type;
+projectiles[slot].angle = angle;
+projectiles[slot].age = 0;
+projectiles[slot].width = 1;
+projectiles[slot].height = 1;
+switch(projectiles[slot].type){
+case BULLET:
+projectiles[slot].symbol = '+';
+projectiles[slot].pierce = 1;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 0;
+projectiles[slot].dx = 0;
+projectiles[slot].dy = -1; //Moves directly upward
+break;
+case LASER:
+projectiles[slot].symbol = '|';
+projectiles[slot].pierce = 100;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 0;
+projectiles[slot].dx = 0;
+projectiles[slot].dy = -100;
+break;
+case BOMB:
+projectiles[slot].symbol = 'O';
+projectiles[slot].pierce = 1;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 0;
+projectiles[slot].dx = 0;
+projectiles[slot].dy = -2;
+break;
+case MISSILE:
+projectiles[slot].symbol = '^';
+projectiles[slot].pierce = 3;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 5;
+projectiles[slot].dx = 0;
+projectiles[slot].dy = -2;
+break;
+case PLASMA:
+projectiles[slot].symbol = '*';
+projectiles[slot].pierce = 5;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 0;
+projectiles[slot].dx = 0;
+projectiles[slot].dy = -5;
+break;
+case EMP:
+projectiles[slot].symbol = '-';
+projectiles[slot].pierce = 100;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 0;
+projectiles[slot].dx = 0;
+projectiles[slot].dy = 0;
+projectiles[slot].width = 1000;
+projectiles[slot].height = 1000;
+break;
+case CHAINLIGHTNING:
+projectiles[slot].symbol = '~';
+projectiles[slot].pierce = 10;
+projectiles[slot].strafe = 0;
+projectiles[slot].turn_rate = 0;
+projectiles[slot].dx = 10;
+projectiles[slot].dy = -10;
+break;
+}
+if (player_owned == TRUE){
+    projectiles[slot].player_owned = TRUE;
+    projectiles[slot].color = 4;
+}
+else {projectiles[slot].player_owned = FALSE;
+    projectiles[slot].color = 3;}
+}
+void move_projectiles(){
+    for(int i = 0, i < MAX_PROJECTILES, i++){
+        
+    }
 }

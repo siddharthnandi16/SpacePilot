@@ -12,7 +12,7 @@ Enemy enemies[MAX_ENEMIES] = {
     .hp = 1,
     .symbol = '%',
     .width = 1, .height = 1,
-    .cooldown_frames = 120, //Unused since fire rate is based on weapon type
+    .cooldown_frames = 0, //Stores the firing timer
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
