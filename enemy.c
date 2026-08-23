@@ -195,4 +195,6 @@ for(int i=0; i < MAX_ENEMIES; i++){
     }
 }
 }
+void fire_enemies(Enemy *enemies){
     
+}

@@ -1,6 +1,7 @@
 #include <pdcurses.h>
 #include <math.h>
 #include "gamedata.h"
+#include "window.h"
 #define MAX_PROJECTILES 2000
 #define MAX_ENEMIES 100
 //Table for storing projectiles. The values here are placeholders than will be overwritten during gameplay
@@ -27,7 +28,7 @@ Chain Lighting = ~
 */
 //List of player weapon types. All player weapons are in lowercase
 const WeaponType autopistol = {
-    .cooldown_frames = 30, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 15, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
 ,.weapon_id = AUTOPISTOL_ID
 };
 const WeaponType machinegun = {
@@ -35,7 +36,7 @@ const WeaponType machinegun = {
     ,.weapon_id = MACHINEGUN_ID
 };
 const WeaponType laserrifle = {
-    .cooldown_frames = 30, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+    .cooldown_frames = 20, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
     ,.weapon_id = LASRIFLE_PLAYER_ID
 };
 const WeaponType bomblauncher = {
@@ -47,7 +48,7 @@ const WeaponType missilelauncher = {
     ,.weapon_id = MISSILE_PLAYER_ID
 };
 const WeaponType plasmarifle = {
-    .cooldown_frames = 20, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+    .cooldown_frames = 5, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMARIFLE_PLAYER_ID
 };
 const WeaponType empbomb = {
@@ -67,7 +68,7 @@ const WeaponType lasercannon = {
     ,.weapon_id = LASERCANNON_ID
 };
 const WeaponType plasmacannon = {
-    .cooldown_frames = 60, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
+    .cooldown_frames = 10, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMACANNON_ID
 };
 //List of enemy weapon types. All enemy weapon types are capitalised
@@ -124,6 +125,7 @@ int findfreeprojectileslot(void){
     }
 }
 //Function that fires one projectile at a given angle, returns cooldown timer
+#define LASER_DURATION_FRAMES 150
 void fire_weapon(const WeaponType *weapon, float px, float py, float angle, bool player_owned){
 int slot = findfreeprojectileslot();
 if (slot == -1){
@@ -152,7 +154,7 @@ projectiles[slot].pierce = 100;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -100;
+projectiles[slot].dy = -5;
 break;
 case BOMB:
 projectiles[slot].symbol = 'O';
@@ -160,13 +162,13 @@ projectiles[slot].pierce = 1;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -2;
+projectiles[slot].dy = -0.5;
 break;
 case MISSILE:
 projectiles[slot].symbol = '^';
 projectiles[slot].pierce = 3;
 projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 20; //Higher = more accurate
+projectiles[slot].turn_rate = 30; //Higher = more accurate
 projectiles[slot].dx = 0;
 projectiles[slot].dy = -2;
 break;
@@ -207,14 +209,20 @@ else {projectiles[slot].player_owned = FALSE;
 // Function that moves and updates projectiles
 void move_projectiles(Projectile *projectiles, int max_x, int max_y){
     for(int i = 0; i < MAX_PROJECTILES; i++){
+        projectiles[i].age++; //Updates projetile age per tick
         if (projectiles[i].pierce <= 0) {
 projectiles[i].state = SPENT;
 }
+if (projectiles[i].type == LASER) {
+    if (projectiles[i].age >= LASER_DURATION_FRAMES) {
+        projectiles[i].state = SPENT;
+    }
+    continue; // Skips normal movement
+}
+//Skips check for projectiles that are inactive
 if (projectiles[i].state != NORMAL) {
             continue;
         }
-projectiles[i].age++;
-
 // Skip standard straight-line movement for special-case types (deferred)
 if (projectiles[i].type == CHAINLIGHTNING || projectiles[i].type == EMP) {
 continue; // TODO: special handling later
@@ -280,22 +288,54 @@ if (projectiles[i].angle != 90) {
         }
     }
 }
+//Function that calculates the bounds for laser-type projectiles
+ float start_row =0 ,end_row = 0;
+void get_laser_bounds(Projectile *proj, int max_y, int max_x, float *start_row, float *end_row){
+    getmaxyx (stdscr, max_y, max_x);
+if (proj->player_owned == TRUE){
+    *start_row = (int)proj->py;
+    *end_row = 0;
+    }
+else {
+    *start_row = (int)proj->py;
+    *end_row = max_y -1;
+}
+if (*start_row > *end_row) {
+    int temp = *start_row;
+    *start_row = *end_row;
+    *end_row = temp;
+}
+}
 //Function that renders projectiles each frame
-void render_projectiles(Projectile *projectiles){
+void render_projectiles(Projectile *projectiles, int max_x, int max_y){
+        getmaxyx (stdscr, max_y, max_x);
 for(int i=0; i < MAX_PROJECTILES; i++){
-    if (projectiles[i].state == NORMAL){
+    if (projectiles[i].state == NORMAL && projectiles[i].type != LASER){
     attron(COLOR_PAIR(projectiles[i].color));
      mvaddch(projectiles[i].py, projectiles[i].px, projectiles[i].symbol);
-     attroff(COLOR_PAIR(projectiles[i].color));
      refresh();
     }
+    if (projectiles[i].state == NORMAL && projectiles[i].type == LASER){
+get_laser_bounds(&projectiles[i], max_y, max_x, &start_row, &end_row);
+for (int p = start_row; p <= end_row; p++) {
+    mvaddch(p, projectiles[i].px, projectiles[i].symbol);
+}
+    }
+    attroff(COLOR_PAIR(projectiles[i].color));
 }
 }
 //Function that erases old positions of projectiles each frame and removes spent projectiles
-void erase_projectiles(Projectile *projectiles){
+void erase_projectiles(Projectile *projectiles, int max_x, int max_y){
+    getmaxyx (stdscr, max_y, max_x);
     for(int i=0; i < MAX_PROJECTILES; i++){
         if (projectiles[i].state == NORMAL || projectiles[i].state == SPENT){  
     mvaddch(projectiles[i].py, projectiles[i].px, ' ');
      }
+      if ( (projectiles[i].state == SPENT || projectiles[i].state == NORMAL) && projectiles[i].type == LASER){
+get_laser_bounds(&projectiles[i], max_y, max_x, &start_row, &end_row);
+for (int p = start_row; p <= end_row; p++) {
+    mvaddch(p, projectiles[i].px, ' ');
+}
+    }
         }
     }

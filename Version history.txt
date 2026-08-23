@@ -20,7 +20,8 @@ v0.9: 23rd August 2026
 1. Added a projectile firing system for players. Currently, only bullets, bombs and missiles work.
 2. Missiles are bugged and fly off to the right instead of homing properly
 3. There is no distinction between player missiles and enemy missiles, so all missiles erroneously track the player.
-v0.10
+v0.10:
 1. Fixed bugs related to missile that prevented them from homing properly
 2. Player missiles now home in enemies and vice versa
-3. 
+v0.11:
+1. Added proper laser functionality
