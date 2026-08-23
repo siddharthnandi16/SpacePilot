@@ -17,7 +17,8 @@ Enemy enemies[MAX_ENEMIES] = {
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
-    .weapon = &GRUNT_RIFLE
+    .weapon = &GRUNT_RIFLE,
+    
     }
 };
 //Slowly fires bullets. Low-threat enemy, mostly just scoring fodder
@@ -32,7 +33,8 @@ static const Enemy grunt_template = {
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
-    .weapon = &GRUNT_RIFLE
+    .weapon = &GRUNT_RIFLE,
+    
 };
 // Rapidly fires bullets. Meant to be dangerous in swarms
 static const Enemy rapidfire_template = {
@@ -42,7 +44,7 @@ static const Enemy rapidfire_template = {
     .symbol = '&',
     .width = 1, .height = 1,
     .cooldown_frames = 10,
-    .type = GRUNT,
+    .type = RAPIDFIRE,
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
@@ -56,7 +58,7 @@ static const Enemy laser_template = {
     .symbol = '!',
     .width = 1, .height = 1,
     .cooldown_frames = 120,
-    .type = GRUNT,
+    .type = LASER_ENEMY,
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
@@ -70,7 +72,7 @@ static const Enemy bomber_template = {
     .symbol = '#',
     .width = 1, .height = 1,
     .cooldown_frames = 180,
-    .type = GRUNT,
+    .type = BOMBER,
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
@@ -84,7 +86,7 @@ static const Enemy hunter_template = {
     .symbol = 'H',
     .width = 1, .height = 1,
     .cooldown_frames = 30,
-    .type = GRUNT,
+    .type = HUNTER,
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
@@ -195,6 +197,16 @@ for(int i=0; i < MAX_ENEMIES; i++){
     }
 }
 }
+//Function that fires enemy weapons
 void fire_enemies(Enemy *enemies){
-    
+    for (int i =0 ; i < MAX_ENEMIES ; i++){
+        if (enemies[i].state == ALIVE){
+            enemies[i].cooldown_frames++;
+        WeaponType *weapon = enemies[i].weapon;
+         if (weapon != NULL && enemies[i].cooldown_frames >= weapon->cooldown_frames) {
+            fire_weapon(weapon, enemies[i].px, enemies[i].py - 1, 270, FALSE);
+            enemies[i].cooldown_frames = 0;
+        }
+    }
+}
 }

@@ -74,7 +74,7 @@ int age; //Increments every frame, determines some enemy behaviors
 float anchor_px, anchor_py; //Sets an "anchor point" for strafing enemies
 float strafe; //Sets how far a strafing enemy is willing to go from their anchor point
 float old_px, old_py; //Stores old positions of enemy for purpose of drawing, now redunant
-const WeaponType *weapon; //Tells the weapon firing function what weapon to use
+WeaponType *weapon; //Tells the weapon firing function what weapon to use
 }Enemy;
 extern Enemy enemies[];
 

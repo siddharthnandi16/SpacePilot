@@ -6,4 +6,5 @@ void spawn_enemy(EnemyType type, EnemyBehavior behavior, float px, float py, flo
 void move_enemy(Enemy *enemies, int max_x, int max_y);
 void erase_enemies(Enemy *enemies);
 void render_enemies(Enemy *enemies);
+void fire_enemies(Enemy *enemies);
 #endif

@@ -25,3 +25,6 @@ v0.10:
 2. Player missiles now home in enemies and vice versa
 v0.11:
 1. Added proper laser functionality
+v0.12:
+1. Added enemy firing functionality
+2. Fixed bug where lasers were rendered incorrectly

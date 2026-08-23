@@ -203,7 +203,7 @@ if (player_owned == TRUE){
     projectiles[slot].player_owned = TRUE;
     projectiles[slot].color = 4;
 }
-else {projectiles[slot].player_owned = FALSE;
+else if (player_owned == FALSE){projectiles[slot].player_owned = FALSE;
     projectiles[slot].color = 3;}
 }
 // Function that moves and updates projectiles
@@ -313,15 +313,18 @@ for(int i=0; i < MAX_PROJECTILES; i++){
     if (projectiles[i].state == NORMAL && projectiles[i].type != LASER){
     attron(COLOR_PAIR(projectiles[i].color));
      mvaddch(projectiles[i].py, projectiles[i].px, projectiles[i].symbol);
+     attroff(COLOR_PAIR(projectiles[i].color));
      refresh();
     }
     if (projectiles[i].state == NORMAL && projectiles[i].type == LASER){
 get_laser_bounds(&projectiles[i], max_y, max_x, &start_row, &end_row);
 for (int p = start_row; p <= end_row; p++) {
+      attron(COLOR_PAIR(projectiles[i].color));
     mvaddch(p, projectiles[i].px, projectiles[i].symbol);
+     attroff(COLOR_PAIR(projectiles[i].color));
 }
     }
-    attroff(COLOR_PAIR(projectiles[i].color));
+    
 }
 }
 //Function that erases old positions of projectiles each frame and removes spent projectiles
