@@ -27,10 +27,10 @@ new_py = fminf(fmaxf(new_py, 0), max_y - 1);
     }
 
     switch (choice) {
-        case 'w': new_py = *py - dy; break;
-        case 's': new_py = *py + dy; break;
-        case 'a': new_px = *px - dx; break;
-        case 'd': new_px = *px + dx; break;
+        case KEY_UP: new_py = *py - dy; break;
+        case KEY_DOWN: new_py = *py + dy; break;
+        case KEY_LEFT: new_px = *px - dx; break;
+        case KEY_RIGHT: new_px = *px + dx; break;
         case KEY_RESIZE:
         resize_term(0, 0);
         syncConsoleBufferToWindow();

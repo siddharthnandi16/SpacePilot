@@ -2,6 +2,7 @@
 #include <math.h>
 #include "gamedata.h"
 #define MAX_PROJECTILES 2000
+#define MAX_ENEMIES 100
 //Table for storing projectiles. The values here are placeholders than will be overwritten during gameplay
 Projectile projectiles[MAX_PROJECTILES] = {
     [0] = {
@@ -26,27 +27,27 @@ Chain Lighting = ~
 */
 //List of player weapon types. All player weapons are in lowercase
 const WeaponType autopistol = {
-    .cooldown_frames = 60, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 30, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
 ,.weapon_id = AUTOPISTOL_ID
 };
 const WeaponType machinegun = {
-    .cooldown_frames = 10, .number = 2, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 5, .number = 2, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = MACHINEGUN_ID
 };
 const WeaponType laserrifle = {
-    .cooldown_frames = 60, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+    .cooldown_frames = 30, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
     ,.weapon_id = LASRIFLE_PLAYER_ID
 };
 const WeaponType bomblauncher = {
-    .cooldown_frames = 60, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+    .cooldown_frames = 30, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = BOMB_PLAYER_ID
 };
 const WeaponType missilelauncher = {
-    .cooldown_frames = 60, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
+    .cooldown_frames = 20, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
     ,.weapon_id = MISSILE_PLAYER_ID
 };
 const WeaponType plasmarifle = {
-    .cooldown_frames = 60, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+    .cooldown_frames = 20, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMARIFLE_PLAYER_ID
 };
 const WeaponType empbomb = {
@@ -58,7 +59,7 @@ const WeaponType lightning = {
     ,.weapon_id = LIGHTNING_ID
 };
 const WeaponType shotgun = {
-    .cooldown_frames = 75, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 40, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = SHOTGUN_ID
 };
 const WeaponType lasercannon = {
@@ -66,7 +67,7 @@ const WeaponType lasercannon = {
     ,.weapon_id = LASERCANNON_ID
 };
 const WeaponType plasmacannon = {
-    .cooldown_frames = 90, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
+    .cooldown_frames = 60, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMACANNON_ID
 };
 //List of enemy weapon types. All enemy weapon types are capitalised
@@ -165,7 +166,7 @@ case MISSILE:
 projectiles[slot].symbol = '^';
 projectiles[slot].pierce = 3;
 projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 5;
+projectiles[slot].turn_rate = 20; //Higher = more accurate
 projectiles[slot].dx = 0;
 projectiles[slot].dy = -2;
 break;
@@ -225,14 +226,51 @@ if (projectiles[i].angle != 90) {
             projectiles[i].dx = speed * cosf(rad);
             projectiles[i].dy = -speed * sinf(rad); // negative since up = decreasing py
         }
-        if (projectiles[i].type == MISSILE && projectiles[i].turn_rate > 0) {
-            float target_angle = atan2f(-(player.py - projectiles[i].py),
-                                          (player.px - projectiles[i].px)); // check sign conventions against your angle system
-            float current_angle = atan2f(-projectiles[i].dy, projectiles[i].dx);
-            float diff = target_angle - current_angle;
-            // TODO: normalize diff to [-pi, pi] and clamp to turn_rate before applying
-            projectiles[i].angle = current_angle + diff; // placeholder - needs turn_rate clamping
+      if (projectiles[i].type == MISSILE && projectiles[i].turn_rate > 0) {
+    float target_x, target_y;
+    bool has_target = false;
+
+    if (projectiles[i].player_owned) {
+        // Player-owned missiles home in on the nearest living enemy
+        float best_dist_sq = -1.0f;
+        for (int e = 0; e < MAX_ENEMIES; e++) {
+            if (enemies[e].state == ALIVE) {
+                float dx = enemies[e].px - projectiles[i].px;
+                float dy = enemies[e].py - projectiles[i].py;
+                float dist_sq = dx * dx + dy * dy;
+                if (best_dist_sq < 0 || dist_sq < best_dist_sq) {
+                    best_dist_sq = dist_sq;
+                    target_x = enemies[e].px;
+                    target_y = enemies[e].py;
+                    has_target = true;
+                }
+            }
         }
+    } else {
+        // Enemy-owned missiles home in on the player
+        target_x = player.px;
+        target_y = player.py;
+        has_target = true;
+    }
+
+    if (has_target) {
+        float target_angle_rad = atan2f(-(target_y - projectiles[i].py),
+                                          (target_x - projectiles[i].px));
+        float current_angle_rad = projectiles[i].angle * (M_PI / 180.0f);
+
+        float diff = target_angle_rad - current_angle_rad;
+        while (diff > M_PI)  diff -= 2.0f * M_PI;
+        while (diff < -M_PI) diff += 2.0f * M_PI;
+
+        float turn_rate_rad = projectiles[i].turn_rate * (M_PI / 180.0f);
+        if (diff > turn_rate_rad)  diff = turn_rate_rad;
+        if (diff < -turn_rate_rad) diff = -turn_rate_rad;
+
+        float new_angle_rad = current_angle_rad + diff;
+        projectiles[i].angle = new_angle_rad * (180.0f / M_PI);
+    }
+    // if no target found, missile continues straight at its current angle
+}
 
         projectiles[i].px += projectiles[i].dx;
         projectiles[i].py += projectiles[i].dy;
