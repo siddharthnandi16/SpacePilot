@@ -6,6 +6,7 @@
 #include "sound.h"
 #include "dialogue.h"
 #include "enemy.h"
+#include "window.h"
 extern int unsigned long tick;
 extern int spawn_table_count_1;
 int rows_scrolled;
@@ -23,30 +24,33 @@ bool should_draw_cell(int max_y, int max_x){
 }
 //Scrolls the game and renders the player. Also returns the number of rows scrolled
 int scrollanddraw(){
-    static int old_px = -1, old_py = -1;
-    // Erase the player's previous position before anything else moves
-    if (old_px != -1) {
-        mvaddch(old_py, old_px, ' ');
+    static int old_screen_px = -1, old_screen_py = -1;
+
+    if (old_screen_px != -1) {
+        mvaddch(old_screen_py, old_screen_px, ' ');
     }
 
     scrollok(stdscr, TRUE);
     if (tick % 5 == 0){
-    wscrl(stdscr, -1);
+        wscrl(stdscr, -1);
     }
-    // Draw the player at its current position, on top of whatever's there
-    //Highlights if the player gets hit
+
+    int screen_px = offset_x + (int)player.px;
+    int screen_py = offset_y + (int)player.py;
+
     if (player.invuln_frames > 0){attron(A_REVERSE);}
     attron(COLOR_PAIR(1));
-    mvaddch((int)player.py, (int)player.px, player.symbol);
+    mvaddch(screen_py, screen_px, player.symbol);
     attroff(COLOR_PAIR(1));
     if (player.invuln_frames > 0){attroff(A_REVERSE);}
-    old_px = (int)player.px;
-    old_py = (int)player.py;
-rows_scrolled++;
+
+    old_screen_px = screen_px;
+    old_screen_py = screen_py;
+
+    rows_scrolled++;
     refresh();
     return rows_scrolled;
 }
-
 //Data for level 1
 Level_Data level_1={
 .spawn_table = spawn_table_1,
@@ -64,7 +68,7 @@ void level(const Level_Data *level){
         }
         switch (level->spawn_table[i].trigger) {
             case TICK:
-                if (tick = level->spawn_table[i].trigger_time) {
+                if (tick >= level->spawn_table[i].trigger_time) {
                     spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior,
                                 level->spawn_table[i].px, level->spawn_table[i].py,
                                 level->spawn_table[i].strafe);

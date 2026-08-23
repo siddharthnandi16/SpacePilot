@@ -40,6 +40,8 @@ int gameloop(Player *player, int max_x, int max_y){
     erase_projectiles(projectiles);
     scrollanddraw();
     getmaxyx(stdscr, max_y, max_x);
+    update_playfield_offset(max_x,max_y);
+    draw_playfield_border();
     move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
     fire_player(player);
     move_projectiles(projectiles, max_x, max_y);
@@ -57,8 +59,10 @@ int gameloop(Player *player, int max_x, int max_y){
 int seed; //Variable that stores the RNG seed. Used for various rng calls
 
 int main(){    
-     
+    //Debug function used to check whether consoles resizing is working properly
+// forceConsoleSize_debug(100,30);
 initscr();
+forceConsoleSize(100,30);
 int max_x, max_y;
 getmaxyx(stdscr, max_y, max_x);
 scrollok(stdscr, TRUE);

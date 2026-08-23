@@ -30,3 +30,9 @@ v0.12:
 2. Fixed bug where lasers were rendered incorrectly
 v0.13:
 Added enemy-projectile collisions and logic for removing enemies that are below 0 HP.
+v0.14:
+1. Added player-projectile collisions
+2. Added enemy-player collisions
+3. Added special logic for laser collisions
+v0.15:
+1. Set playfield borders to (100,30) respectively

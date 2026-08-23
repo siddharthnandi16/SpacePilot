@@ -1,6 +1,10 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
+//Defines for current size of playfield
+#define PLAYFIELD_W 100
+#define PLAYFIELD_H 30
 // This header file stores data about the game's current state
+//Enums for types and states of projectiles
 typedef enum proj_type{BULLET,LASER,BOMB,MISSILE,PLASMA,EMP,CHAINLIGHTNING}ProjType;
 typedef enum proj_state{NORMAL,SPENT,EXPLODING}ProjState;
 //This struct stores data on the projectile

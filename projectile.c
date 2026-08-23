@@ -293,8 +293,8 @@ if (projectiles[i].angle != 90) {
 
         projectiles[i].px += projectiles[i].dx;
         projectiles[i].py += projectiles[i].dy;
-        if (projectiles[i].py < 0 || projectiles[i].py >= max_y ||
-            projectiles[i].px < 0 || projectiles[i].px >= max_x) {
+        if (projectiles[i].py < 0 || projectiles[i].py >= PLAYFIELD_H ||
+            projectiles[i].px < 0 || projectiles[i].px >= PLAYFIELD_W) {
             projectiles[i].state = SPENT;
         }
     }
@@ -319,11 +319,10 @@ if (*start_row > *end_row) {
 }
 //Function that renders projectiles each frame
 void render_projectiles(Projectile *projectiles, int max_x, int max_y){
-        getmaxyx (stdscr, max_y, max_x);
 for(int i=0; i < MAX_PROJECTILES; i++){
     if (projectiles[i].state == NORMAL && projectiles[i].type != LASER){
     attron(COLOR_PAIR(projectiles[i].color));
-     mvaddch(projectiles[i].py, projectiles[i].px, projectiles[i].symbol);
+     mvaddch(offset_y + projectiles[i].py, offset_x + projectiles[i].px, projectiles[i].symbol);
      attroff(COLOR_PAIR(projectiles[i].color));
      refresh();
     }
@@ -331,7 +330,7 @@ for(int i=0; i < MAX_PROJECTILES; i++){
 get_laser_bounds(&projectiles[i], max_y, max_x, &start_row, &end_row);
 for (int p = start_row; p <= end_row; p++) {
       attron(COLOR_PAIR(projectiles[i].color));
-    mvaddch(p, projectiles[i].px, projectiles[i].symbol);
+    mvaddch(offset_y + p, offset_x + projectiles[i].px, projectiles[i].symbol);
      attroff(COLOR_PAIR(projectiles[i].color));
 }
     }
@@ -343,12 +342,12 @@ void erase_projectiles(Projectile *projectiles, int max_x, int max_y){
     getmaxyx (stdscr, max_y, max_x);
     for(int i=0; i < MAX_PROJECTILES; i++){
         if (projectiles[i].state == NORMAL || projectiles[i].state == SPENT){  
-    mvaddch(projectiles[i].py, projectiles[i].px, ' ');
+    mvaddch(offset_y + projectiles[i].py, offset_x + projectiles[i].px, ' ');
      }
       if ( (projectiles[i].state == SPENT || projectiles[i].state == NORMAL) && projectiles[i].type == LASER){
 get_laser_bounds(&projectiles[i], max_y, max_x, &start_row, &end_row);
 for (int p = start_row; p <= end_row; p++) {
-    mvaddch(p, projectiles[i].px, ' ');
+    mvaddch(offset_y + p, offset_x + projectiles[i].px, ' ');
 }
     }
         }

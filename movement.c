@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <windows.h>
+#include "gamedata.h"
 #include "movement.h"
 #include "window.h"
 #include "projectile.h"
@@ -10,8 +11,8 @@ void move_player(float *px, float *py, float dy, float dx, int max_x, int max_y,
     keypad(stdscr, TRUE);
     float new_px = *px, new_py = *py;
     int choice = getch();
-    new_px = fminf(fmaxf(new_px, 0), max_x - 1); // -1 since columns are 0-indexed
-new_py = fminf(fmaxf(new_py, 0), max_y - 1);
+    new_px = fminf(fmaxf(new_px, 0), PLAYFIELD_W - 1); // -1 since columns are 0-indexed
+new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
 
     if (choice == 'q' && !(*q_was_down)) {
         *speed_mode_fast = !(*speed_mode_fast);
@@ -38,8 +39,8 @@ new_py = fminf(fmaxf(new_py, 0), max_y - 1);
         default: break; // Position unchanged on no input
     }
 
-    new_px = fminf(fmaxf(new_px, 0), (float)max_x-1);
-    new_py = fminf(fmaxf(new_py, 0), (float)max_y-1);
+    new_px = fminf(fmaxf(new_px, 0), (float)PLAYFIELD_W-1);
+    new_py = fminf(fmaxf(new_py, 0), (float)PLAYFIELD_H-1);
     *px = new_px;
     *py = new_py;
 }

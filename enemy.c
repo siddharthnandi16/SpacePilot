@@ -3,6 +3,7 @@
 #include <math.h>
 #include "gamedata.h"
 #include "projectile.h"
+#include "window.h"
 #define MAX_ENEMIES 100
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
 Enemy enemies[MAX_ENEMIES] = {
@@ -145,27 +146,27 @@ switch(enemies[i].behavior){
     break; //No need to move them since they are stationary by design
     case MOVEVERTICALLY: //Moves vertically downwards and then despawns
     enemies[i].py = enemies[i].py + enemies[i].dy;
-    if (enemies[i].py >= max_y - 1) {
+    if (enemies[i].py >= PLAYFIELD_H - 1) {
 enemies[i].state = DEAD; //Despawns upon hitting the bottom edge of the screen
     }
 break;
 case MOVEHORIZONTALLY: //Moves from left to right and then despawms
 enemies[i].px = enemies[i].px + enemies[i].dx;
- if (enemies[i].py >= max_x - 1) {
+ if (enemies[i].px >= PLAYFIELD_W - 1) {
 enemies[i].state = DEAD; //Despawns upon hitting the right edge of the screen
  }
 break;
 case STRAFE_HORIZONTAL:
 enemies[i].px = enemies[i].px + enemies[i].dx;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe || enemies[i].px == max_x-1 || enemies[i].px == 0){
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe || enemies[i].px == PLAYFIELD_W-1 || enemies[i].px == 0){
 enemies[i].dx = -enemies[i].dx;
 }
 break;
 case STRAFE_VERTICAL:
 enemies[i].py = enemies[i].py + enemies[i].dy;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || enemies[i].px == max_x-1 || enemies[i].px == 0){
+if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || enemies[i].px == PLAYFIELD_H-1 || enemies[i].px == 0){
 enemies[i].dy = -enemies[i].dy;
 }
 break;
@@ -180,7 +181,7 @@ void erase_enemies(Enemy *enemies){
     for(int i=0; i < MAX_ENEMIES; i++){
         if (enemies[i].state == ALIVE || enemies[i].state == DEAD){
 if (enemies[i].shape == NULL){   
-    mvaddch(enemies[i].py, enemies[i].px, ' ');
+    mvaddch(offset_y + enemies[i].py, offset_x + enemies[i].px, ' ');
      enemies[i].old_px = enemies[i].px;
     enemies[i].old_py = enemies[i].py;
     if (enemies[i].state == DEAD) {
@@ -195,7 +196,7 @@ void render_enemies(Enemy *enemies){
 for(int i=0; i < MAX_ENEMIES; i++){
     if (enemies[i].state == ALIVE){
     attron(COLOR_PAIR(2));
-     mvaddch(enemies[i].py, enemies[i].px, enemies[i].symbol);
+     mvaddch(offset_y + enemies[i].py, offset_x + enemies[i].px, enemies[i].symbol);
      attroff(COLOR_PAIR(2));
      refresh();
     }
