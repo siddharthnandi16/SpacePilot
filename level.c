@@ -34,9 +34,12 @@ int scrollanddraw(){
     wscrl(stdscr, -1);
     }
     // Draw the player at its current position, on top of whatever's there
+    //Highlights if the player gets hit
+    if (player.invuln_frames > 0){attron(A_REVERSE);}
     attron(COLOR_PAIR(1));
     mvaddch((int)player.py, (int)player.px, player.symbol);
     attroff(COLOR_PAIR(1));
+    if (player.invuln_frames > 0){attroff(A_REVERSE);}
     old_px = (int)player.px;
     old_py = (int)player.py;
 rows_scrolled++;

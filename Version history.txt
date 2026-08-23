@@ -28,3 +28,5 @@ v0.11:
 v0.12:
 1. Added enemy firing functionality
 2. Fixed bug where lasers were rendered incorrectly
+v0.13:
+Added enemy-projectile collisions and logic for removing enemies that are below 0 HP.

@@ -20,6 +20,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "sound.h"
 #include "dialogue.h"
 #include "projectile.h"
+#include "collision.h"
 int quit = 0; //1= true, 0= false
 int unsigned long tick=0;
 int spawn_table_1_count;
@@ -47,6 +48,7 @@ int gameloop(Player *player, int max_x, int max_y){
     render_enemies(enemies);
     render_projectiles(projectiles);
     level(&level_1);
+    Check_Collisions(player, enemies, projectiles);
     refresh();
     napms(34); //Controls frame rate and refresh rate
     }

@@ -7,14 +7,16 @@
 //Table for storing projectiles. The values here are placeholders than will be overwritten during gameplay
 Projectile projectiles[MAX_PROJECTILES] = {
     [0] = {
-.px = 0, .py = 0,
-    .dx = 1, .dy = 1, .angle = 90,
+.px = -1, .py = -1,
+.old_px=-1, .old_py=-1,
+    .dx = 0, .dy = 0, .angle = 90,
     .symbol = '*',
     .width = 1, .height = 1,
     .age = 0, .strafe=0,
     .pierce = 1, .turn_rate=0,
     .type = BULLET, .state=SPENT,
-     .color=3, .player_owned = FALSE
+     .color=3, .player_owned = FALSE,
+     .damage = 1
     }
 };
 /*Chart of symbols based on projectile type
@@ -147,6 +149,7 @@ projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
 projectiles[slot].dy = -1; //Moves directly upward
+projectiles[slot].damage = 1;
 break;
 case LASER:
 projectiles[slot].symbol = '|';
@@ -154,7 +157,8 @@ projectiles[slot].pierce = 100;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -5;
+projectiles[slot].dy = 0;
+projectiles[slot].damage = 3;
 break;
 case BOMB:
 projectiles[slot].symbol = 'O';
@@ -163,6 +167,7 @@ projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
 projectiles[slot].dy = -0.5;
+projectiles[slot].damage = 3;
 break;
 case MISSILE:
 projectiles[slot].symbol = '^';
@@ -170,7 +175,8 @@ projectiles[slot].pierce = 3;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 30; //Higher = more accurate
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -2;
+projectiles[slot].dy = -1;
+projectiles[slot].damage = 2;
 break;
 case PLASMA:
 projectiles[slot].symbol = '*';
@@ -179,6 +185,7 @@ projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
 projectiles[slot].dy = -5;
+projectiles[slot].damage = 5;
 break;
 case EMP:
 projectiles[slot].symbol = '-';
@@ -189,6 +196,7 @@ projectiles[slot].dx = 0;
 projectiles[slot].dy = 0;
 projectiles[slot].width = 1000;
 projectiles[slot].height = 1000;
+projectiles[slot].damage = 0;
 break;
 case CHAINLIGHTNING:
 projectiles[slot].symbol = '~';
@@ -197,6 +205,7 @@ projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 10;
 projectiles[slot].dy = -10;
+projectiles[slot].damage = 3;
 break;
 }
 if (player_owned == TRUE){
@@ -209,7 +218,9 @@ else if (player_owned == FALSE){projectiles[slot].player_owned = FALSE;
 // Function that moves and updates projectiles
 void move_projectiles(Projectile *projectiles, int max_x, int max_y){
     for(int i = 0; i < MAX_PROJECTILES; i++){
-        projectiles[i].age++; //Updates projetile age per tick
+        projectiles[i].old_px = projectiles[i].px;
+        projectiles[i].old_py = projectiles[i].py;
+        projectiles[i].age++; //Updates projectile age per tick
         if (projectiles[i].pierce <= 0) {
 projectiles[i].state = SPENT;
 }

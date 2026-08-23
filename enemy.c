@@ -135,7 +135,7 @@ enemies[slot].anchor_py = enemies[slot].py;
 enemies[slot].behavior = behavior;
 enemies[slot].state = ALIVE;
 }
-//Function that moves living enemies based on their behavior type
+//Function that moves living enemies based on their behavior type and removes dead enemies
 void move_enemy(Enemy *enemies, int max_x, int max_y){
 for (int i =0; i < MAX_ENEMIES; i++ ){
     enemies[i].age++;
@@ -178,15 +178,19 @@ break;
 //Function that erases the old positions of enemies each frame
 void erase_enemies(Enemy *enemies){
     for(int i=0; i < MAX_ENEMIES; i++){
-        if (enemies[i].state == ALIVE){
+        if (enemies[i].state == ALIVE || enemies[i].state == DEAD){
 if (enemies[i].shape == NULL){   
     mvaddch(enemies[i].py, enemies[i].px, ' ');
      enemies[i].old_px = enemies[i].px;
     enemies[i].old_py = enemies[i].py;
+    if (enemies[i].state == DEAD) {
+        enemies[i].state = INACTIVE;
+    }
      }
         }
     }
 }
+//Function that renders living enemies
 void render_enemies(Enemy *enemies){
 for(int i=0; i < MAX_ENEMIES; i++){
     if (enemies[i].state == ALIVE){

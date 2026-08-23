@@ -6,9 +6,11 @@ typedef enum proj_state{NORMAL,SPENT,EXPLODING}ProjState;
 //This struct stores data on the projectile
 typedef struct Projectile{
     float px,py;
+    float old_px, old_py;
     float dx,dy;
     char symbol;
     int width, height;
+    int damage; //Determines HP damage dealt
     int age; //Used for bomb detionation timers
     int pierce; //Tells you how many enemies a projectile can pierce before being spent
     int color; // Is 3 for enemy projectiles and 4 for player projectiles
@@ -46,6 +48,7 @@ typedef struct Player{
     bool q_was_down; //Checks whether the speed-toggle was held down last frame and prevents it from activating if it was
     WeaponID weapon_id;
     WeaponID inventory[8]; 
+    int invuln_frames; //Period of invulnerability granted after taking a hit
 }Player;
 extern Player player;
 #define MAX_TILE_HEIGHT 8 //Max height of multi-tile enemies

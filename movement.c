@@ -25,7 +25,7 @@ new_py = fminf(fmaxf(new_py, 0), max_y - 1);
         dx = vx / 2;
         dy = vy / 2;
     }
-
+//Takes movement input
     switch (choice) {
         case KEY_UP: new_py = *py - dy; break;
         case KEY_DOWN: new_py = *py + dy; break;

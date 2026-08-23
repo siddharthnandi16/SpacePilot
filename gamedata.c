@@ -28,6 +28,8 @@ struct Player player = {
     .speed_mode_fast = true,
     .q_was_down = false,
     .weapon_id = AUTOPISTOL_ID,
-    .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID}
+    .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, 
+        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID},
     // For debug purpose, all implemented weapons are given to the player 
+    .invuln_frames = 0
 };
