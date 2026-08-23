@@ -20,10 +20,10 @@ typedef struct Projectile{
     bool player_owned;
 }Projectile;
 //This struct defines the behavior of weapons which fire projectiles
-typedef enum weapon_id{AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID,
+typedef enum weapon_id{EMPTY_ID, AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID,
 PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID, 
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
- BOMB_ENEMY_ID, HUNTER_RIFLE_ID}WeaponID
+ BOMB_ENEMY_ID, HUNTER_RIFLE_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 typedef struct WeaponType{
     int cooldown_frames;
@@ -40,11 +40,12 @@ typedef struct Player{
     int alive; //Stores whether the player is alive or dead, 1=alive, 0=dead
     int lives; //Stores the number of lives of the player
     bool hasLasers, hasBombs; // Stores whether the player has access to special weapons
-    int power; // Will affect fire rate later on when upgrades are added, currently unused
+    int fire_rate; // Will affect fire rate later on when upgrades are added, currently unused
     char symbol;
     bool speed_mode_fast ; //Making this false halves player movement
-    bool q_was_down; 
-    //Checks whether the speed-toggle was held down last frame and prevents it from activating if it was
+    bool q_was_down; //Checks whether the speed-toggle was held down last frame and prevents it from activating if it was
+    WeaponID weapon_id;
+    WeaponID inventory[8]; 
 }Player;
 extern Player player;
 #define MAX_TILE_HEIGHT 8 //Max height of multi-tile enemies

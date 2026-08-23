@@ -1,4 +1,5 @@
 #include <pdcurses.h>
+#include <math.h>
 #include "gamedata.h"
 #define MAX_PROJECTILES 2000
 //Table for storing projectiles. The values here are placeholders than will be overwritten during gameplay
@@ -77,7 +78,7 @@ const WeaponType RAPIDFIRE_RIFLE = {
     .cooldown_frames = 30, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = RAPIDFIRE_RIFLE_ID
 };
-const WeaponType LASER_RIFLE = {
+const WeaponType LASER_RIFLE_ENEMY = {
     .cooldown_frames = 180, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
     ,.weapon_id = LASER_RIFLE_ENEMY_ID
 };
@@ -92,7 +93,7 @@ const WeaponType HUNTER_RIFLE = {
 //Function to find a free slot in the enemy pool
 int findfreeprojectileslot(void){
     for(int i=0; i < MAX_PROJECTILES; i++){
-        if (enemies[i].state == SPENT){
+        if (projectiles[i].state == SPENT){
             return i;
         }
     }
@@ -113,10 +114,10 @@ int findfreeprojectileslot(void){
         case SHOTGUN_ID:             return &shotgun;
         case LASERCANNON_ID:         return &lasercannon;
         case PLASMACANNON_ID:        return &plasmacannon;
-        case GRUNT_WEAPON_ID:        return &GRUNT_WEAPON;
+        case GRUNT_WEAPON_ID:        return &GRUNT_RIFLE;
         case RAPIDFIRE_RIFLE_ID:     return &RAPIDFIRE_RIFLE;
         case LASER_RIFLE_ENEMY_ID:   return &LASER_RIFLE_ENEMY;
-        case BOMB_ENEMY_ID:          return &BOMB_ENEMY;
+        case BOMB_ENEMY_ID:          return &BOMB_ENEMY_WEAPON;
         case HUNTER_RIFLE_ID:        return &HUNTER_RIFLE;
         default:                     return NULL;
     }
@@ -202,8 +203,61 @@ if (player_owned == TRUE){
 else {projectiles[slot].player_owned = FALSE;
     projectiles[slot].color = 3;}
 }
-void move_projectiles(){
-    for(int i = 0, i < MAX_PROJECTILES, i++){
-        
+// Function that moves and updates projectiles
+void move_projectiles(Projectile *projectiles, int max_x, int max_y){
+    for(int i = 0; i < MAX_PROJECTILES; i++){
+        if (projectiles[i].pierce <= 0) {
+projectiles[i].state = SPENT;
+}
+if (projectiles[i].state != NORMAL) {
+            continue;
+        }
+projectiles[i].age++;
+
+// Skip standard straight-line movement for special-case types (deferred)
+if (projectiles[i].type == CHAINLIGHTNING || projectiles[i].type == EMP) {
+continue; // TODO: special handling later
+        }
+if (projectiles[i].angle != 90) {
+            float rad = projectiles[i].angle * (M_PI / 180.0f); // convert degrees to radians - confirm your angle units
+            float speed = sqrtf(projectiles[i].dx * projectiles[i].dx +
+                                 projectiles[i].dy * projectiles[i].dy); // derive speed from the default dx/dy magnitude - or pull from WeaponType if you add that field
+            projectiles[i].dx = speed * cosf(rad);
+            projectiles[i].dy = -speed * sinf(rad); // negative since up = decreasing py
+        }
+        if (projectiles[i].type == MISSILE && projectiles[i].turn_rate > 0) {
+            float target_angle = atan2f(-(player.py - projectiles[i].py),
+                                          (player.px - projectiles[i].px)); // check sign conventions against your angle system
+            float current_angle = atan2f(-projectiles[i].dy, projectiles[i].dx);
+            float diff = target_angle - current_angle;
+            // TODO: normalize diff to [-pi, pi] and clamp to turn_rate before applying
+            projectiles[i].angle = current_angle + diff; // placeholder - needs turn_rate clamping
+        }
+
+        projectiles[i].px += projectiles[i].dx;
+        projectiles[i].py += projectiles[i].dy;
+        if (projectiles[i].py < 0 || projectiles[i].py >= max_y ||
+            projectiles[i].px < 0 || projectiles[i].px >= max_x) {
+            projectiles[i].state = SPENT;
+        }
     }
 }
+//Function that renders projectiles each frame
+void render_projectiles(Projectile *projectiles){
+for(int i=0; i < MAX_PROJECTILES; i++){
+    if (projectiles[i].state == NORMAL){
+    attron(COLOR_PAIR(projectiles[i].color));
+     mvaddch(projectiles[i].py, projectiles[i].px, projectiles[i].symbol);
+     attroff(COLOR_PAIR(projectiles[i].color));
+     refresh();
+    }
+}
+}
+//Function that erases old positions of projectiles each frame and removes spent projectiles
+void erase_projectiles(Projectile *projectiles){
+    for(int i=0; i < MAX_PROJECTILES; i++){
+        if (projectiles[i].state == NORMAL || projectiles[i].state == SPENT){  
+    mvaddch(projectiles[i].py, projectiles[i].px, ' ');
+     }
+        }
+    }

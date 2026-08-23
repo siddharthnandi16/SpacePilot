@@ -60,7 +60,7 @@ static const Enemy laser_template = {
     .state = INACTIVE,
     .behavior = STATIC,
     .shape = NULL,
-    .weapon = &LASER_RIFLE
+    .weapon = &LASER_RIFLE_ENEMY
 };
 //Fire bombs that explode into circles of bullets.A dangerous, high-priority target
 static const Enemy bomber_template = {

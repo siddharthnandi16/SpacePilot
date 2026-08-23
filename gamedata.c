@@ -1,7 +1,7 @@
 #include <pdcurses.h>
 #include "gamedata.h"
 // This file stores data on players, enemies and bullets
-struct Player{
+/* struct Player{
     float px, py; //Stores the player's position
     float vx, vy; // Stores the player's standard movement speed
     float dx, dy; //Stores the player's current movement direction and speed
@@ -12,8 +12,10 @@ struct Player{
     char symbol;
     bool speed_mode_fast ; //Making this false halves player movement
     bool q_was_down; //Checks whether the speed-toggle was held down last frame and prevents it from activating if it was
-};
-
+  WeaponID weapon_id;
+    WeaponID inventory[100]; //Size maximised for debug purposes will be reduced to 10 later 
+}; */
+// Commented out since it conflicts with the typedef in gamedata.h
 struct Player player = {
     .px = 0, .py = 0,
     .vx = 1, .vy = 1,
@@ -21,8 +23,11 @@ struct Player player = {
     .alive = 1,
     .lives = 5,
     .hasLasers = true, .hasBombs = true,
-    .fire_rate = 50,
+    .fire_rate = 20,
     .symbol = '@',
     .speed_mode_fast = true,
-    .q_was_down = false
+    .q_was_down = false,
+    .weapon_id = AUTOPISTOL_ID,
+    .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID}
+    // For debug purpose, all implemented weapons are given to the player 
 };
