@@ -309,7 +309,7 @@ if (proj->player_owned == TRUE){
     }
 else {
     *start_row = (int)proj->py;
-    *end_row = max_y -1;
+    *end_row = PLAYFIELD_H -1;
 }
 if (*start_row > *end_row) {
     int temp = *start_row;
