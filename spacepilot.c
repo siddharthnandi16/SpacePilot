@@ -53,7 +53,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         break;
     case ENDLESS_MODE:
     //Commented out as it is not not yet implemented
-      //  endless_level();  
+    endless_level();  
         break;
     default:
         break;

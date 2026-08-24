@@ -3,6 +3,7 @@
 #include "spawn.h"
 #include "sound.h"
 #include "dialogue.h"
+#include "gamedata.h"
 //Defintion of struct that stores level data
 typedef struct {
     spawn_entry *spawn_table;
@@ -18,4 +19,10 @@ bool should_draw_cell(int max_y, int max_x);
 int scrollanddraw();
 void level(const Level_Data *level);
 extern int rows_scrolled;
+EnemyType pick_type_weighted_by_difficulty(long double difficulty);
+EnemyBehavior pick_behavior_for_type(EnemyType type, long double difficulty);
+EnemyConfig pick_enemy_config(long double difficulty);
+void spawn_wave(long double difficulty);
+int pick_music_track(long double difficulty);
+void endless_level(void);
 #endif

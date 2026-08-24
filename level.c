@@ -1,5 +1,6 @@
 #include <pdcurses.h>
 #include <stdlib.h>
+#include <time.h>
 #include "gamedata.h"
 #include "level.h"
 #include "spawn.h"
@@ -89,4 +90,107 @@ void level(const Level_Data *level){
         }
     }
     // TBA: music and dialogue passes, same structure
+}
+static long double difficulty = 0;
+//Function which picks a type for each enemy
+EnemyType pick_type_weighted_by_difficulty(long double difficulty) {
+    // Clamp difficulty to 0.0-1.0 range
+    if (difficulty < 0.0f) difficulty = 0.0f;
+    if (difficulty > 1.0f) difficulty = 1.0f;
+    
+    // GRUNT: 75% -> 40%
+    int grunt_weight = 75 - (int)(difficulty * 35);
+    
+    // RAPIDFIRE: 10% -> 30%
+    int rapidfire_weight = 10 + (int)(difficulty * 20);
+    
+    // Special enemies: split remaining equally
+    int special_remaining = 100 - grunt_weight - rapidfire_weight;
+    int laser_weight = special_remaining / 3;
+    int bomber_weight = special_remaining / 3;
+    int hunter_weight = special_remaining - laser_weight - bomber_weight;  // handles rounding
+    
+    // Roll 0-99 and check weights
+    int roll = rand() % 100;
+    
+    if (roll < grunt_weight) return GRUNT;
+    roll -= grunt_weight;
+    
+    if (roll < rapidfire_weight) return RAPIDFIRE;
+    roll -= rapidfire_weight;
+    
+    if (roll < laser_weight) return LASER_ENEMY;
+    roll -= laser_weight;
+    
+    if (roll < bomber_weight) return BOMBER;
+    
+    return HUNTER;
+}
+//Function to choose enemy behaviour given type
+EnemyBehavior pick_behavior_for_type(EnemyType type, long double difficulty) {
+    // HUNTER type always hunts, regardless of difficulty
+    if (type == HUNTER) {
+        return HUNT_PLAYER;
+    }
+    
+    // Clamp difficulty
+    if (difficulty < 0.0f) difficulty = 0.0f;
+    if (difficulty > 1.0f) difficulty = 1.0f;
+    
+    // STATIC: 50% -> 0%
+    int static_weight = 50 - (int)(difficulty * 50);
+    
+    // Remaining percentage split equally among three behaviors
+    int dynamic_remaining = 100 - static_weight;
+    int strafe_h_weight = dynamic_remaining / 3;
+    int strafe_v_weight = dynamic_remaining / 3;
+    int hunt_weight = dynamic_remaining - strafe_h_weight - strafe_v_weight;  // handles rounding
+    
+    int roll = rand() % 100;
+    
+    if (roll < static_weight) return STATIC;
+    roll -= static_weight;
+    
+    if (roll < strafe_h_weight) return STRAFE_HORIZONTAL;
+    roll -= strafe_h_weight;
+    
+    if (roll < strafe_v_weight) return STRAFE_VERTICAL;
+    
+    return HUNT_PLAYER;
+}
+
+//Function to set enemy configs
+EnemyConfig pick_enemy_config(long double difficulty) {
+    srand((unsigned)time(NULL));
+    EnemyConfig config = {0};
+    EnemyType chosen_type = GRUNT;
+    EnemyBehavior behavior = STATIC;
+    config.type = pick_type_weighted_by_difficulty(difficulty);
+    config.behavior = pick_behavior_for_type(config.type, difficulty);
+    config.strafe = (rand() % 10) + 5;
+    return config;
+}
+//Function to spawn enemies in waves
+#define SPAWN_ZONE_TOP 5 // enemies spawn in top 5 rows only
+#define SPAWN_ZONE_WIDTH (PLAYFIELD_W - 2)  
+void spawn_wave(long double difficulty) {
+    int wave_size = 3 + (int)(difficulty * 5);
+    for (int i = 0; i < wave_size; i++) {
+        EnemyConfig config = pick_enemy_config(difficulty);
+        float px = (rand() % (PLAYFIELD_W - 2)) + 1;  
+        float py = rand() % SPAWN_ZONE_TOP;
+        
+        spawn_enemy(config.type, config.behavior, px, py, config.strafe);
+    }
+}
+//Function to select music based on difficulty, currently a stub
+int pick_music_track(long double difficulty) {
+}
+//Function to generate an endless procedurally generated level
+void endless_level(void){
+    if (tick % 180) difficulty += 0.01;
+if (tick % 600 || tick ==0){
+spawn_wave(difficulty);
+pick_music_track(difficulty);
+}
 }

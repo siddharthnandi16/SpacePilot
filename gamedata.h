@@ -86,5 +86,10 @@ float old_px, old_py; //Stores old positions of enemy for purpose of drawing, no
 WeaponType *weapon; //Tells the weapon firing function what weapon to use
 }Enemy;
 extern Enemy enemies[];
-
+//Enemy config struct
+typedef struct {
+    EnemyType type;
+    EnemyBehavior behavior;
+    float strafe;
+} EnemyConfig;
 #endif
