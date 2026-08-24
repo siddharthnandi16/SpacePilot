@@ -19,7 +19,7 @@
 struct Player player = {
     .px = 0, .py = 0,
     .vx = 1, .vy = 1,
-    .dx = 1, .dy = 1,
+    .dx = 2, .dy = 2,
     .alive = 1,
     .lives = 5,
     .hasLasers = true, .hasBombs = true,

@@ -161,26 +161,26 @@ EnemyBehavior pick_behavior_for_type(EnemyType type, long double difficulty) {
 
 //Function to set enemy configs
 EnemyConfig pick_enemy_config(long double difficulty) {
-    srand((unsigned)time(NULL));
     EnemyConfig config = {0};
     EnemyType chosen_type = GRUNT;
     EnemyBehavior behavior = STATIC;
     config.type = pick_type_weighted_by_difficulty(difficulty);
     config.behavior = pick_behavior_for_type(config.type, difficulty);
-    config.strafe = (rand() % 10) + 5;
+   config.strafe = rand() % 11;
     return config;
 }
 //Function to spawn enemies in waves
 #define SPAWN_ZONE_TOP 5 // enemies spawn in top 5 rows only
 #define SPAWN_ZONE_WIDTH (PLAYFIELD_W - 2)  
 void spawn_wave(long double difficulty) {
-    int wave_size = 3 + (int)(difficulty * 5);
-    for (int i = 0; i < wave_size; i++) {
+ float wave_size = 4 + (difficulty * 5);
+    for (int i = 0; i < (int)wave_size; i++) {
+        fprintf(stderr, "  Iteration %d/%d\n", i+1, wave_size);
         EnemyConfig config = pick_enemy_config(difficulty);
         float px = (rand() % (PLAYFIELD_W - 2)) + 1;  
         float py = rand() % SPAWN_ZONE_TOP;
-        
         spawn_enemy(config.type, config.behavior, px, py, config.strafe);
+        fprintf(stderr, "    Spawning %d at (%.0f, %.0f)\n", config.type, px, py);
     }
 }
 //Function to select music based on difficulty, currently a stub
@@ -189,7 +189,7 @@ int pick_music_track(long double difficulty) {
 //Function to generate an endless procedurally generated level
 void endless_level(void){
     if (tick % 180) difficulty += 0.01;
-if (tick % 600 || tick ==0){
+if (tick % 150 ==0){
 spawn_wave(difficulty);
 pick_music_track(difficulty);
 }

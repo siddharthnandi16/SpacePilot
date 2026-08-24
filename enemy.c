@@ -4,7 +4,7 @@
 #include "gamedata.h"
 #include "projectile.h"
 #include "window.h"
-#define MAX_ENEMIES 100
+#define MAX_ENEMIES 50
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
 Enemy enemies[MAX_ENEMIES] = {
     [0] = {
@@ -159,14 +159,16 @@ break;
 case STRAFE_HORIZONTAL:
 enemies[i].px = enemies[i].px + enemies[i].dx;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe || enemies[i].px >= PLAYFIELD_W-1 || enemies[i].px == 0){
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe || (int)enemies[i].px >= PLAYFIELD_W-1 
+|| enemies[i].px == 0 || (int)enemies[i].py >= PLAYFIELD_H-1 || enemies[i].py == 0 ){
 enemies[i].dx = -enemies[i].dx;
 }
 break;
 case STRAFE_VERTICAL:
 enemies[i].py = enemies[i].py + enemies[i].dy;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || enemies[i].px >= PLAYFIELD_H-1 || enemies[i].px == 0){
+if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || (int)enemies[i].px == PLAYFIELD_H-1 
+|| enemies[i].px == 0 || (int)enemies[i].py >= PLAYFIELD_H-1 || enemies[i].py == 0){
 enemies[i].dy = -enemies[i].dy;
 }
 break;

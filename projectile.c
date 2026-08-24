@@ -177,7 +177,7 @@ projectiles[slot].pierce = 3;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 30; //Higher = more accurate
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -1;
+projectiles[slot].dy = -2;
 projectiles[slot].damage = 2;
 break;
 case PLASMA:
@@ -186,7 +186,7 @@ projectiles[slot].pierce = 5;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -5;
+projectiles[slot].dy = -3;
 projectiles[slot].damage = 5;
 break;
 case EMP:

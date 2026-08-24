@@ -10,6 +10,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include <stdbool.h>
 #include <pdcurses.h>
 #include <windows.h>
+#include <time.h>
 #include "titlescreen.h"
 #include "gamedata.h"
 #include "movement.h"
@@ -71,6 +72,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
 int seed; //Variable that stores the RNG seed. Used for various rng calls
 
 int main(){    
+     srand((unsigned)time(NULL));
     //Debug function used to check whether consoles resizing is working properly
 // forceConsoleSize_debug(100,30);
 initscr();
