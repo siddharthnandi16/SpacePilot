@@ -1,4 +1,5 @@
 #ifndef TITLESCREEN_H
 #define TITLESCREEN_H
-int drawTitleScreen(int quit);
+#include "gamedata.h"
+GameMode drawTitleScreen(void);
 #endif

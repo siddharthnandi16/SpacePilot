@@ -22,7 +22,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "projectile.h"
 #include "collision.h"
 int quit = 0; //1= true, 0= false
-int game_over =0 //1= true, 0=false
+int game_over =0; //1= true, 0=false
 int unsigned long tick=0;
 int spawn_table_1_count;
 //This function sets the player's current movement speed to their top speed
@@ -30,12 +30,9 @@ void setplayermovement(struct Player *player){
 player->dx = player->vx;
 player->dy = player->vy;
 }
-int gameloop(Player *player, int max_x, int max_y){
+int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(quit != 1 && game_over!=1){
-        //Debug code to see how fast the function is running
-       // a++;
-       // printf("%d", a);
     tick++;
     erase_enemies(enemies);
     erase_projectiles(projectiles);
@@ -50,8 +47,22 @@ int gameloop(Player *player, int max_x, int max_y){
     fire_enemies(enemies);
     render_enemies(enemies);
     render_projectiles(projectiles);
-    level(&level_1);
+    switch(game_mode) {
+    case STORY_MODE:
+        level(&level_1);
+        break;
+    case ENDLESS_MODE:
+    //Commented out as it is not not yet implemented
+      //  endless_level();  
+        break;
+    default:
+        break;
+}
     Check_Collisions(player, enemies, projectiles);
+    if (player->lives <= 0){
+        game_over=1;
+        return 0;
+    }
     refresh();
     napms(34); //Controls frame rate and refresh rate
     }
@@ -79,14 +90,42 @@ touchwin(stdscr);
     init_pair(4, COLOR_CYAN, COLOR_BLACK); //Player projectiles
     init_pair(5, COLOR_WHITE, COLOR_BLACK); //Background objects
 refresh();
-drawTitleScreen(quit);
+keypad(stdscr, TRUE);
+//drawTitleScreen();
 setplayermovement(&player);
 player.px = max_x/2, player.py = max_y/2;
 seed = max_x + max_y;
 srand(seed);
     refresh();
-    erase();
-    gameloop(&player, max_x, max_y);
+ 
+ GameMode game_mode = drawTitleScreen();
+ erase();
+    while(game_mode != MODE_QUIT){
+switch(game_mode){
+case STORY_MODE:
+erase();
+gameloop(&player, max_x, max_y, STORY_MODE);
+break;
+case ENDLESS_MODE:
+erase();
+gameloop(&player, max_x, max_y, ENDLESS_MODE);
+break;
+//Placeholder case for unimplemented feature
+case HIGH_SCORES:
+break;
+//Placeholder case for unimplemented feature
+case MUSIC_ROOM:
+break;
+default:
+ break; 
+}
+if (game_mode != MODE_QUIT){
+    //Function TBA here which will reset all variables to their default values
+game_mode = drawTitleScreen();
+}
+    }
+    
+    
     endwin();
     return 0;
 }

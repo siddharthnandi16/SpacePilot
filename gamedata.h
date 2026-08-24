@@ -4,6 +4,8 @@
 #define PLAYFIELD_W 100
 #define PLAYFIELD_H 30
 // This header file stores data about the game's current state
+//Enums for storing game modes
+typedef enum game_mode{STORY_MODE, ENDLESS_MODE, HIGH_SCORES, MUSIC_ROOM, MODE_QUIT}GameMode;
 //Enums for types and states of projectiles
 typedef enum proj_type{BULLET,LASER,BOMB,MISSILE,PLASMA,EMP,CHAINLIGHTNING}ProjType;
 typedef enum proj_state{NORMAL,SPENT,EXPLODING}ProjState;
