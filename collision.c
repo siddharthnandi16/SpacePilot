@@ -3,7 +3,6 @@
 #include "gamedata.h"
 #include  "enemy.h"
 #include "projectile.h"
-#define MAX_ENEMIES 100
 #define MAX_PROJECTILES 2000
 int Check_Collisions(Player *player, Enemy *enemies, Projectile *projectiles){
 //First loop for enemy-projectile collisions. Enemies only collide with player projectiles

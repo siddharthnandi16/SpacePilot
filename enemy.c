@@ -4,9 +4,26 @@
 #include "gamedata.h"
 #include "projectile.h"
 #include "window.h"
-#define MAX_ENEMIES 50
+#include "enemy.h"
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
 Enemy enemies[MAX_ENEMIES] = {
+    [0] = {
+.px = 0, .py = 0,
+    .dx = 1, .dy = 1,
+    .hp = 1,
+    .symbol = '%',
+    .width = 1, .height = 1,
+    .cooldown_frames = 0, //Stores the firing timer
+    .type = GRUNT,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = NULL,
+    .weapon = &GRUNT_RIFLE,
+    
+    }
+};
+//Backup of spawning pool
+Enemy enemies_backup[MAX_ENEMIES] = {
     [0] = {
 .px = 0, .py = 0,
     .dx = 1, .dy = 1,

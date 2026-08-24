@@ -24,11 +24,11 @@ bool should_draw_cell(int max_y, int max_x){
     return (rand() / (double)RAND_MAX) < density;
 }
 //Scrolls the game and renders the player. Also returns the number of rows scrolled
-int scrollanddraw(){
-    static int old_screen_px = -1, old_screen_py = -1;
-
-    if (old_screen_px != -1) {
-        mvaddch(old_screen_py, old_screen_px, ' ');
+ int old_screen_px = -1;
+ int old_screen_py = -1;
+int scrollanddraw(int *old_screen_px, int *old_screen_py){
+    if (*old_screen_px != -1) {
+        mvaddch(*old_screen_py, *old_screen_px, ' ');
     }
 
     scrollok(stdscr, TRUE);
@@ -45,8 +45,8 @@ int scrollanddraw(){
     attroff(COLOR_PAIR(1));
     if (player.invuln_frames > 0){attroff(A_REVERSE);}
 
-    old_screen_px = screen_px;
-    old_screen_py = screen_py;
+    *old_screen_px = screen_px;
+    *old_screen_py = screen_py;
 
     rows_scrolled++;
     refresh();
@@ -137,8 +137,8 @@ EnemyBehavior pick_behavior_for_type(EnemyType type, long double difficulty) {
     if (difficulty < 0.0f) difficulty = 0.0f;
     if (difficulty > 1.0f) difficulty = 1.0f;
     
-    // STATIC: 50% -> 0%
-    int static_weight = 50 - (int)(difficulty * 50);
+    // STATIC: 30% -> 0%
+    int static_weight = 30 - (int)(difficulty * 50);
     
     // Remaining percentage split equally among three behaviors
     int dynamic_remaining = 100 - static_weight;
@@ -166,14 +166,14 @@ EnemyConfig pick_enemy_config(long double difficulty) {
     EnemyBehavior behavior = STATIC;
     config.type = pick_type_weighted_by_difficulty(difficulty);
     config.behavior = pick_behavior_for_type(config.type, difficulty);
-   config.strafe = rand() % 11;
+ config.strafe = 5 + (rand() % 6);  // 5 + (0 to 5) = 5 to 10
     return config;
 }
 //Function to spawn enemies in waves
 #define SPAWN_ZONE_TOP 5 // enemies spawn in top 5 rows only
 #define SPAWN_ZONE_WIDTH (PLAYFIELD_W - 2)  
 void spawn_wave(long double difficulty) {
- float wave_size = 4 + (difficulty * 4);
+ float wave_size = 4 + (difficulty * 10);
     for (int i = 0; i < (int)wave_size; i++) {
         fprintf(stderr, "  Iteration %d/%d\n", i+1, wave_size);
         EnemyConfig config = pick_enemy_config(difficulty);
@@ -187,10 +187,11 @@ void spawn_wave(long double difficulty) {
 int pick_music_track(long double difficulty) {
 }
 //Function to generate an endless procedurally generated level
+int unsigned long spawn_tick = 0;
 void endless_level(void){
-    static unsigned long spawn_tick = 0;
+    difficulty = 0;
     if (difficulty < 5){
-if (spawn_tick % 600==0) difficulty += 0.04;
+if (spawn_tick % 600==0) difficulty += 0.05;
     }  
 if (spawn_tick % 300 ==0 || spawn_tick==0){
 spawn_wave(difficulty);

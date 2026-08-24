@@ -33,11 +33,11 @@ player->dy = player->vy;
 }
 int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
-    while(quit != 1 && game_over!=1){
+    while(quit != 1 && game_over != 1){
     tick++;
     erase_enemies(enemies);
     erase_projectiles(projectiles);
-    scrollanddraw();
+    scrollanddraw(&old_screen_px, &old_screen_py);
     getmaxyx(stdscr, max_y, max_x);
     update_playfield_offset(max_x,max_y);
     draw_playfield_border();
@@ -70,7 +70,33 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     return 0;
 }
 int seed; //Variable that stores the RNG seed. Used for various rng calls
-
+//Function to reset all values to their defaults
+void reset_all(int max_x, int max_y) {
+    player = player_backup;
+    player.lives = 5;
+    game_over = 0;  // <- add this
+    memcpy(enemies, enemies_backup, sizeof(enemies_backup));
+    memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
+    for (int i = 0; i < level_1.spawn_count; i++) {
+        spawn_table_1[i].fired = FALSE;
+    }
+    
+    // Reset dialogue tables
+    for (int i = 0; i < level_1.dialogue_count; i++) {
+        dialogue_table_1[i].fired = FALSE;
+    }
+    
+    // Reset sound tables
+    for (int i = 0; i < level_1.sound_count; i++) {
+        sound_table_1[i].fired = FALSE;
+    }
+    spawn_tick = 0;
+     fprintf(stderr, "Before update: offset_x=%d, offset_y=%d\n", offset_x, offset_y);
+update_playfield_offset(max_x,max_y);
+fprintf(stderr, "After update: offset_x=%d, offset_y=%d\n", offset_x, offset_y);
+old_screen_py =-1;
+old_screen_px= -1;
+}
 int main(){    
      srand((unsigned)time(NULL));
     //Debug function used to check whether consoles resizing is working properly
@@ -95,11 +121,11 @@ refresh();
 keypad(stdscr, TRUE);
 //drawTitleScreen();
 setplayermovement(&player);
-player.px = max_x/2, player.py = max_y/2;
-seed = max_x + max_y;
-srand(seed);
-    refresh();
- 
+player.px = PLAYFIELD_W/2, player.py = (PLAYFIELD_H)/3*2;
+getmaxyx(stdscr, max_y, max_x);
+    update_playfield_offset(max_x,max_y);
+refresh();
+
  GameMode game_mode = drawTitleScreen();
  erase();
     while(game_mode != MODE_QUIT){
@@ -122,8 +148,8 @@ default:
  break; 
 }
 if (game_mode != MODE_QUIT){
-    //Function TBA here which will reset all variables to their default values
-game_mode = drawTitleScreen();
+    reset_all(max_x, max_y);
+     game_mode = drawTitleScreen();   
 }
     }
     

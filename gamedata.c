@@ -17,7 +17,7 @@
 }; */
 // Commented out since it conflicts with the typedef in gamedata.h
 struct Player player = {
-    .px = 0, .py = 0,
+    .px = PLAYFIELD_W/2, .py = PLAYFIELD_H/3,
     .vx = 1, .vy = 1,
     .dx = 2, .dy = 2,
     .alive = 1,
@@ -33,3 +33,22 @@ struct Player player = {
     // For debug purpose, all implemented weapons are given to the player 
     .invuln_frames = 0
 };
+//Backup version of player struct. ALWAYS KEEP IT THE SAME AS THE PLAYER STRUCT
+struct Player player_backup = {
+    .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H)/3 * 2,
+    .vx = 1, .vy = 1,
+    .dx = 2, .dy = 2,
+    .alive = 1,
+    .lives = 5,
+    .hasLasers = true, .hasBombs = true,
+    .fire_rate = 20,
+    .symbol = '@',
+    .speed_mode_fast = true,
+    .q_was_down = false,
+    .weapon_id = AUTOPISTOL_ID,
+    .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, 
+        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID},
+    // For debug purpose, all implemented weapons are given to the player 
+    .invuln_frames = 0
+};
+

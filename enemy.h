@@ -1,5 +1,8 @@
 #ifndef ENEMY_H
 #define ENEMY_H
+#define MAX_ENEMIES 50
+//Backup of enemy spawning pool 
+extern Enemy enemies_backup[MAX_ENEMIES];   
 int findfreeslot(void);
 const Enemy* get_template(EnemyType type);
 void spawn_enemy(EnemyType type, EnemyBehavior behavior, float px, float py, float strafe);

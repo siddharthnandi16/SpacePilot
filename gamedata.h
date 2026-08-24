@@ -57,6 +57,7 @@ typedef struct Player{
     int invuln_frames; //Period of invulnerability granted after taking a hit
 }Player;
 extern Player player;
+extern Player player_backup;
 #define MAX_TILE_HEIGHT 8 //Max height of multi-tile enemies
 #define MAX_TILE_WIDTH  40 //Max width of multi-tile enemies
 typedef struct TileLayout {

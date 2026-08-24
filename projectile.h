@@ -1,7 +1,9 @@
 #include "gamedata.h"
+#include "enemy.h"
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 #define MAX_PROJECTILES 2000
+extern Projectile projectiles_backup[MAX_ENEMIES];
 extern Projectile projectiles[MAX_PROJECTILES];
 extern WeaponType autopistol;
 extern WeaponType machinegun;

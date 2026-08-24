@@ -2,8 +2,8 @@
 #include <math.h>
 #include "gamedata.h"
 #include "window.h"
+#include "enemy.h"
 #define MAX_PROJECTILES 2000
-#define MAX_ENEMIES 100
 //Table for storing projectiles. The values here are placeholders than will be overwritten during gameplay
 Projectile projectiles[MAX_PROJECTILES] = {
     [0] = {
@@ -28,6 +28,21 @@ Plasma = *
 EMP = -
 Chain Lighting = ~
 */
+//Backup of projectiles struct
+Projectile projectiles_backup[MAX_PROJECTILES] = {
+    [0] = {
+.px = -1, .py = -1,
+.old_px=-1, .old_py=-1,
+    .dx = 0, .dy = 0, .angle = 90,
+    .symbol = '*',
+    .width = 1, .height = 1,
+    .age = 0, .strafe=0,
+    .pierce = 1, .turn_rate=0,
+    .type = BULLET, .state=SPENT,
+     .color=3, .player_owned = FALSE,
+     .damage = 1
+    }
+};
 //List of player weapon types. All player weapons are in lowercase
 const WeaponType autopistol = {
     .cooldown_frames = 5, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
