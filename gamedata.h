@@ -2,7 +2,7 @@
 #define GAMEDATA_H
 //Defines for current size of playfield
 #define PLAYFIELD_W 100
-#define PLAYFIELD_H 30
+#define PLAYFIELD_H 27
 // This header file stores data about the game's current state
 //Enums for storing game modes
 typedef enum game_mode{STORY_MODE, ENDLESS_MODE, HIGH_SCORES, MUSIC_ROOM, MODE_QUIT}GameMode;
@@ -34,6 +34,7 @@ GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFL
  BOMB_ENEMY_ID, HUNTER_RIFLE_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 typedef struct WeaponType{
+    char *display_name;
     int cooldown_frames;
     int number; //Number of projectiles fired
     float angle; //Angle at which extra projectiles are offset from the main projectile
@@ -55,6 +56,7 @@ typedef struct Player{
     WeaponID weapon_id;
     WeaponID inventory[8]; 
     int invuln_frames; //Period of invulnerability granted after taking a hit
+    int score; //Increments upon destroyed enemies
 }Player;
 extern Player player;
 extern Player player_backup;

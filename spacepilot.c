@@ -22,6 +22,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "dialogue.h"
 #include "projectile.h"
 #include "collision.h"
+#include "hud.h"
 int quit = 0; //1= true, 0= false
 int game_over =0; //1= true, 0=false
 int unsigned long tick=0;
@@ -64,6 +65,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         game_over=1;
         return 0;
     }
+    drawHUD(player);
     refresh();
     napms(34); //Controls frame rate and refresh rate
     }
@@ -112,11 +114,24 @@ syncConsoleBufferToWindow();
 resize_term(0,0);
 touchwin(stdscr);
  start_color();
+ #define AMBER_COLOR  8
+ #define STEEL_GRAY_COLOR  9
+#define ACID_GREEN_COLOR  10
+#define PURPLE_COLOR      11
+init_color(AMBER_COLOR, 1000, 690, 0);
+init_color(STEEL_GRAY_COLOR, 541, 608, 659);
+    init_color(ACID_GREEN_COLOR, 651, 1000, 0);
+    init_color(PURPLE_COLOR, 690, 361, 1000);
     init_pair(1, COLOR_GREEN,COLOR_BLACK); //Player
     init_pair(2, COLOR_RED, COLOR_BLACK); //Enemies
     init_pair(3, COLOR_YELLOW, COLOR_BLACK); //Enemy projectiles
     init_pair(4, COLOR_CYAN, COLOR_BLACK); //Player projectiles
     init_pair(5, COLOR_WHITE, COLOR_BLACK); //Background objects
+    init_pair(6, AMBER_COLOR, COLOR_BLACK); //Color for HUD
+    init_pair(7, STEEL_GRAY_COLOR, COLOR_BLACK); //Used for borders
+    init_pair(8, ACID_GREEN_COLOR, COLOR_BLACK);
+    init_pair(9,     PURPLE_COLOR,     COLOR_BLACK);
+    
 refresh();
 keypad(stdscr, TRUE);
 //drawTitleScreen();

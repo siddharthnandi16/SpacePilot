@@ -35,7 +35,7 @@ void draw_playfield_border(void) {
     int left   = offset_x - 1;
     int right  = offset_x + PLAYFIELD_W;
 
-    attron(COLOR_PAIR(5)); // Reusing your existing "background objects" color
+    attron(COLOR_PAIR(7)); // Reusing your existing "background objects" color
 
     // Corners
     mvaddch(top,    left,  ACS_ULCORNER);
@@ -55,7 +55,7 @@ void draw_playfield_border(void) {
         mvaddch(y, right, ACS_VLINE);
     }
 
-    attroff(COLOR_PAIR(5));
+    attroff(COLOR_PAIR(7));
 }
 //Function to forcibly resize terminal, does not work currently
 void forceConsoleSize(int cols, int rows) {

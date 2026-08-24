@@ -21,6 +21,7 @@ if ((int)enemies[i].px == (int)projectiles[p].px &&
 && (int)enemies[i].px >= x_min && (int)enemies[i].px <= x_max){
 enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
+player->score++;
 if (projectiles[p].type == BOMB){
     projectiles[p].state = EXPLODING;
 }
@@ -35,6 +36,7 @@ if(projectiles[p].type == LASER){
 if((int)enemies[i].px == (int)projectiles[p].px){
     enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
+player->score++;
  if(enemies[i].hp <= 0){
 enemies[i].state = DEAD;
 };

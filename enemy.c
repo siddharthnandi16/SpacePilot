@@ -233,6 +233,7 @@ void fire_enemies(Enemy *enemies){
          if (weapon != NULL && enemies[i].cooldown_frames >= weapon->cooldown_frames) {
             fire_weapon(weapon, enemies[i].px, enemies[i].py - 1, 270, FALSE);
             enemies[i].cooldown_frames = 0;
+            if (weapon->type == LASER) enemies[i].cooldown_frames = -300;
         }
     }
 }
