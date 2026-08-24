@@ -30,11 +30,11 @@ Chain Lighting = ~
 */
 //List of player weapon types. All player weapons are in lowercase
 const WeaponType autopistol = {
-    .cooldown_frames = 15, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 5, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
 ,.weapon_id = AUTOPISTOL_ID
 };
 const WeaponType machinegun = {
-    .cooldown_frames = 5, .number = 2, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 2, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = MACHINEGUN_ID
 };
 const WeaponType laserrifle = {
@@ -42,19 +42,19 @@ const WeaponType laserrifle = {
     ,.weapon_id = LASRIFLE_PLAYER_ID
 };
 const WeaponType bomblauncher = {
-    .cooldown_frames = 30, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+    .cooldown_frames = 15, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = BOMB_PLAYER_ID
 };
 const WeaponType missilelauncher = {
-    .cooldown_frames = 20, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
+    .cooldown_frames = 30, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
     ,.weapon_id = MISSILE_PLAYER_ID
 };
 const WeaponType plasmarifle = {
-    .cooldown_frames = 5, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+    .cooldown_frames = 3, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMARIFLE_PLAYER_ID
 };
 const WeaponType empbomb = {
-    .cooldown_frames = 600, .number = 1, .angle= 90, .type= EMP, .modes = NORMAL
+    .cooldown_frames = 300, .number = 1, .angle= 90, .type= EMP, .modes = NORMAL
     ,.weapon_id = EMP_ID
 };
 const WeaponType lightning = {
@@ -62,7 +62,7 @@ const WeaponType lightning = {
     ,.weapon_id = LIGHTNING_ID
 };
 const WeaponType shotgun = {
-    .cooldown_frames = 40, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 20, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = SHOTGUN_ID
 };
 const WeaponType lasercannon = {
@@ -75,23 +75,23 @@ const WeaponType plasmacannon = {
 };
 //List of enemy weapon types. All enemy weapon types are capitalised
 const WeaponType GRUNT_RIFLE = {
-    .cooldown_frames = 90, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 45, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = GRUNT_WEAPON_ID
 };
 const WeaponType RAPIDFIRE_RIFLE = {
-    .cooldown_frames = 30, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 15, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = RAPIDFIRE_RIFLE_ID
 };
 const WeaponType LASER_RIFLE_ENEMY = {
-    .cooldown_frames = 180, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+    .cooldown_frames = 90, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
     ,.weapon_id = LASER_RIFLE_ENEMY_ID
 };
 const WeaponType BOMB_ENEMY_WEAPON = {
-    .cooldown_frames = 180, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+    .cooldown_frames = 120, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = BOMB_ENEMY_ID
 };
 const WeaponType HUNTER_RIFLE = {
-    .cooldown_frames = 20, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    .cooldown_frames = 15, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = HUNTER_RIFLE_ID
 };
 //Function to find a free slot in the enemy pool

@@ -37,11 +37,11 @@ static const Enemy grunt_template = {
     .weapon = &GRUNT_RIFLE,
     
 };
-// Rapidly fires bullets. Meant to be dangerous in swarms
+// Rapidly fires bullets and moves fast. Meant to be dangerous in swarms
 static const Enemy rapidfire_template = {
     .px = 0, .py = 0,
-    .dx = 2, .dy = 2,
-    .hp = 1,
+    .dx = 3, .dy = 3,
+    .hp = 2,
     .symbol = '&',
     .width = 1, .height = 1,
     .cooldown_frames = 10,
