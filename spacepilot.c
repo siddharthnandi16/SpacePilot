@@ -22,6 +22,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "projectile.h"
 #include "collision.h"
 int quit = 0; //1= true, 0= false
+int game_over =0 //1= true, 0=false
 int unsigned long tick=0;
 int spawn_table_1_count;
 //This function sets the player's current movement speed to their top speed
@@ -31,7 +32,7 @@ player->dy = player->vy;
 }
 int gameloop(Player *player, int max_x, int max_y){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
-    while(1){
+    while(quit != 1 && game_over!=1){
         //Debug code to see how fast the function is running
        // a++;
        // printf("%d", a);

@@ -98,6 +98,8 @@ const WeaponType HUNTER_RIFLE = {
 int findfreeprojectileslot(void){
     for(int i=0; i < MAX_PROJECTILES; i++){
         if (projectiles[i].state == SPENT){
+            //Debug code
+             //fprintf(stderr, "Found free slot: %d\n", i);
             return i;
         }
     }
@@ -229,6 +231,45 @@ if (projectiles[i].type == LASER) {
         projectiles[i].state = SPENT;
     }
     continue; // Skips normal movement
+}
+if(projectiles[i].type == BOMB && projectiles[i].age >= 15){
+    projectiles[i].state = EXPLODING;
+}
+if (projectiles[i].state == EXPLODING){
+    projectiles[i].state = SPENT;  
+    int offset_angle = 90;
+    for (int j= 0; j < 12; j++){
+int slot_1 = findfreeprojectileslot();
+//Debug code for checking if projectile slot finding function is working properly
+//fprintf(stderr, "j=%d: got slot %d, its current state=%d\n", j, slot_1, projectiles[slot_1].state);
+if (slot_1 == -1){
+    offset_angle = offset_angle + 30;
+    continue; //Skips execution if there are no free projectile slots
+}
+projectiles[slot_1].state = NORMAL;
+//Debug code to check if slot is being set properly
+//fprintf(stderr, "Set slot %d to NORMAL\n", slot_1);
+projectiles[slot_1].player_owned = projectiles[i].player_owned;
+projectiles[slot_1].px = projectiles[i].px ;
+projectiles[slot_1].py = projectiles[i].py ;
+projectiles[slot_1].type = BULLET;
+projectiles[slot_1].angle = offset_angle;
+projectiles[slot_1].symbol = '+';
+projectiles[slot_1].pierce = 1;
+projectiles[slot_1].strafe = 0;
+projectiles[slot_1].turn_rate = 0;
+projectiles[slot_1].dx = 0;
+projectiles[slot_1].dy = -1; //Moves directly upward
+projectiles[slot_1].damage = 1;
+projectiles[slot_1].color = projectiles[i].color;
+offset_angle = offset_angle + 30;
+//Debug code for checking number of projectiles spawned
+//fprintf(stderr, "Created shrapnel: slot %d, angle %d, initial dx=%.2f dy=%.2f\n", 
+//       slot_1, offset_angle, projectiles[slot_1].dx, projectiles[slot_1].dy);
+    }
+    //Debug code for checking state of first three slots in pool
+      //  fprintf(stderr, "After explosion: slot 0 state=%d, slot 1 state=%d, slot 2 state=%d\n", 
+      //  projectiles[0].state, projectiles[1].state, projectiles[2].state);
 }
 //Skips check for projectiles that are inactive
 if (projectiles[i].state != NORMAL) {

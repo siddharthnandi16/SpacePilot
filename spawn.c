@@ -17,7 +17,7 @@ spawn_entry spawn_table_1[]={
  .px = 12, .py = 10, .strafe = 0, .trigger_time=40
     },
     [3] ={
-.trigger = ROW, .type = BOMBER, .behavior = STRAFE_HORIZONTAL, 
+.trigger = ROW, .type = GRUNT, .behavior = STRAFE_HORIZONTAL, 
 .fired = FALSE, .px = 13, .py = 25, .strafe = 10, .trigger_time=30
     },
     [4] ={

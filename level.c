@@ -82,7 +82,8 @@ void level(const Level_Data *level){
                                 level->spawn_table[i].px, level->spawn_table[i].py,
                                 level->spawn_table[i].strafe);
                     level->spawn_table[i].fired = TRUE;
-                    fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
+                    //Debug code to check whether entities are spawning correctly
+                    //fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
                 }
                 break;
         }
