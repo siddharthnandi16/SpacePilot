@@ -84,7 +84,9 @@ void level(const Level_Data *level){
                                 level->spawn_table[i].strafe);
                     level->spawn_table[i].fired = TRUE;
                     //Debug code to check whether entities are spawning correctly
-                    //fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
+                    fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
+                    //Debug code to check if enemy characteristics are being correctly assinged
+                    fprintf(stderr, "Entry horizontal position is %d , shape=%d\n", enemies[i].px, enemies[i].shape );
                 }
                 break;
         }

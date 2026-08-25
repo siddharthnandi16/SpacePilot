@@ -110,6 +110,38 @@ static const Enemy hunter_template = {
     .shape = NULL,
     .weapon = &HUNTER_RIFLE
 };
+//Layout for jets
+static const int jet_row0_colors[] = {2, 6, 2}; //red, amber, red
+static const int jet_row1_colors[] = {2, 7, 2}; //red, steel gray, red
+static const int jet_row2_colors[] = {2, 2, 2}; //red, red, red
+// Anchor point is the # at its center
+TileLayout Jet_Layout = {
+.width = 3, .height = 3,
+.glyph_rows = {
+    " | ",
+    "<#>",
+    " V "
+},
+.color_rows = {
+    jet_row0_colors,
+    jet_row1_colors,
+    jet_row2_colors
+}
+};
+static const Enemy jet_template = {
+    .px = 0, .py = 0,
+    .dx = 2, .dy = 2,
+    .hp = 10,
+    .symbol = '%',
+    .width = 3, .height = 3,
+    .cooldown_frames = 30,
+    .type = JET,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Jet_Layout,
+    .weapon = &JET_CANNON
+};
+
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
     for(int i=0; i < MAX_ENEMIES; i++){
@@ -127,8 +159,7 @@ const Enemy* get_template(EnemyType type) {
         case LASER_ENEMY:     return &laser_template;
         case BOMBER:    return &bomber_template;
         case HUNTER:    return &hunter_template;
-  //      case JET:       return &jet_template;
-  // Commented out since it is not yet implemented
+        case JET:       return &jet_template;
         default:        return NULL;
     }
 }
@@ -152,6 +183,12 @@ enemies[slot].anchor_px = enemies[slot].px;
 enemies[slot].anchor_py = enemies[slot].py;
 enemies[slot].behavior = behavior;
 enemies[slot].state = ALIVE;
+if (enemies[slot].shape != NULL){
+enemies[slot].px = enemies[slot].px - (template->shape->width  / 2.0f);
+enemies[slot].py = enemies[slot].py - (template->shape->height / 2.0f);
+enemies[slot].anchor_px = enemies[slot].px;
+enemies[slot].anchor_py = enemies[slot].py;
+} 
 }
 //Function that moves living enemies based on their behavior type and removes dead enemies
 void move_enemy(Enemy *enemies, Player *player, int max_x, int max_y){
@@ -176,16 +213,22 @@ break;
 case STRAFE_HORIZONTAL:
 enemies[i].px = enemies[i].px + enemies[i].dx;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe || (int)enemies[i].px >= PLAYFIELD_W-1 
-|| enemies[i].px == 0 || (int)enemies[i].py >= PLAYFIELD_H-1 || enemies[i].py == 0 ){
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe 
+|| (int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W-1 
+|| enemies[i].px + enemies[i].width -1 == 0 
+|| (int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1
+|| enemies[i].py + enemies[i].height -1 == 0 ){
 enemies[i].dx = -enemies[i].dx;
 }
 break;
 case STRAFE_VERTICAL:
 enemies[i].py = enemies[i].py + enemies[i].dy;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || (int)enemies[i].px == PLAYFIELD_H-1 
-|| enemies[i].px == 0 || (int)enemies[i].py >= PLAYFIELD_H-1 || enemies[i].py == 0){
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe 
+|| (int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W-1 
+|| enemies[i].px + enemies[i].width -1 == 0 
+|| (int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1
+|| enemies[i].py + enemies[i].height -1 == 0){
 enemies[i].dy = -enemies[i].dy;
 }
 break;
@@ -203,17 +246,23 @@ float target_py = player->py - 4;
 if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
 if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
 }
+//General purpose border collsion code, may be copied for other freely moving enemies
+if ((int)enemies[i].py + enemies[i].height - 1 == PLAYFIELD_H-1 || (int)enemies[i].px +  enemies[i].width -1 == 0 
+|| (int)enemies[i].px + enemies[i].width -1  >= PLAYFIELD_W-1 || enemies[i].py + enemies[i].height - 1 == 0){
+enemies[i].dy = -enemies[i].dy;
+enemies[i].dx = -enemies[i].dx; 
+}
 break;
 default:
 break;
-    }
+} 
 }
 }
 }
 //Function that erases the old positions of enemies each frame
 void erase_enemies(Enemy *enemies){
     for(int i=0; i < MAX_ENEMIES; i++){
-        if (enemies[i].state == ALIVE || enemies[i].state == DEAD){
+        if (enemies[i].shape == NULL && (enemies[i].state == ALIVE || enemies[i].state == DEAD)){
 if (enemies[i].shape == NULL){   
     mvaddch(offset_y + enemies[i].py, offset_x + enemies[i].px, ' ');
      enemies[i].old_px = enemies[i].px;
@@ -222,18 +271,57 @@ if (enemies[i].shape == NULL){
         enemies[i].state = INACTIVE;
     }
      }
+             }
+             if (enemies[i].shape != NULL && (enemies[i].state ==ALIVE || enemies[i].state == DEAD)){
+const TileLayout *shape = enemies[i].shape;
+    for (int row = 0; row < shape->height; row++) {
+        for (int col = 0; col < shape->width; col++) {
+            char glyph = shape->glyph_rows[row][col];
+            // Does not render anything in blank cells
+            if (glyph == ' ') continue;
+            int color = shape->color_rows[row][col];
+            attron(COLOR_PAIR(color));
+            mvaddch(offset_y + (int)enemies[i].py + row,
+            offset_x + (int)enemies[i].px + col,
+            ' ');
+            attroff(COLOR_PAIR(color));
         }
+    }
+     }
+
     }
 }
 //Function that renders living enemies
 void render_enemies(Enemy *enemies){
 for(int i=0; i < MAX_ENEMIES; i++){
-    if (enemies[i].state == ALIVE){
+   /* if (enemies[i].state != INACTIVE){
+    fprintf(stderr, "%d %d %d",i, enemies[i].state, enemies[i].shape);
+    } */
+    if (enemies[i].shape == NULL && enemies[i].state == ALIVE){
     attron(COLOR_PAIR(2));
      mvaddch(offset_y + enemies[i].py, offset_x + enemies[i].px, enemies[i].symbol);
      attroff(COLOR_PAIR(2));
      refresh();
+     //This block renders all multi-tile enemies
     }
+    
+     if (enemies[i].shape != NULL && enemies[i].state ==ALIVE){
+        fprintf(stderr, "rendering shape enemy at %d\n", i);
+const TileLayout *shape = enemies[i].shape;
+    for (int row = 0; row < shape->height; row++) {
+        for (int col = 0; col < shape->width; col++) {
+            char glyph = shape->glyph_rows[row][col];
+            // Does not render anything in blank cells
+            if (glyph == ' ') continue;
+            int color = shape->color_rows[row][col];
+            attron(COLOR_PAIR(color));
+            mvaddch(offset_y + (int)enemies[i].py + row,
+            offset_x + (int)enemies[i].px + col,
+            glyph);
+            attroff(COLOR_PAIR(color));
+        }
+    }
+     }
 }
 }
 //Function that fires enemy weapons

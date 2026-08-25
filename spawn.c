@@ -9,19 +9,19 @@ spawn_entry spawn_table_1[]={
 .strafe = 0, .trigger_time=10
     },
     [1] ={
-.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
- .px = 11, .py = 10, .strafe = 0, .trigger_time=25
+.trigger = ROW, .type = JET, .behavior = STATIC, .fired = FALSE,
+ .px = 50, .py = 8, .strafe = 0, .trigger_time=0
     },
     [2] ={
 .trigger = ROW, .type = LASER_ENEMY, .behavior = STATIC, .fired = FALSE,
  .px = 12, .py = 10, .strafe = 0, .trigger_time=40
     },
     [3] ={
-.trigger = ROW, .type = GRUNT, .behavior = STRAFE_HORIZONTAL, 
-.fired = FALSE, .px = 13, .py = 25, .strafe = 10, .trigger_time=30
+.trigger = ROW, .type = JET, .behavior = STRAFE_HORIZONTAL, 
+.fired = FALSE, .px = 13, .py = 25, .strafe = 10, .trigger_time=0
     },
     [4] ={
-.trigger = TICK, .type = GRUNT, .behavior = STRAFE_VERTICAL, 
+.trigger = TICK, .type = JET, .behavior = HUNT_PLAYER, 
 .fired = FALSE, .px = 20, .py = 20, .strafe = 10, .trigger_time=90
     }
 };

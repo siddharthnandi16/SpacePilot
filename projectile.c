@@ -106,8 +106,12 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = BOMB_ENEMY_ID
 };
   WeaponType HUNTER_RIFLE = {
-   .display_name = "autocannon", .cooldown_frames = 15, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+   .display_name = "autocannon", .cooldown_frames = 10, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = HUNTER_RIFLE_ID
+};
+ WeaponType JET_CANNON = {
+   .display_name = "autocannon", .cooldown_frames = 5, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = JET_CANNON_ID
 };
 //Function to find a free slot in the enemy pool
 int findfreeprojectileslot(void){
@@ -140,6 +144,7 @@ const WeaponType* get_weapon_template(WeaponID weapon_id) {
         case LASER_RIFLE_ENEMY_ID:   return &LASER_RIFLE_ENEMY;
         case BOMB_ENEMY_ID:          return &BOMB_ENEMY_WEAPON;
         case HUNTER_RIFLE_ID:        return &HUNTER_RIFLE;
+        case JET_CANNON_ID:          return &JET_CANNON;
         default:                     return NULL;
     }
 }
