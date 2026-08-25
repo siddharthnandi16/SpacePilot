@@ -122,7 +122,7 @@ int findfreeprojectileslot(void){
 }
 //Finds the address of a weapon and returns it. 
 //Add a new case each time a new weapon is made
-    WeaponType* get_weapon_template(WeaponID weapon_id) {
+const WeaponType* get_weapon_template(WeaponID weapon_id) {
     switch (weapon_id) {
         case AUTOPISTOL_ID:          return &autopistol;
         case MACHINEGUN_ID:          return &machinegun;

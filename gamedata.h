@@ -33,7 +33,7 @@ PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID,
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
  BOMB_ENEMY_ID, HUNTER_RIFLE_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
-typedef struct WeaponType{
+const typedef struct WeaponType{
     char *display_name;
     int cooldown_frames;
     int number; //Number of projectiles fired

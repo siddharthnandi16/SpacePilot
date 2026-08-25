@@ -18,7 +18,7 @@
 // Commented out since it conflicts with the typedef in gamedata.h
 struct Player player = {
     .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H)/3*2,
-    .vx = 1, .vy = 1,
+    .vx = 2, .vy = 2,
     .dx = 2, .dy = 2,
     .alive = 1,
     .lives = 5,
@@ -37,7 +37,7 @@ struct Player player = {
 //Backup version of player struct. ALWAYS KEEP IT THE SAME AS THE PLAYER STRUCT
 struct Player player_backup = {
     .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H/3) * 2,
-    .vx = 1, .vy = 1,
+    .vx = 2, .vy = 2,
     .dx = 2, .dy = 2,
     .alive = 1,
     .lives = 5,

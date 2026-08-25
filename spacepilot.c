@@ -42,7 +42,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     getmaxyx(stdscr, max_y, max_x);
     update_playfield_offset(max_x,max_y);
     draw_playfield_border();
-    move_player(&player->px, &player->py, player->dy,  player->dx, max_x, max_y, &player->speed_mode_fast, player->vx, player->vy, &player->q_was_down);
+    move_player(player);
     fire_player(player);
     move_projectiles(projectiles, max_x, max_y);
     move_enemy(enemies, max_x, max_y);
@@ -118,10 +118,14 @@ touchwin(stdscr);
  #define STEEL_GRAY_COLOR  9
 #define ACID_GREEN_COLOR  10
 #define PURPLE_COLOR      11
+#define CRT_BG 12
+#define CRT_GREEN 13
 init_color(AMBER_COLOR, 1000, 690, 0);
 init_color(STEEL_GRAY_COLOR, 541, 608, 659);
     init_color(ACID_GREEN_COLOR, 651, 1000, 0);
     init_color(PURPLE_COLOR, 690, 361, 1000);
+    init_color(CRT_BG, 0, 45, 10);       // darker, flatter green-black
+init_color(CRT_GREEN, 282, 910, 416);
     init_pair(1, COLOR_GREEN,COLOR_BLACK); //Player
     init_pair(2, COLOR_RED, COLOR_BLACK); //Enemies
     init_pair(3, COLOR_YELLOW, COLOR_BLACK); //Enemy projectiles
@@ -131,6 +135,7 @@ init_color(STEEL_GRAY_COLOR, 541, 608, 659);
     init_pair(7, STEEL_GRAY_COLOR, COLOR_BLACK); //Used for borders
     init_pair(8, ACID_GREEN_COLOR, COLOR_BLACK);
     init_pair(9,     PURPLE_COLOR,     COLOR_BLACK);
+    init_pair(10, CRT_GREEN, CRT_BG); //Colors for future dialogue screen
     
 refresh();
 keypad(stdscr, TRUE);

@@ -6,34 +6,45 @@
 #include "movement.h"
 #include "window.h"
 #include "projectile.h"
-void move_player(float *px, float *py, float dy, float dx, int max_x, int max_y, bool *speed_mode_fast, float vx, float vy, bool *q_was_down){
+#include "hud.h"
+void move_player(Player *player){
+    int max_x, max_y;
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
-    float new_px = *px, new_py = *py;
+    float new_px = player->px, new_py = player->py;
     int choice = getch();
     new_px = fminf(fmaxf(new_px, 0), PLAYFIELD_W - 1); // -1 since columns are 0-indexed
 new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
 
-    if (choice == 'q' && !(*q_was_down)) {
-        *speed_mode_fast = !(*speed_mode_fast);
+    if (choice == 'q' && !(player->q_was_down)) {
+        player->speed_mode_fast = !(player->speed_mode_fast);
     }
-    *q_was_down = (choice == 'q');
+    player->q_was_down = (choice == 'q');
 
-    if (*speed_mode_fast) {
-        dx = vx;
-        dy = vy;
+    if (player->speed_mode_fast) {
+        player->dx = player->vx;
+       player->dy = player->vy;
     } else {
-        dx = vx / 2;
-        dy = vy / 2;
+        player->dx = player->vx / 2;
+        player->dy = player->vy / 2;
     }
 //Takes movement input
     switch (choice) {
-        case KEY_UP: new_py = *py - dy; break;
-        case KEY_DOWN: new_py = *py + dy; break;
-        case KEY_LEFT: new_px = *px - dx; break;
-        case KEY_RIGHT: new_px = *px + dx; break;
+        case KEY_UP: new_py = player->py - player->dy; break;
+        case KEY_DOWN: new_py = player->py + player->dy; break;
+        case KEY_LEFT: new_px = player->px - player->dx; break;
+        case KEY_RIGHT: new_px = player->px + player->dx; break;
         case KEY_RESIZE:
+        erase();
         resize_term(0, 0);
+        getmaxyx(stdscr, max_x, max_y);
+        update_playfield_offset(max_y, max_x);
+        werase(hud_win);
+        wresize(hud_win, offset_y-3, offset_x-1);
+        mvwin(hud_win, offset_y-3, offset_x-1);
+        box(hud_win, 0, 0);
+        wrefresh(hud_win);
+        refresh();
         syncConsoleBufferToWindow();
         break;
         default: break; // Position unchanged on no input
@@ -41,8 +52,8 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
 
     new_px = fminf(fmaxf(new_px, 0), (float)PLAYFIELD_W-1);
     new_py = fminf(fmaxf(new_py, 0), (float)PLAYFIELD_H-1);
-    *px = new_px;
-    *py = new_py;
+    player->px = new_px;
+    player->py = new_py;
 }
 //Function that fires player weapons
 #define NUM_WEAPON_SLOTS 6
