@@ -206,8 +206,8 @@ projectiles[slot].pierce = 5;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 0;
 projectiles[slot].dx = 0;
-projectiles[slot].dy = -3;
-projectiles[slot].damage = 5;
+projectiles[slot].dy = -2;
+projectiles[slot].damage = 4;
 break;
 case EMP:
 projectiles[slot].symbol = '-';

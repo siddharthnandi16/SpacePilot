@@ -60,21 +60,31 @@ int enemy_bottom = enemies[i].py + enemies[i].shape->height - 1;
 if(enemy_left <= x_max_2 && enemy_right >= x_min_2
 && enemy_top <= y_max_2 && enemy_bottom >= y_min_2){
 //Code to check if point hit was a blank space
-int local_col = (int)projectiles[p].px - (int)enemies[i].px;
-int local_row = (int)projectiles[p].py - (int)enemies[i].py;
-if (local_row >= 0 && local_row < enemies[i].shape->height &&
-    local_col >= 0 && local_col < enemies[i].shape->width) {
-    char hit_glyph = enemies[i].shape->glyph_rows[local_row][local_col];
-    if (hit_glyph != ' ') {
-enemies[i].hp = enemies[i].hp - projectiles[p].damage;
+int steps = 4; // tune based on how fast your fastest projectile moves per frame
+bool hit_solid = false;
+for (int s = 0; s <= steps && !hit_solid; s++) {
+    float t = (float)s / steps;
+    float sample_px = projectiles[p].old_px + t * (projectiles[p].px - projectiles[p].old_px);
+    float sample_py = projectiles[p].old_py + t * (projectiles[p].py - projectiles[p].old_py);
+
+    int local_col = (int)sample_px - (int)enemies[i].px;
+    int local_row = (int)sample_py - (int)enemies[i].py;
+
+    if (local_row >= 0 && local_row < enemies[i].shape->height &&
+        local_col >= 0 && local_col < enemies[i].shape->width) {
+        if (enemies[i].shape->glyph_rows[local_row][local_col] != ' ') {
+            hit_solid = true;
+        }
+    }
+}
+if (hit_solid) {
+ enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
  if(enemies[i].hp <= 0){
 enemies[i].state = DEAD;
-player->score = player ->score + 5;
-}     
-    }
+player->score += 5;
+ }
 }
-
 }
 }
 if(projectiles[p].type == LASER && projectiles[p].state != SPENT){
@@ -83,7 +93,7 @@ if(abs((int)enemies[i].px - (int)projectiles[p].px)  <= 1){
 projectiles[p].pierce--;
  if(enemies[i].hp <= 0){
 enemies[i].state = DEAD;
-player->score++;
+player->score += 5;
 };
 }
 }
