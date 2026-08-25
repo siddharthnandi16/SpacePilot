@@ -77,10 +77,10 @@ if (rightward_movement == TRUE) new_px = player->px + player->dx;
 }
 
 //Function that fires player weapons
-#define NUM_WEAPON_SLOTS 6
+#define NUM_WEAPON_SLOTS 9
 void fire_player(Player *player) {
     static bool switch_key_was_down[NUM_WEAPON_SLOTS] = {false};
-    int slot_keys[NUM_WEAPON_SLOTS] = {'1', '2', '3', '4', '5', '6'};
+    int slot_keys[NUM_WEAPON_SLOTS] = {'1', '2', '3', '4', '5', '6', '7','8','9'};
 
     // Switches weapons once per click
     for (int i = 0; i < NUM_WEAPON_SLOTS; i++) {

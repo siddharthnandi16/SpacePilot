@@ -18,10 +18,10 @@ spawn_entry spawn_table_1[]={
     },
     [3] ={
 .trigger = ROW, .type = JET, .behavior = STRAFE_HORIZONTAL, 
-.fired = FALSE, .px = 13, .py = 25, .strafe = 10, .trigger_time=0
+.fired = FALSE, .px = 10, .py = 10, .strafe = 10, .trigger_time=0
     },
     [4] ={
-.trigger = TICK, .type = JET, .behavior = HUNT_PLAYER, 
-.fired = FALSE, .px = 20, .py = 20, .strafe = 10, .trigger_time=90
+.trigger = TICK, .type = JET, .behavior = STRAFE_VERTICAL, 
+.fired = FALSE, .px = 0, .py = 26, .strafe = 30, .trigger_time=90
     }
 };

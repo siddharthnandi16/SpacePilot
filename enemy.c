@@ -213,23 +213,33 @@ break;
 case STRAFE_HORIZONTAL:
 enemies[i].px = enemies[i].px + enemies[i].dx;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe 
-|| (int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W-1 
-|| enemies[i].px + enemies[i].width -1 == 0 
-|| (int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1
-|| enemies[i].py + enemies[i].height -1 == 0 ){
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe){
+  enemies[i].dx = -enemies[i].dx; 
+  enemies[i].px = enemies[i].px + enemies[i].dx;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W - enemies[i].width;
+}
+if  (enemies[i].px + enemies[i].width -1 <= 0 ){
 enemies[i].dx = -enemies[i].dx;
+enemies[i].px =  enemies[i].width;
 }
 break;
 case STRAFE_VERTICAL:
 enemies[i].py = enemies[i].py + enemies[i].dy;
 //Reverses direction if it goes too far from its anchor point or hits a border
-if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe 
-|| (int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W-1 
-|| enemies[i].px + enemies[i].width -1 == 0 
-|| (int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1
-|| enemies[i].py + enemies[i].height -1 == 0){
+if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe) 
 enemies[i].dy = -enemies[i].dy;
+enemies[i].py = enemies[i].py + enemies[i].dy;
+//Boundary checking code
+if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py = PLAYFIELD_H - enemies[i].height;
+}
+if  (enemies[i].py + enemies[i].height -1 <= 0){
+enemies[i].dy = -enemies[i].dy;
+enemies[i].py = enemies[i].height;
 }
 break;
 // Hunters will attempt to get within 4 rows of the player 
@@ -246,11 +256,21 @@ float target_py = player->py - 4;
 if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
 if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
 }
-//General purpose border collsion code, may be copied for other freely moving enemies
-if ((int)enemies[i].py + enemies[i].height - 1 == PLAYFIELD_H-1 || (int)enemies[i].px +  enemies[i].width -1 == 0 
-|| (int)enemies[i].px + enemies[i].width -1  >= PLAYFIELD_W-1 || enemies[i].py + enemies[i].height - 1 == 0){
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W -1;
+}
+if  (enemies[i].px + enemies[i].width -1 == 0 ){
+enemies[i].dx = -enemies[i].dx;
+enemies[i].px -=  enemies[i].dx;
+}
+if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py - PLAYFIELD_H - 1;
+}
+if  (enemies[i].py + enemies[i].height -1 <= 0){
 enemies[i].dy = -enemies[i].dy;
-enemies[i].dx = -enemies[i].dx; 
+enemies[i].py = 1;
 }
 break;
 default:

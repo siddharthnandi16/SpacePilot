@@ -55,7 +55,7 @@ typedef struct Player{
     bool speed_mode_fast ; //Making this false halves player movement
     bool q_was_down; //Checks whether the speed-toggle was held down last frame and prevents it from activating if it was
     WeaponID weapon_id;
-    WeaponID inventory[8]; 
+    WeaponID inventory[10]; 
     int invuln_frames; //Period of invulnerability granted after taking a hit
     int score; //Increments upon destroyed enemies
 }Player;
