@@ -7,6 +7,7 @@
 #include "window.h"
 #include "projectile.h"
 #include "hud.h"
+
 void move_player(Player *player){
     int max_x, max_y;
     nodelay(stdscr, TRUE);
@@ -28,13 +29,18 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
         player->dx = player->vx / 2;
         player->dy = player->vy / 2;
     }
-//Takes movement input
-    switch (choice) {
+// Now only used for key resizing, old switch-based movement code is commented out
+  /*  
+  switch (choice) {
         case KEY_UP: new_py = player->py - player->dy; break;
         case KEY_DOWN: new_py = player->py + player->dy; break;
         case KEY_LEFT: new_px = player->px - player->dx; break;
-        case KEY_RIGHT: new_px = player->px + player->dx; break;
-        case KEY_RESIZE:
+        case KEY_RIGHT: new_px = player->px + player->dx; break;   
+        break;
+        default: break; // Position unchanged on no input
+    }
+   */
+    if ( choice == KEY_RESIZE){
         erase();
         resize_term(0, 0);
         getmaxyx(stdscr, max_x, max_y);
@@ -45,16 +51,31 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
         box(hud_win, 0, 0);
         wrefresh(hud_win);
         refresh();
-        syncConsoleBufferToWindow();
-        break;
-        default: break; // Position unchanged on no input
-    }
-
+        syncConsoleBufferToWindow();}
+//New movement code, allowing for diagonal movement
+bool upward_movement = (GetAsyncKeyState(VK_UP)& 0x8000) != 0;
+bool downward_movement = (GetAsyncKeyState(VK_DOWN)& 0x8000) != 0;
+bool rightward_movement = (GetAsyncKeyState(VK_RIGHT)& 0x8000) != 0;
+bool leftward_movement = (GetAsyncKeyState(VK_LEFT)& 0x8000) != 0;
+bool moving_horizontally = FALSE;
+bool moving_vertically = FALSE;
+if (upward_movement == TRUE || downward_movement == TRUE) moving_vertically = TRUE;
+if (rightward_movement == TRUE || leftward_movement == TRUE) moving_horizontally = TRUE;
+if (moving_horizontally && moving_vertically == TRUE) moving_diagonally = TRUE;
+if (moving_diagonally == TRUE){
+    player->dx = player->dx * 0.7071;
+    player->dy = player->dy * 0.7071;
+}
+if (upward_movement == TRUE) new_py = player->py - player->dy;
+if (downward_movement == TRUE) new_py = player->py + player->dy;
+if (leftward_movement == TRUE) new_px = player->px - player->dx;
+if (rightward_movement == TRUE) new_px = player->px + player->dx;
     new_px = fminf(fmaxf(new_px, 0), (float)PLAYFIELD_W-1);
     new_py = fminf(fmaxf(new_py, 0), (float)PLAYFIELD_H-1);
     player->px = new_px;
     player->py = new_py;
 }
+
 //Function that fires player weapons
 #define NUM_WEAPON_SLOTS 6
 void fire_player(Player *player) {
@@ -74,9 +95,9 @@ void fire_player(Player *player) {
     }
 
     // Firing - held, gated by cooldown
+    player->fire_rate++;
     bool fire_key_down = (GetAsyncKeyState('Z') & 0x8000) != 0;
     if (fire_key_down) {
-        player->fire_rate++;
         const WeaponType *weapon = get_weapon_template(player->weapon_id);
         if (weapon != NULL && player->fire_rate >= weapon->cooldown_frames) {
             fire_weapon(weapon, player->px, player->py - 1, 90, TRUE);

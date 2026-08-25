@@ -28,10 +28,24 @@ mvwprintw(hud_win,1,20, "Weapon:");
 WeaponType *current_weapon = get_weapon_template(player->weapon_id);
 char *weapon_name = current_weapon->display_name;
 mvwprintw(hud_win,1,27, "%s", weapon_name);
-mvwprintw(hud_win,1,47, "Speed:");
-float speed = sqrt((player->dx*player->dx) + (player->dy*player->dy));
-mvwprintw(hud_win,1,54,"%.3f", speed);
-mvwprintw(hud_win,1,60, "m/s");
+if (player->fire_rate < current_weapon->cooldown_frames){
+    mvwprintw(hud_win,1,43, "LOADING");
+}
+else {
+    wattroff(hud_win, COLOR_PAIR(6));
+    wattron(hud_win, COLOR_PAIR(1));
+mvwprintw(hud_win,1,43, "READY TO FIRE");
+wattroff(hud_win, COLOR_PAIR(1));
+}
+wattron(hud_win, COLOR_PAIR(6));
+mvwprintw(hud_win,1,57, "Speed:");
+float speed = 0;
+if (moving_diagonally == TRUE){
+speed = sqrt((player->dx*player->dx) + (player->dy*player->dy));
+}
+else speed = player->dx;
+mvwprintw(hud_win,1,64,"%.2f", speed);
+mvwprintw(hud_win,1,70, "m/s");
 wattroff(hud_win,COLOR_PAIR(6));
 wrefresh(hud_win);
 }

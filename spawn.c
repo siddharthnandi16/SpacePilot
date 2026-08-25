@@ -5,7 +5,7 @@
 //After editing spawn table, ALWAYS set spawn_count in level.c to the number of enemies in that table
 spawn_entry spawn_table_1[]={
     [0] ={
-.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE, .px = 10, .py = 10, 
+.trigger = ROW, .type = HUNTER, .behavior = HUNT_PLAYER, .fired = FALSE, .px = 10, .py = 10, 
 .strafe = 0, .trigger_time=10
     },
     [1] ={

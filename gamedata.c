@@ -16,6 +16,8 @@
     WeaponID inventory[100]; //Size maximised for debug purposes will be reduced to 10 later 
 }; */
 // Commented out since it conflicts with the typedef in gamedata.h
+//Bool that stores whether the player is moving diagonally
+bool moving_diagonally = FALSE;
 struct Player player = {
     .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H)/3*2,
     .vx = 2, .vy = 2,

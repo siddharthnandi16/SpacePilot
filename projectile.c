@@ -61,7 +61,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = BOMB_PLAYER_ID
 };
   WeaponType missilelauncher = {
-   .display_name = "Homing Missile", .cooldown_frames = 30, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
+   .display_name = "Homing Missile", .cooldown_frames = 15, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
     ,.weapon_id = MISSILE_PLAYER_ID
 };
   WeaponType plasmarifle = {

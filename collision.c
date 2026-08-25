@@ -1,9 +1,11 @@
 #include <pdcurses.h>
 #include <math.h>
+#include <stdlib.h>
 #include "gamedata.h"
 #include  "enemy.h"
 #include "projectile.h"
 #define MAX_PROJECTILES 2000
+#define PROJ_HITBOX_MARGIN 1 //Degree of leniency for player projectiles
 int Check_Collisions(Player *player, Enemy *enemies, Projectile *projectiles){
 //First loop for enemy-projectile collisions. Enemies only collide with player projectiles
 for (int i = 0; i < MAX_ENEMIES; i++){
@@ -12,16 +14,15 @@ for (int i = 0; i < MAX_ENEMIES; i++){
   if (enemies[i].shape == NULL){
     //Handling non-laser projectile types
     if(projectiles[i].type != LASER){
-int y_min = (int)fminf(projectiles[p].old_py, projectiles[p].py);
-int y_max = (int)fmaxf(projectiles[p].old_py, projectiles[p].py);
-int x_min = (int)fminf(projectiles[p].old_px, projectiles[p].px);
-int x_max = (int)fmaxf(projectiles[p].old_px, projectiles[p].px);
-if ((int)enemies[i].px == (int)projectiles[p].px &&
+int y_min = (int)fminf(projectiles[p].old_py, projectiles[p].py) -PROJ_HITBOX_MARGIN ;
+int y_max = (int)fmaxf(projectiles[p].old_py, projectiles[p].py) +PROJ_HITBOX_MARGIN;
+int x_min = (int)fminf(projectiles[p].old_px, projectiles[p].px) -PROJ_HITBOX_MARGIN;
+int x_max = (int)fmaxf(projectiles[p].old_px, projectiles[p].px) +PROJ_HITBOX_MARGIN;
+if ( abs((int)enemies[i].px - (int)projectiles[p].px) <= PROJ_HITBOX_MARGIN &&
     (int)enemies[i].py >= y_min && (int)enemies[i].py <= y_max
 && (int)enemies[i].px >= x_min && (int)enemies[i].px <= x_max){
 enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
-player->score++;
 if (projectiles[p].type == BOMB){
     projectiles[p].state = EXPLODING;
 }
@@ -29,11 +30,12 @@ if (projectiles[p].type == BOMB){
     
    if(enemies[i].hp <= 0){
 enemies[i].state = DEAD;
+player->score++;
 };
 }
 //Special code for laser-type projectiles
 if(projectiles[p].type == LASER){
-if((int)enemies[i].px == (int)projectiles[p].px){
+if(abs((int)enemies[i].px - (int)projectiles[p].px)  <= 1){
     enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
 player->score++;

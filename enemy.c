@@ -154,7 +154,7 @@ enemies[slot].behavior = behavior;
 enemies[slot].state = ALIVE;
 }
 //Function that moves living enemies based on their behavior type and removes dead enemies
-void move_enemy(Enemy *enemies, int max_x, int max_y){
+void move_enemy(Enemy *enemies, Player *player, int max_x, int max_y){
 for (int i =0; i < MAX_ENEMIES; i++ ){
     enemies[i].age++;
     if (enemies[i].state == ALIVE){
@@ -189,8 +189,20 @@ if (fabs(enemies[i].anchor_py - enemies[i].py) > enemies[i].strafe || (int)enemi
 enemies[i].dy = -enemies[i].dy;
 }
 break;
-//Placeholder since hunt player is unimplemented
+// Hunters will attempt to get within 4 rows of the player 
+// and then attack with their rapid-firing cannons.
+// They will always attempt to be on the same column as the player
+// They will never go below the player
 case HUNT_PLAYER:
+static int hunt_tick = 0;
+hunt_tick++;
+if (hunt_tick % 4 == 0){
+if (enemies[i].px < player->px) enemies[i].px +=  enemies[i].dx;
+if (enemies[i].px > player->px) enemies[i].px -=  enemies[i].dx;
+float target_py = player->py - 4;
+if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
+if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
+}
 break;
 default:
 break;

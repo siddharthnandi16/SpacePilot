@@ -166,7 +166,7 @@ EnemyConfig pick_enemy_config(long double difficulty) {
     EnemyBehavior behavior = STATIC;
     config.type = pick_type_weighted_by_difficulty(difficulty);
     config.behavior = pick_behavior_for_type(config.type, difficulty);
- config.strafe = 5 + (rand() % 6);  // 5 + (0 to 5) = 5 to 10
+ config.strafe = 8 + (rand() % 4);  // 8 + (0 to 5) = 8 to 12
     return config;
 }
 //Function to spawn enemies in waves
@@ -180,7 +180,7 @@ void spawn_wave(long double difficulty) {
         float px = (rand() % (PLAYFIELD_W - 2)) + 1;  
         float py = rand() % SPAWN_ZONE_TOP;
         spawn_enemy(config.type, config.behavior, px, py, config.strafe);
-        fprintf(stderr, "    Spawning %d at (%.0f, %.0f)\n", config.type, px, py);
+       // fprintf(stderr, "    Spawning %d at (%.0f, %.0f)\n", config.type, px, py);
     }
 }
 //Function to select music based on difficulty, currently a stub
