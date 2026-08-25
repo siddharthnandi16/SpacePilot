@@ -59,12 +59,13 @@ int enemy_top    = enemies[i].py;
 int enemy_bottom = enemies[i].py + enemies[i].shape->height - 1;
 if(enemy_left <= x_max_2 && enemy_right >= x_min_2
 && enemy_top <= y_max_2 && enemy_bottom >= y_min_2){
+    if enem
    enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
  if(enemies[i].hp <= 0){
 enemies[i].state = DEAD;
 player->score++;
-};   
+}   
 }
 }
 if(projectiles[p].type == LASER && projectiles[p].state != SPENT){
