@@ -61,7 +61,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = BOMB_PLAYER_ID
 };
   WeaponType missilelauncher = {
-   .display_name = "Homing Missile", .cooldown_frames = 15, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
+   .display_name = "Homing Missile", .cooldown_frames = 60, .number = 1, .angle= 90, .type= MISSILE, .modes = NORMAL
     ,.weapon_id = MISSILE_PLAYER_ID
 };
   WeaponType plasmarifle = {
@@ -188,7 +188,7 @@ projectiles[slot].damage = 3;
 break;
 case MISSILE:
 projectiles[slot].symbol = '^';
-projectiles[slot].pierce = 3;
+projectiles[slot].pierce = 2;
 projectiles[slot].strafe = 0;
 projectiles[slot].turn_rate = 30; //Higher = more accurate
 projectiles[slot].dx = 0;

@@ -173,9 +173,9 @@ EnemyConfig pick_enemy_config(long double difficulty) {
 #define SPAWN_ZONE_TOP 5 // enemies spawn in top 5 rows only
 #define SPAWN_ZONE_WIDTH (PLAYFIELD_W - 2)  
 void spawn_wave(long double difficulty) {
- float wave_size = 4 + (difficulty * 10);
+ float wave_size = 6 + (difficulty * 10);
     for (int i = 0; i < (int)wave_size; i++) {
-        fprintf(stderr, "  Iteration %d/%d\n", i+1, wave_size);
+       // fprintf(stderr, "  Iteration %d/%d\n", i+1, wave_size);
         EnemyConfig config = pick_enemy_config(difficulty);
         float px = (rand() % (PLAYFIELD_W - 2)) + 1;  
         float py = rand() % SPAWN_ZONE_TOP;
@@ -191,7 +191,7 @@ int unsigned long spawn_tick = 0;
 void endless_level(void){
     difficulty = 0;
     if (difficulty < 5){
-if (spawn_tick % 600==0) difficulty += 0.05;
+if (spawn_tick % 300==0) difficulty += 0.05;
     }  
 if (spawn_tick % 300 ==0 || spawn_tick==0){
 spawn_wave(difficulty);
