@@ -3,6 +3,8 @@
 #include "gamedata.h"
 #include "window.h"
 #include "enemy.h"
+#include "sound.h"
+#include "miniaudio.h"
 #define MAX_PROJECTILES 2000
 //Table for storing projectiles. The values here are placeholders than will be overwritten during gameplay
 Projectile projectiles[MAX_PROJECTILES] = {
@@ -170,6 +172,7 @@ projectiles[slot].width = 1;
 projectiles[slot].height = 1;
 switch(projectiles[slot].type){
 case BULLET:
+ma_sound_start(&loaded_sounds[Machine_Gun]);
 projectiles[slot].symbol = '+';
 projectiles[slot].pierce = 1;
 projectiles[slot].strafe = 0;
@@ -179,6 +182,7 @@ projectiles[slot].dy = -1; //Moves directly upward
 projectiles[slot].damage = 1;
 break;
 case LASER:
+ma_sound_start(&loaded_sounds[Laser_sound]);
 projectiles[slot].symbol = '|';
 projectiles[slot].pierce = 100;
 projectiles[slot].strafe = 0;
@@ -188,6 +192,7 @@ projectiles[slot].dy = 0;
 projectiles[slot].damage = 3;
 break;
 case BOMB:
+ma_sound_start(&loaded_sounds[Bomb_sound]);
 projectiles[slot].symbol = 'O';
 projectiles[slot].pierce = 1;
 projectiles[slot].strafe = 0;
@@ -197,6 +202,7 @@ projectiles[slot].dy = -0.5;
 projectiles[slot].damage = 3;
 break;
 case MISSILE:
+ma_sound_start(&loaded_sounds[Missile_sound]);
 projectiles[slot].symbol = '^';
 projectiles[slot].pierce = 2;
 projectiles[slot].strafe = 0;

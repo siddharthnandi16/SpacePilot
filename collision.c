@@ -4,6 +4,8 @@
 #include "gamedata.h"
 #include  "enemy.h"
 #include "projectile.h"
+#include "sound.h"
+#include "miniaudio.h"
 #define MAX_PROJECTILES 2000
 #define PROJ_HITBOX_MARGIN 1 //Degree of leniency for player projectiles
 int Check_Collisions(Player *player, Enemy *enemies, Projectile *projectiles){
@@ -78,6 +80,7 @@ for (int s = 0; s <= steps && !hit_solid; s++) {
     }
 }
 if (hit_solid) {
+    ma_sound_start(&loaded_sounds[Enemy_down]);
  enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
  if(enemies[i].hp <= 0){
@@ -88,6 +91,7 @@ player->score += 5;
 }
 }
 if(projectiles[p].type == LASER && projectiles[p].state != SPENT){
+    ma_sound_start(&loaded_sounds[Enemy_down]);
 if(abs((int)enemies[i].px - (int)projectiles[p].px)  <= 1){
     enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
@@ -110,7 +114,9 @@ int y_max = (int)fmaxf(projectiles[p].old_py, projectiles[p].py);
 int x_min = (int)fminf(projectiles[p].old_px, projectiles[p].px);
 int x_max = (int)fmaxf(projectiles[p].old_px, projectiles[p].px);
 if(projectiles[p].type == LASER){
+   
 if((int)player->px == (int)projectiles[p].px && player->invuln_frames <= 0){
+     ma_sound_start(&loaded_sounds[Player_life_lost]);
 player->lives--;
  player->invuln_frames = 60;  
 projectiles[p].pierce--;
@@ -121,6 +127,7 @@ if ((int)player->px == (int)projectiles[p].px &&
     (int)player->py >= y_min && (int)player->py <= y_max
 && (int)player->px >= x_min && (int)player->px <= x_max
 && player->invuln_frames <= 0){
+    ma_sound_start(&loaded_sounds[Player_life_lost]);
     player->lives--;
     player->invuln_frames = 60;  
     projectiles[p].pierce--;
@@ -131,7 +138,9 @@ if ((int)player->px == (int)projectiles[p].px &&
 //Third loop for player-enemy collisions
 for (int i = 0; i < MAX_ENEMIES; i++){
     if (enemies[i].state == ALIVE){
-        if (enemies[i].px == player->px && enemies[i].py == player->py && player->invuln_frames <= 0){
+        if (enemies[i].px == player->px && enemies[i].py == player->py
+             && player->invuln_frames <= 0){
+            ma_sound_start(&loaded_sounds[Player_life_lost]);
              player->lives--;
     player->invuln_frames = 60; 
         }

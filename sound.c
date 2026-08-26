@@ -66,6 +66,72 @@ ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
     &loaded_sounds[Level_1]
 );
 ma_sound_set_looping(&loaded_sounds[Level_1], TRUE);
+ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
+    ma_result BossBGM_result = ma_sound_init_from_file(
+    &engine,
+    "BossMain.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Boss_Theme]
+);
+  ma_result BossIntro_result = ma_sound_init_from_file(
+    &engine,
+    "BossIntro.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Boss_Intro]
+);
+    ma_result MachineGun_result = ma_sound_init_from_file(
+    &engine,
+    "D_24P.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Machine_Gun]
+);
+    ma_result Laser_result = ma_sound_init_from_file(
+    &engine,
+    "sfx_wpn_laser11.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Laser_sound]
+);
+    ma_result Bomb_result = ma_sound_init_from_file(
+    &engine,
+    "sfx_exp_medium2.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Bomb_sound]
+);
+    ma_result Missile_result = ma_sound_init_from_file(
+    &engine,
+    "sfx_wpn_missilelaunch.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Missile_sound]
+);
+    ma_result Player_life_lost_result = ma_sound_init_from_file(
+    &engine,
+    "sfx_deathscream_alien4.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Player_life_lost]
+);
+    ma_result Enemy_down_result = ma_sound_init_from_file(
+    &engine,
+    "sfx_deathscream_robot3.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Enemy_down]
+);
+
 }  
 //Plays and updates sound effects, redudant since miniaudio already does this
 void PlaySoundEffect(ma_sound *sound){
