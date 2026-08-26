@@ -7,8 +7,8 @@
 #include "window.h"
 #include "projectile.h"
 #include "hud.h"
-
-void move_player(Player *player){
+int quit = 0; //1= true, 0= false
+int move_player(Player *player){
     int max_x, max_y;
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
@@ -40,7 +40,37 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
         default: break; // Position unchanged on no input
     }
    */
-    if ( choice == KEY_RESIZE){
+  //Game pausing functionality
+  bool paused = FALSE;
+    if (choice == 'p' && paused == FALSE){
+        scrollok(stdscr, FALSE);
+        nodelay(stdscr, FALSE);
+        paused = TRUE;
+        mvprintw(offset_y + PLAYFIELD_H/2, offset_x + PLAYFIELD_W/2, "PAUSED");
+        mvprintw(offset_y + PLAYFIELD_H/2 + 2, offset_x + PLAYFIELD_W/2, "Press Q to return to title screen");
+        refresh();
+    }
+    while (paused == TRUE){  
+    nodelay(stdscr, FALSE);
+     choice = getch();
+    if (choice == 'q' && paused == TRUE){
+        quit = 1;
+        scrollok(stdscr, TRUE);
+        nodelay(stdscr, TRUE);
+        paused = FALSE;
+        erase();
+        refresh();
+    }
+    if (choice == 'p'){
+        scrollok(stdscr, TRUE);
+        nodelay(stdscr, TRUE);
+        paused = FALSE;
+        erase();
+        refresh();
+    }
+    }
+    
+    if (choice == KEY_RESIZE){
         erase();
         resize_term(0, 0);
         getmaxyx(stdscr, max_x, max_y);
@@ -74,6 +104,7 @@ if (rightward_movement == TRUE) new_px = player->px + player->dx;
     new_py = fminf(fmaxf(new_py, 0), (float)PLAYFIELD_H-1);
     player->px = new_px;
     player->py = new_py;
+    return quit;
 }
 
 //Function that fires player weapons

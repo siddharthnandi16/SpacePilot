@@ -6,6 +6,7 @@
 #include "titlescreen.h"
 #include "gamedata.h"
 #include "sound.h"
+#include "window.h"
 #define NUM_MENU_OPTIONS (sizeof(menu_options) / sizeof(menu_options[0]))
 GameMode drawTitleScreen(void){
    PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
@@ -34,8 +35,8 @@ int num_lines=8;
 int max_x, max_y;
 getmaxyx(stdscr, max_y, max_x);
 int art_width = strlen(titlescreen[0]); // All lines are of same width, used to make it centred
-int start_y = max_y / 4;                // Prints the title screen near the top
-int start_x = (max_x - art_width) / 2;
+int start_y = PLAYFIELD_H / 4;                // Prints the title screen near the top
+int start_x = (PLAYFIELD_W - art_width) / 2;
 
 
 //mvprintw(start_y + 12, start_x + 6, "Press any key to start the game");
@@ -48,15 +49,15 @@ while(1) {
     
  for (int i = 0; i < num_lines; i++) {
     attron(COLOR_PAIR(1)); // Contains black background and green foreground
-    mvprintw(start_y + i, start_x, "%s", titlescreen[i]);
+    mvprintw(offset_y + i, offset_x + start_x, "%s", titlescreen[i]);
 }
     // Draw menu options
-    int menu_y = start_y + 12;
+    int menu_y = offset_y + 12;
     for (int i = 0; i < NUM_MENU_OPTIONS; i++) {
         if (i == selected) {
             attron(A_REVERSE);
         }
-        mvprintw(menu_y + i, start_x, "%s", menu_options[i]);
+        mvprintw(menu_y + i, offset_x + start_x, "%s", menu_options[i]);
         if (i == selected) {
             attroff(A_REVERSE);
         }
@@ -66,6 +67,13 @@ while(1) {
     
     int ch = getch();
     switch(ch) {
+        case KEY_RESIZE:
+        erase();
+        resize_term(0, 0);
+        getmaxyx(stdscr, max_x, max_y);
+        update_playfield_offset(max_y, max_x);
+        refresh();
+        syncConsoleBufferToWindow();
         case 60419:  // Up
             selected = (selected - 1 + NUM_MENU_OPTIONS) % NUM_MENU_OPTIONS;
             break;

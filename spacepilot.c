@@ -27,7 +27,6 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "hud.h"
 #include "miniaudio.h"
 
-int quit = 0; //1= true, 0= false
 int game_over =0; //1= true, 0=false
 int unsigned long tick=0;
 int spawn_table_1_count;
@@ -66,7 +65,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         break;
 }
     Check_Collisions(player, enemies, projectiles);
-    if (player->lives <= 0){
+    if (player->lives <= 0 || quit == 1){
     ma_sound_stop(&loaded_sounds[Level_1]);
         game_over=1;
         return 0;
@@ -82,7 +81,8 @@ int seed; //Variable that stores the RNG seed. Used for various rng calls
 void reset_all(int max_x, int max_y) {
     player = player_backup;
     player.lives = 5;
-    game_over = 0;  // <- add this
+    game_over = 0; 
+    quit = 0;
     memcpy(enemies, enemies_backup, sizeof(enemies_backup));
     memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
     for (int i = 0; i < level_1.spawn_count; i++) {
