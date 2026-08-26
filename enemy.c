@@ -19,6 +19,8 @@ Enemy enemies[MAX_ENEMIES] = {
     .behavior = STATIC,
     .shape = NULL,
     .weapon = &GRUNT_RIFLE,
+    .fire_px=0,
+    .fire_py=0
     
     }
 };
@@ -141,7 +143,66 @@ static const Enemy jet_template = {
     .shape = &Jet_Layout,
     .weapon = &JET_CANNON
 };
-
+//Layout for flying fortresses
+static const int flyfort_row0_colors[] = {2, 6, 6, 6, 2}; //red, amber, amber,amber, red
+static const int flyfort_row1_colors[] = {2, 7, 7, 7, 2}; //red, steel gray, steel gray, steel gray, red
+static const int flyfort_row2_colors[] = {2, 2, 7, 2, 2}; //red, red,steel gray, red, red
+// Anchor point is the # at its center
+TileLayout Flying_Fortress_Layout = {
+.width = 5, .height = 3,
+.glyph_rows = {
+    " ||| ",
+    "<###>",
+    " \\#/ "
+},
+.color_rows = {
+    flyfort_row0_colors,
+    flyfort_row1_colors,
+    flyfort_row2_colors
+}
+};
+static const Enemy Flying_Fortress_template = {
+    .px = 0, .py = 0,
+    .dx = 1, .dy = 1,
+    .hp = 20,
+    .symbol = '%',
+    .width = 5, .height = 3,
+    .cooldown_frames = -60,
+    .type = FLYING_FORTRESS,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Flying_Fortress_Layout,
+    .weapon = &FLYFORT_CANNON
+};
+static const int laser_jet_row0_colors[] = {2, 6, 6, 2}; //red, amber, red
+static const int laser_jet_row1_colors[] = {2, 7, 7, 2}; //red, steel gray, red
+static const int laser_jet_row2_colors[] = {2, 3, 3, 2}; //red, yellow,yellow, red
+TileLayout Laser_Jet_Layout = {
+.width = 4, .height = 3,
+.glyph_rows = {
+    " || ",
+    "<##>",
+    " !! "
+},
+.color_rows = {
+    laser_jet_row0_colors,
+    laser_jet_row1_colors,
+    laser_jet_row2_colors
+}
+};
+static const Enemy laser_jet_template = {
+    .px = 0, .py = 0,
+    .dx = 3, .dy = 1,
+    .hp = 8,
+    .symbol = '%',
+    .width = 4, .height = 3,
+    .cooldown_frames = -120,
+    .type = LASER_JET,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Laser_Jet_Layout,
+    .weapon = &laserrifle
+};
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
     for(int i=0; i < MAX_ENEMIES; i++){
@@ -160,6 +221,8 @@ const Enemy* get_template(EnemyType type) {
         case BOMBER:    return &bomber_template;
         case HUNTER:    return &hunter_template;
         case JET:       return &jet_template;
+        case FLYING_FORTRESS: return &Flying_Fortress_template;
+        case LASER_JET: return &laser_jet_template;
         default:        return NULL;
     }
 }
@@ -181,11 +244,15 @@ enemies[slot].old_py = py;
 enemies[slot].strafe = strafe;
 enemies[slot].anchor_px = enemies[slot].px;
 enemies[slot].anchor_py = enemies[slot].py;
+enemies[slot].fire_px = enemies[slot].px;
+enemies[slot].fire_py = enemies[slot].py;
 enemies[slot].behavior = behavior;
 enemies[slot].state = ALIVE;
 if (enemies[slot].shape != NULL){
 enemies[slot].px = enemies[slot].px - (template->shape->width  / 2.0f);
 enemies[slot].py = enemies[slot].py - (template->shape->height / 2.0f);
+enemies[slot].fire_px = enemies[slot].px + ceilf(enemies[slot].width / 2.0f);
+enemies[slot].fire_py = enemies[slot].py + ceilf(enemies[slot].height / 2.0f);
 enemies[slot].anchor_px = enemies[slot].px;
 enemies[slot].anchor_py = enemies[slot].py;
 } 
@@ -195,6 +262,13 @@ void move_enemy(Enemy *enemies, Player *player, int max_x, int max_y){
 for (int i =0; i < MAX_ENEMIES; i++ ){
     enemies[i].age++;
     if (enemies[i].state == ALIVE){
+if(enemies[i].shape !=NULL){
+enemies[i].fire_px = enemies[i].px + ceilf(enemies[i].width / 2.0f);
+enemies[i].fire_py = enemies[i].py + ceilf(enemies[i].height / 2.0f);}
+else {
+enemies[i].fire_px = enemies[i].px ;
+enemies[i].fire_py = enemies[i].py;
+}
 switch(enemies[i].behavior){
     case STATIC:
     break; //No need to move them since they are stationary by design
@@ -351,7 +425,7 @@ void fire_enemies(Enemy *enemies){
             enemies[i].cooldown_frames++;
         WeaponType *weapon = enemies[i].weapon;
          if (weapon != NULL && enemies[i].cooldown_frames >= weapon->cooldown_frames) {
-            fire_weapon(weapon, enemies[i].px, enemies[i].py - 1, 270, FALSE);
+            fire_weapon(weapon, enemies[i].fire_px, enemies[i].fire_py + 1, 270, FALSE);
             enemies[i].cooldown_frames = 0;
             if (weapon->type == LASER) enemies[i].cooldown_frames = -300;
         }

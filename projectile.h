@@ -22,6 +22,7 @@ extern WeaponType LASER_RIFLE_ENEMY;
 extern WeaponType BOMB_ENEMY_WEAPON;
 extern WeaponType HUNTER_RIFLE;
 extern WeaponType JET_CANNON;
+extern WeaponType FLYFORT_CANNON;
 void fire_weapon(const WeaponType *weapon, float px, float py, float angle, bool player_owned);
 const WeaponType* get_weapon_template(WeaponID weapon_id);
 int findfreeprojectileslot(void);

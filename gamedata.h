@@ -32,7 +32,7 @@ typedef struct Projectile{
 typedef enum weapon_id{EMPTY_ID, AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID,
 PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID, 
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
- BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID}WeaponID;
+ BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 const typedef struct WeaponType{
     char *display_name;
@@ -69,7 +69,7 @@ typedef struct TileLayout {
     const int  *color_rows[MAX_TILE_HEIGHT];     // Parallel color_pair IDs, one int array per row
 } TileLayout;
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
-typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET } EnemyType;
+typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS, LASER_JET } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
 typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL, STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG } EnemyBehavior;
 typedef struct Enemy{
@@ -87,7 +87,8 @@ int age; //Increments every frame, determines some enemy behaviors
 float anchor_px, anchor_py; //Sets an "anchor point" for strafing enemies
 float strafe; //Sets how far a strafing enemy is willing to go from their anchor point
 float old_px, old_py; //Stores old positions of enemy for purpose of drawing, now redunant
-WeaponType *weapon; //Tells the weapon firing function what weapon to use
+float fire_px, fire_py; //Stores firing positions for multi-tile enemies
+ WeaponType *weapon; //Tells the weapon firing function what weapon to use
 }Enemy;
 extern Enemy enemies[];
 //Enemy config struct

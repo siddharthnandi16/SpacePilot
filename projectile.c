@@ -113,6 +113,10 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
    .display_name = "autocannon", .cooldown_frames = 5, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = JET_CANNON_ID
 };
+WeaponType FLYFORT_CANNON = {
+   .display_name = "autocannon", .cooldown_frames = 10, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+    ,.weapon_id = FLYFORT_CANNON_ID
+};
 //Function to find a free slot in the enemy pool
 int findfreeprojectileslot(void){
     for(int i=0; i < MAX_PROJECTILES; i++){
@@ -145,6 +149,7 @@ const WeaponType* get_weapon_template(WeaponID weapon_id) {
         case BOMB_ENEMY_ID:          return &BOMB_ENEMY_WEAPON;
         case HUNTER_RIFLE_ID:        return &HUNTER_RIFLE;
         case JET_CANNON_ID:          return &JET_CANNON;
+        case FLYFORT_CANNON_ID:       return &FLYFORT_CANNON;
         default:                     return NULL;
     }
 }
