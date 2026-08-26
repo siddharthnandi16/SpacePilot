@@ -1,8 +1,74 @@
+#define MINIAUDIO_IMPLEMENTATION
 #include <pdcurses.h>
+#include <string.h>
 #include  "gamedata.h"
 #include "sound.h"
+#include "miniaudio.h"
+#include <stdio.h>
+ma_engine engine;   //Initialisation for miniaudio engine
+//Initalises the audio and returns whether it worked successfully
+bool init_audio(void) {
+    fprintf(stderr, "Initialising audio");
+    ma_result result = ma_engine_init(NULL, &engine);
+    if (result != MA_SUCCESS) {
+    fprintf(stderr, "Engine init failed: %d\n", result);
+        return FALSE;
+    }
+    return TRUE;
+}
+//Shuts down the audio
+void shutdown_audio(void) {
+    ma_engine_uninit(&engine);
+}
+/* Commented out due to being uneccessary and overcomplicated
+//Stores all of the sounds used by the game
+typedef struct Sound_Pool{
+    char *path;
+    int sound_effect_id;
+    bool loop; 
+    char *description;
+    char *sound;
+}Sound_Pool;
+Sound_Pool sound_pool[MAX_SOUNDS] = {
+[0] = {
+    .path = NULL,
+    .sound_effect_id = 0,
+    .loop = FALSE,
+    .description = "Placeholder.",
+    .sound = "Placeholder."
+};
+}*/
+//Table for storing sounds for level 1
 sound_entry sound_table_1[]={
     [0] ={
 .trigger = ROW, .is_song=TRUE, .loop = TRUE, .fired = FALSE, .trigger_time = 0, .sound_effect_id = 0,
     }
 };
+
+ma_sound loaded_sounds[MAX_SOUNDS] = {};
+void InitialiseSoundEffects(ma_sound *loaded_sounds){ 
+    ma_result Titlescreen_BGM_result = ma_sound_init_from_file(
+    &engine,
+    "Music and Sound effects/Mercury.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Titlescreen_MUSIC]
+);
+ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
+    ma_result level_1_BGM_result = ma_sound_init_from_file(
+    &engine,
+    "Music and Sound effects/Mars.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Level_1]
+);
+ma_sound_set_looping(&loaded_sounds[Level_1], TRUE);
+}
+//Plays and updates sound effects
+void PlaySoundEffect(ma_sound *sound){
+ma_sound_start(sound);
+}
+//Example of how to call the above function
+//PlaySoundEffect(&loaded_sounds[Titlescreen]);

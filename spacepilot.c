@@ -8,9 +8,11 @@ RED= ENEMY, YELLOW= BULLET, GREEN= PLAYER, BLUE=POWER-UPs
 Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clearing bombs,
  multiple playable characters with different abilities, sound effects, TTS Voice acting  */
 #include <stdbool.h>
+#include <stdio.h>
 #include <pdcurses.h>
 #include <windows.h>
 #include <time.h>
+#include <mmsystem.h>
 #include "titlescreen.h"
 #include "gamedata.h"
 #include "movement.h"
@@ -23,6 +25,8 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "projectile.h"
 #include "collision.h"
 #include "hud.h"
+#include "miniaudio.h"
+
 int quit = 0; //1= true, 0= false
 int game_over =0; //1= true, 0=false
 int unsigned long tick=0;
@@ -36,6 +40,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(quit != 1 && game_over != 1){
     tick++;
+    PlaySoundEffect(&loaded_sounds[Level_1]);
     erase_enemies(enemies);
     erase_projectiles(projectiles);
     scrollanddraw(&old_screen_px, &old_screen_py);
@@ -145,7 +150,11 @@ player.px = PLAYFIELD_W/2, player.py = (PLAYFIELD_H)/3*2;
 getmaxyx(stdscr, max_y, max_x);
     update_playfield_offset(max_x,max_y);
 refresh();
-
+init_audio();
+InitialiseSoundEffects(loaded_sounds);
+//Placeholder from old audio system, now superseded by miniaudio
+//PlaySoundA("Mars.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
  GameMode game_mode = drawTitleScreen();
  erase();
     while(game_mode != MODE_QUIT){

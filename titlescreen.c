@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <pdcurses.h>
 #include <string.h>
+#include "miniaudio.h"
 #include "titlescreen.h"
 #include "gamedata.h"
+#include "sound.h"
 #define NUM_MENU_OPTIONS (sizeof(menu_options) / sizeof(menu_options[0]))
 GameMode drawTitleScreen(void){
+   // PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
     const char *menu_options[] = {
     "Story Mode",
     "Endless Mode",
