@@ -46,10 +46,11 @@ sound_entry sound_table_1[]={
 };
 
 ma_sound loaded_sounds[MAX_SOUNDS] = {};
+// Old version of the function. Stored as a restore point in case something goes wrong
 void InitialiseSoundEffects(ma_sound *loaded_sounds){ 
     ma_result Titlescreen_BGM_result = ma_sound_init_from_file(
     &engine,
-    "Music and Sound effects/Mercury.wav",
+    "Mercury.wav",
     0,
     NULL,
     NULL,
@@ -58,15 +59,15 @@ void InitialiseSoundEffects(ma_sound *loaded_sounds){
 ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
     ma_result level_1_BGM_result = ma_sound_init_from_file(
     &engine,
-    "Music and Sound effects/Mars.wav",
+    "Mars.wav",
     0,
     NULL,
     NULL,
     &loaded_sounds[Level_1]
 );
 ma_sound_set_looping(&loaded_sounds[Level_1], TRUE);
-}
-//Plays and updates sound effects
+}  
+//Plays and updates sound effects, redudant since miniaudio already does this
 void PlaySoundEffect(ma_sound *sound){
 ma_sound_start(sound);
 }

@@ -8,7 +8,7 @@
 #include "sound.h"
 #define NUM_MENU_OPTIONS (sizeof(menu_options) / sizeof(menu_options[0]))
 GameMode drawTitleScreen(void){
-   // PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
+   PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
     const char *menu_options[] = {
     "Story Mode",
     "Endless Mode",
@@ -73,6 +73,7 @@ while(1) {
             selected = (selected + 1) % NUM_MENU_OPTIONS;
             break;
         case '\n':  // Confirms selection
+        ma_sound_stop(&loaded_sounds[Titlescreen_MUSIC]);
         game_starting = 1;
             return (GameMode)selected;
         default:
@@ -82,7 +83,6 @@ while(1) {
         break;
     }
 }
-
 return (GameMode)selected;
  //More functionality TBA 
 }

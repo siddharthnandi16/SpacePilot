@@ -21,10 +21,11 @@ Miniboss_Theme,
 Miniboss_Intro,
 Engine_Hum,
 Machine_Gun,
-Laser,
-Bomb,
-Missile,
-Player_life_lost
+Laser_sound,
+Bomb_sound,
+Missile_sound,
+Player_life_lost,
+Enemy_down
 }sound_list;
 typedef struct {
 TriggerType trigger;
@@ -35,8 +36,7 @@ int trigger_time;
 int sound_effect_id; //All sounds effects in the game will be given a unique ID
 }sound_entry;
 extern sound_entry sound_table_1[];
-// DO NOT CALL, these crash the program
- bool init_audio(void);
+bool init_audio(void);
 void shutdown_audio(void);
 void InitialiseSoundEffects(ma_sound *loaded_sounds);
 void PlaySoundEffect(ma_sound *sound); 

@@ -40,7 +40,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(quit != 1 && game_over != 1){
     tick++;
-    PlaySoundEffect(&loaded_sounds[Level_1]);
+    ma_sound_start(&loaded_sounds[Level_1]);
     erase_enemies(enemies);
     erase_projectiles(projectiles);
     scrollanddraw(&old_screen_px, &old_screen_py);
@@ -67,6 +67,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
 }
     Check_Collisions(player, enemies, projectiles);
     if (player->lives <= 0){
+    ma_sound_stop(&loaded_sounds[Level_1]);
         game_over=1;
         return 0;
     }
@@ -154,7 +155,6 @@ init_audio();
 InitialiseSoundEffects(loaded_sounds);
 //Placeholder from old audio system, now superseded by miniaudio
 //PlaySoundA("Mars.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
  GameMode game_mode = drawTitleScreen();
  erase();
     while(game_mode != MODE_QUIT){
