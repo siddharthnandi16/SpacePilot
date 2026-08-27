@@ -10,6 +10,7 @@ float px;
 float py;
 float strafe;
 int trigger_time; 
+bool aimed;
 }spawn_entry;
 extern spawn_entry spawn_table_1[];
 #endif

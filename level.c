@@ -70,16 +70,18 @@ void level(const Level_Data *level){
         switch (level->spawn_table[i].trigger) {
             case TICK:
                 if (tick >= level->spawn_table[i].trigger_time) {
-                    spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior,
-                                level->spawn_table[i].px, level->spawn_table[i].py,
-                                level->spawn_table[i].strafe);
+
+                    spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior, 
+                        level->spawn_table[i].aimed, level->spawn_table[i].px,
+                         level->spawn_table[i].py,level->spawn_table[i].strafe);
                     level->spawn_table[i].fired = TRUE;
                     
                 }
                 break;
             case ROW:
                 if (rows_scrolled >= level->spawn_table[i].trigger_time) {
-                    spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior,
+                    spawn_enemy(level->spawn_table[i].type, level->spawn_table[i].behavior, 
+                                level->spawn_table[i].aimed,
                                 level->spawn_table[i].px, level->spawn_table[i].py,
                                 level->spawn_table[i].strafe);
                     level->spawn_table[i].fired = TRUE;
@@ -160,14 +162,23 @@ EnemyBehavior pick_behavior_for_type(EnemyType type, long double difficulty) {
     
     return HUNT_PLAYER;
 }
+bool pick_aimed_for_difficulty(long double difficulty) {
+    if (difficulty < 0.0f) difficulty = 0.0f;
+    if (difficulty > 1.0f) difficulty = 1.0f;
 
+    int aimed_chance = 20 + (int)(difficulty * 15); // 20% -> 35%
+    int roll = rand() % 100;
+
+    return (roll < aimed_chance);
+}
 //Function to set enemy configs
 EnemyConfig pick_enemy_config(long double difficulty) {
     EnemyConfig config = {0};
     EnemyType chosen_type = GRUNT;
     EnemyBehavior behavior = STATIC;
     config.type = pick_type_weighted_by_difficulty(difficulty);
-    config.behavior = pick_behavior_for_type(config.type, difficulty);
+    config.behavior = pick_behavior_for_type(config.type, difficulty);\
+     config.aimed = pick_aimed_for_difficulty(difficulty);
  config.strafe = 8 + (rand() % 4);  // 8 + (0 to 5) = 8 to 12
     return config;
 }
@@ -181,7 +192,7 @@ void spawn_wave(long double difficulty) {
         EnemyConfig config = pick_enemy_config(difficulty);
         float px = (rand() % (PLAYFIELD_W - 2)) + 1;  
         float py = rand() % SPAWN_ZONE_TOP;
-        spawn_enemy(config.type, config.behavior, px, py, config.strafe);
+        spawn_enemy(config.type, config.behavior, config.aimed,px, py, config.strafe);
        // fprintf(stderr, "    Spawning %d at (%.0f, %.0f)\n", config.type, px, py);
     }
 }

@@ -20,7 +20,8 @@ Enemy enemies[MAX_ENEMIES] = {
     .shape = NULL,
     .weapon = &GRUNT_RIFLE,
     .fire_px=0,
-    .fire_py=0
+    .fire_py=0,
+    .aimed = FALSE
     
     }
 };
@@ -203,6 +204,43 @@ static const Enemy laser_jet_template = {
     .shape = &Laser_Jet_Layout,
     .weapon = &laserrifle
 };
+//Template for core of first boss
+// Carrier boss shape — turret sockets marked '.', aircraft bays marked 'o'
+// Use these positions (row, col) as reference offsets when placing turret/grunt-spawn subsystems relative to the core anchor
+static const int carrier_colors_row0[10] = {7,7,6,7,7,6,7,7,6,7};
+static const int carrier_colors_row1[10] = {2,2,2,2,2,2,2,2,2,2};
+static const int carrier_colors_row2[10] = {7,7,7,7,7,7,7,7,7,7};
+static const int carrier_colors_row3[10] = {7,7,2,7,7,7,7,2,7,7};
+static const int carrier_colors_row4[10] = {7,2,2,7,7,7,7,2,2,7};
+static const int carrier_colors_row5[10] = {2,2,2,2,2,2,2,2,2,2};
+static const TileLayout carrier_layout = {
+    .width = 10, .height = 6,
+    .glyph_rows = {
+        "  |  |  |",
+        "==========",
+        "##########",
+        "##.####.##",
+        "#..####..#",
+        "=========="
+    },
+    .color_rows = {
+        carrier_colors_row0, carrier_colors_row1, carrier_colors_row2,
+        carrier_colors_row3, carrier_colors_row4, carrier_colors_row5
+    }
+};
+static const Enemy carrier_boss_core_template = {
+    .px = 0, .py = 0,
+    .dx = 0.2, .dy = 1,
+    .hp = 100,
+    .symbol = '%',
+    .width = 10, .height = 6,
+    .cooldown_frames = -120,
+    .type = CARRIER_BOSS,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &carrier_layout,
+    .weapon = &machinegun
+};
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
     for(int i=0; i < MAX_ENEMIES; i++){
@@ -223,11 +261,12 @@ const Enemy* get_template(EnemyType type) {
         case JET:       return &jet_template;
         case FLYING_FORTRESS: return &Flying_Fortress_template;
         case LASER_JET: return &laser_jet_template;
+        case CARRIER_BOSS: return &carrier_boss_core_template;
         default:        return NULL;
     }
 }
 //Spawns enemies. Can take arguments to set their type, behavior, spawn point, anchor point, and strafe values
-void spawn_enemy(EnemyType type, EnemyBehavior behavior, float px, float py, float strafe){
+void spawn_enemy(EnemyType type, EnemyBehavior behavior, bool aimed, float px, float py, float strafe){
 int slot = findfreeslot();
 if (slot == -1){
     return;
@@ -236,7 +275,11 @@ const Enemy *template = get_template(type);
 if (template == NULL) {
     return; //Unknown type, exits the function
 }
+
 enemies[slot] = *template;
+if(aimed == TRUE){
+    enemies[slot].aimed = TRUE;
+}
 enemies[slot].px = px;
 enemies[slot].py = py;
 enemies[slot].old_px = px;
@@ -419,13 +462,28 @@ const TileLayout *shape = enemies[i].shape;
 }
 }
 //Function that fires enemy weapons
-void fire_enemies(Enemy *enemies){
+void fire_enemies(Enemy *enemies, Player *player){
+    
     for (int i =0 ; i < MAX_ENEMIES ; i++){
+    float fire_angle = 270; // default downward angle, same as current behavior
+
+if (enemies[i].aimed == TRUE) {
+    float dx = player->px - enemies[i].px;
+    float dy = player->py - (enemies[i].py - 1); // matches the py-1 fire origin you already use
+
+    float ideal_rad = atan2f(-dy, dx); // negative dy since up = decreasing py, matches your missile code
+    float ideal_deg = ideal_rad * (180.0f / M_PI);
+
+    int inaccuracy = 15; // degrees of max random offset, tune to taste
+    float offset = (rand() % (inaccuracy * 2 + 1)) - inaccuracy;
+
+    fire_angle = ideal_deg + offset;
+}
         if (enemies[i].state == ALIVE){
             enemies[i].cooldown_frames++;
         WeaponType *weapon = enemies[i].weapon;
          if (weapon != NULL && enemies[i].cooldown_frames >= weapon->cooldown_frames) {
-            fire_weapon(weapon, enemies[i].fire_px, enemies[i].fire_py + 1, 270, FALSE);
+            fire_weapon(weapon, enemies[i].fire_px, enemies[i].fire_py + 1, fire_angle, FALSE);
             enemies[i].cooldown_frames = 0;
             if (weapon->type == LASER) enemies[i].cooldown_frames = -300;
         }

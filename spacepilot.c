@@ -51,7 +51,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     fire_player(player);
     move_projectiles(projectiles, max_x, max_y);
     move_enemy(enemies, player, max_x, max_y);
-    fire_enemies(enemies);
+    fire_enemies(enemies, player);
     render_enemies(enemies);
     render_projectiles(projectiles);
     switch(game_mode) {

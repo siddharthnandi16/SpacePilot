@@ -71,7 +71,7 @@ typedef struct TileLayout {
     const int  *color_rows[MAX_TILE_HEIGHT];     // Parallel color_pair IDs, one int array per row
 } TileLayout;
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
-typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS, LASER_JET } EnemyType;
+typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS, LASER_JET, CARRIER_BOSS } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
 typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL, STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR } EnemyBehavior;
 typedef struct Enemy{
@@ -91,6 +91,7 @@ float strafe; //Sets how far a strafing enemy is willing to go from their anchor
 float old_px, old_py; //Stores old positions of enemy for purpose of drawing, now redunant
 float fire_px, fire_py; //Stores firing positions for multi-tile enemies
  WeaponType *weapon; //Tells the weapon firing function what weapon to use
+ bool aimed; //If true, the enemy aims in the player's general direction
 }Enemy;
 extern Enemy enemies[];
 //Enemy config struct
@@ -98,5 +99,6 @@ typedef struct {
     EnemyType type;
     EnemyBehavior behavior;
     float strafe;
+    bool aimed;
 } EnemyConfig;
 #endif
