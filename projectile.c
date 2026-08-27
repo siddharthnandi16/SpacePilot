@@ -59,7 +59,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = LASRIFLE_PLAYER_ID
 };
   WeaponType bomblauncher = {
-  .display_name = "Shrapnel Bomb",  .cooldown_frames = 15, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+  .display_name = "Shrapnel Bomb",  .cooldown_frames = 25, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = BOMB_PLAYER_ID
 };
   WeaponType missilelauncher = {
@@ -123,6 +123,14 @@ WeaponType FLYFORT_CANNON = {
    .display_name = "autocannon", .cooldown_frames = 10, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = FLYFORT_CANNON_ID
 };
+ WeaponType CARRIER_CANNON = {
+  .display_name = "autocannon",  .cooldown_frames = 90, .number = 3, .angle= 90, .type= BOMB, .modes = NORMAL
+    ,.weapon_id = BOMB_ENEMY_ID, .offset_angle = 45
+};
+WeaponType CARRIER_FLAK = {
+  .display_name = "autocannon",  .cooldown_frames = 40, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = BOMB_ENEMY_ID, .offset_angle = 15
+};
 //Function to find a free slot in the enemy pool
 int findfreeprojectileslot(void){
     for(int i=0; i < MAX_PROJECTILES; i++){
@@ -157,6 +165,8 @@ const WeaponType* get_weapon_template(WeaponID weapon_id) {
         case JET_CANNON_ID:          return &JET_CANNON;
         case FLYFORT_CANNON_ID:      return &FLYFORT_CANNON;
         case SPIRAL_CANNON_ID:       return &spiral_cannon;
+        case CARRIER_CANNON_ID:      return &CARRIER_CANNON;
+        case CARRIER_FLAK_ID:        return &CARRIER_FLAK;
         default:                     return NULL;
     }
 }

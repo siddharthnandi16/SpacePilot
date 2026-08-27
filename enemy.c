@@ -216,7 +216,7 @@ static const int carrier_colors_row5[10] = {2,2,2,2,2,2,2,2,2,2};
 static const TileLayout carrier_layout = {
     .width = 10, .height = 6,
     .glyph_rows = {
-        "  |  |  |",
+        "  |  |  | ",
         "==========",
         "##########",
         "##.####.##",
@@ -230,16 +230,86 @@ static const TileLayout carrier_layout = {
 };
 static const Enemy carrier_boss_core_template = {
     .px = 0, .py = 0,
-    .dx = 0.2, .dy = 1,
+    .dx = 0, .dy = 0,
     .hp = 100,
     .symbol = '%',
     .width = 10, .height = 6,
     .cooldown_frames = -120,
     .type = CARRIER_BOSS,
     .state = INACTIVE,
-    .behavior = STATIC,
+    .behavior = CARRIER_SPECIAL,
     .shape = &carrier_layout,
-    .weapon = &machinegun
+    .weapon = &HUNTER_RIFLE,
+    .is_boss_part = 1, //Is part of the carrier boss
+    .is_boss_core = 1 //Is core of the carrier boss
+};
+//Layout for carrier's machine guns
+static const int mg_colors_row0[2] = {3, 3};
+static const int mg_colors_row1[2] = {2, 2};
+static const int mg_colors_row2[2] = {2, 2};
+static const int mg_colors_row3[2] = {3, 3};
+
+static const TileLayout flakgun_layout = {
+    .width = 2, .height = 4,
+    .glyph_rows = {
+        "^^",
+        "##",
+        "##",
+        "vv"
+    },
+    .color_rows = {
+        mg_colors_row0, mg_colors_row1, mg_colors_row2, mg_colors_row3
+    }
+};
+static const Enemy carrier_boss_FLAK_template = {
+    .px = 0, .py = 0,
+    .dx = 0, .dy = 0,
+    .hp = 30,
+    .symbol = '%',
+    .width = 2, .height = 4,
+    .cooldown_frames = -60,
+    .type = CARRIER_BOSS_FLAK,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &flakgun_layout,
+    .weapon = &CARRIER_FLAK,
+    .is_boss_part = 1, //Is part of the carrier boss
+    .is_boss_core = 0 
+};
+//Bomb launcher of carrier boss
+static const int bc_colors_row0[3] = {3, 3, 3};
+static const int bc_colors_row1[3] = {2, 2, 2};
+static const int bc_colors_row2[3] = {2, 2, 2};
+static const int bc_colors_row3[3] = {2, 2, 2};
+static const int bc_colors_row4[3] = {3, 3, 3};
+
+static const TileLayout bombcannon_layout = {
+    .width = 3, .height = 5,
+    .glyph_rows = {
+        "/#\\",
+        "###",
+        "###",
+        "###",
+        "\\#/"
+    },
+    .color_rows = {
+        bc_colors_row0, bc_colors_row1, bc_colors_row2, bc_colors_row3, bc_colors_row4
+    }
+};
+static const Enemy carrier_boss_bomb_template = {
+    .px = 0, .py = 0,
+    .dx = 0, .dy = 0,
+    .hp = 30,
+    .symbol = '%',
+    .width = 3, .height = 5,
+    .cooldown_frames = -60,
+    .type = CARRIER_BOSS_BOMB,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &bombcannon_layout,
+    .weapon = &CARRIER_CANNON,
+    .is_boss_part = 1, //Is part of the carrier boss
+    .is_boss_core = 0 
 };
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
@@ -250,6 +320,7 @@ int findfreeslot(void){
     }
 return -1; //No valid slot found
 }
+
 //Finds the address of a template and returns it. Add a new case each time a new template is made
 const Enemy* get_template(EnemyType type) {
     switch (type) {
@@ -262,6 +333,8 @@ const Enemy* get_template(EnemyType type) {
         case FLYING_FORTRESS: return &Flying_Fortress_template;
         case LASER_JET: return &laser_jet_template;
         case CARRIER_BOSS: return &carrier_boss_core_template;
+        case CARRIER_BOSS_FLAK: return &carrier_boss_FLAK_template;
+        case CARRIER_BOSS_BOMB: return &carrier_boss_bomb_template;
         default:        return NULL;
     }
 }
@@ -390,6 +463,57 @@ enemies[i].dy = -enemies[i].dy;
 enemies[i].py = 1;
 }
 break;
+case HUNT_PLAYER_FAR:
+static int hunt_tick_2 = 0;
+hunt_tick_2++;
+if (hunt_tick_2 % 4 == 0){
+if (enemies[i].px < player->px) enemies[i].px +=  enemies[i].dx;
+if (enemies[i].px > player->px) enemies[i].px -=  enemies[i].dx;
+float target_py = player->py - 8;
+if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
+if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W -1;
+}
+if  (enemies[i].px + enemies[i].width -1 == 0 ){
+enemies[i].dx = -enemies[i].dx;
+enemies[i].px -=  enemies[i].dx;
+}
+if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py - PLAYFIELD_H - 1;
+}
+if  (enemies[i].py + enemies[i].height -1 <= 0){
+enemies[i].dy = -enemies[i].dy;
+enemies[i].py = 1;
+}
+case CARRIER_SPECIAL:
+if (BOSS_NORMAL == TRUE){
+break;}
+boss_state_timer++;
+if (boss_state_timer % 500 == 0){
+spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3),
+ enemies[i].py + enemies[i].height + 2, 0);
+ spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 + 1),
+ enemies[i].py + enemies[i].height + 2, 0);
+ spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 + 2),
+ enemies[i].py + enemies[i].height + 2, 0);
+ spawn_enemy(HUNTER, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 + 2),
+ enemies[i].py + enemies[i].height + 2, 0);
+} 
+if (enemies[i].hp < 60 && state == BOSS_NORMAL) {
+    state = SPECIAL_ATTACK_1;
+spawn_enemy(CARRIER_BOSS_FLAK, STATIC, true, enemies[i].px + (enemies[i].width/3),
+ enemies[i].py + enemies[i].height + 2, 0);
+}
+if (enemies[i].hp < 10 && state == SPECIAL_ATTACK_1){
+    state = SPECIAL_ATTACK_2;
+    boss_invulnerable = TRUE;
+spawn_enemy(CARRIER_BOSS_BOMB, STATIC, false, enemies[i].px + (2*enemies[i].width/3 + 3),
+ enemies[i].py + enemies[i].height + 3, 0);
+}
 default:
 break;
 } 

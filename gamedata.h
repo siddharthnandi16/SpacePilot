@@ -32,7 +32,8 @@ typedef struct Projectile{
 typedef enum weapon_id{EMPTY_ID, AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID,
 PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID, 
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
- BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID, SPIRAL_CANNON_ID}WeaponID;
+ BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID, SPIRAL_CANNON_ID,
+CARRIER_CANNON_ID, CARRIER_FLAK_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 const typedef struct WeaponType{
     char *display_name;
@@ -71,9 +72,11 @@ typedef struct TileLayout {
     const int  *color_rows[MAX_TILE_HEIGHT];     // Parallel color_pair IDs, one int array per row
 } TileLayout;
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
-typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS, LASER_JET, CARRIER_BOSS } EnemyType;
+typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS,
+     LASER_JET, CARRIER_BOSS, CARRIER_BOSS_FLAK, CARRIER_BOSS_BOMB } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
-typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL, STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR } EnemyBehavior;
+typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL,
+     STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR, CARRIER_SPECIAL } EnemyBehavior;
 typedef struct Enemy{
 float px, py; //Stores current position
 float dx, dy; //Stores the enemy's speed
@@ -92,13 +95,21 @@ float old_px, old_py; //Stores old positions of enemy for purpose of drawing, no
 float fire_px, fire_py; //Stores firing positions for multi-tile enemies
  WeaponType *weapon; //Tells the weapon firing function what weapon to use
  bool aimed; //If true, the enemy aims in the player's general direction
+ int is_boss_part; //0 for all non boss enemies
+ int is_boss_core; //0 for all non boss enemies
 }Enemy;
 extern Enemy enemies[];
-//Enemy config struct
+//Enemy config struct, used for spawning enemies in endless mode
 typedef struct {
     EnemyType type;
     EnemyBehavior behavior;
     float strafe;
     bool aimed;
 } EnemyConfig;
+//Enum for boss states
+typedef enum {BOSS_NORMAL, TELEGRAPHING, SPECIAL_ATTACK_1, SPECIAL_ATTACK_2, 
+SPECIAL_ATTACK_3, INVULN, BOSS_DYING}BossState;
+extern BossState state;
+extern int boss_state_timer;
+extern bool boss_invulnerable;
 #endif
