@@ -79,16 +79,20 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = LIGHTNING_ID
 };
   WeaponType shotgun = {
-   .display_name = "Flak Cannon", .cooldown_frames = 20, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
-    ,.weapon_id = SHOTGUN_ID
+   .display_name = "Flak Cannon", .cooldown_frames = 20, .number = 7, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = SHOTGUN_ID, .offset_angle = 15
 };
   WeaponType lasercannon = {
    .display_name = "Las-Cannon 2000", .cooldown_frames = 30, .number = 3, .angle= 90, .type= LASER, .modes = NORMAL
-    ,.weapon_id = LASERCANNON_ID
+    ,.weapon_id = LASERCANNON_ID, .offset_angle = 15
 };
   WeaponType plasmacannon = {
    .display_name = "Plasma Howitzer", .cooldown_frames = 10, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
-    ,.weapon_id = PLASMACANNON_ID
+    ,.weapon_id = PLASMACANNON_ID, .offset_angle = 15
+};
+WeaponType spiral_cannon = {
+   .display_name = "Starburst Cannon", .cooldown_frames = 60, .number = 24, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = PLASMACANNON_ID, .offset_angle = 15, .omnidirectional = TRUE
 };
 //List of enemy weapon types. All enemy weapon types are capitalised
   WeaponType GRUNT_RIFLE = {
@@ -151,102 +155,111 @@ const WeaponType* get_weapon_template(WeaponID weapon_id) {
         case BOMB_ENEMY_ID:          return &BOMB_ENEMY_WEAPON;
         case HUNTER_RIFLE_ID:        return &HUNTER_RIFLE;
         case JET_CANNON_ID:          return &JET_CANNON;
-        case FLYFORT_CANNON_ID:       return &FLYFORT_CANNON;
+        case FLYFORT_CANNON_ID:      return &FLYFORT_CANNON;
+        case SPIRAL_CANNON_ID:       return &spiral_cannon;
         default:                     return NULL;
     }
 }
 //Function that fires one projectile at a given angle, returns cooldown timer
 #define LASER_DURATION_FRAMES 150
 void fire_weapon(const WeaponType *weapon, float px, float py, float angle, bool player_owned){
-int slot = findfreeprojectileslot();
-if (slot == -1){
+int reverse_angle = 1;
+for(int i =0; i < weapon->number; i++){
+    int slot = 0;   
+    if(weapon->omnidirectional == FALSE){
+reverse_angle = -reverse_angle;}
+slot = findfreeprojectileslot();
+slot += i;
+if (slot + i == -1){
     return; //Stops execution if there are no free projectile slots
 }
-projectiles[slot].state = NORMAL;
-projectiles[slot].px = px;
-projectiles[slot].py = py;
-projectiles[slot].type = weapon->type;
-projectiles[slot].angle = angle;
-projectiles[slot].age = 0;
-projectiles[slot].width = 1;
-projectiles[slot].height = 1;
-switch(projectiles[slot].type){
+projectiles[slot + i].state = NORMAL;
+projectiles[slot + i].px = px;
+projectiles[slot + i].py = py;
+projectiles[slot + i].type = weapon->type;
+projectiles[slot + i].angle = angle + (i * weapon->offset_angle * reverse_angle);
+projectiles[slot + i].age = 0;
+projectiles[slot + i].width = 1;
+projectiles[slot + i].height = 1;
+switch(projectiles[slot + i].type){
 case BULLET:
 ma_sound_start(&loaded_sounds[Machine_Gun]);
-projectiles[slot].symbol = '+';
-projectiles[slot].pierce = 1;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 0;
-projectiles[slot].dx = 0;
-projectiles[slot].dy = -1; //Moves directly upward
-projectiles[slot].damage = 1;
+projectiles[slot + i].symbol = '+';
+projectiles[slot + i].pierce = 1;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 0;
+projectiles[slot + i].dx = 0;
+projectiles[slot + i].dy = -1; //Moves directly upward
+projectiles[slot + i].damage = 1;
 break;
 case LASER:
 ma_sound_start(&loaded_sounds[Laser_sound]);
-projectiles[slot].symbol = '|';
-projectiles[slot].pierce = 100;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 0;
-projectiles[slot].dx = 0;
-projectiles[slot].dy = 0;
-projectiles[slot].damage = 3;
+projectiles[slot + i].symbol = '|';
+projectiles[slot + i].pierce = 4;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 0;
+projectiles[slot + i].dx = 0;
+projectiles[slot + i].dy = 0;
+projectiles[slot + i].damage = 2;
 break;
 case BOMB:
 ma_sound_start(&loaded_sounds[Bomb_sound]);
-projectiles[slot].symbol = 'O';
-projectiles[slot].pierce = 1;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 0;
-projectiles[slot].dx = 0;
-projectiles[slot].dy = -0.5;
-projectiles[slot].damage = 3;
+projectiles[slot + i].symbol = 'O';
+projectiles[slot + i].pierce = 1;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 0;
+projectiles[slot + i].dx = 0;
+projectiles[slot + i].dy = -0.5;
+projectiles[slot + i].damage = 3;
 break;
 case MISSILE:
 ma_sound_start(&loaded_sounds[Missile_sound]);
-projectiles[slot].symbol = '^';
-projectiles[slot].pierce = 2;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 30; //Higher = more accurate
-projectiles[slot].dx = 0;
-projectiles[slot].dy = -2;
-projectiles[slot].damage = 2;
+projectiles[slot + i].symbol = '^';
+projectiles[slot + i].pierce = 2;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 30; //Higher = more accurate
+projectiles[slot + i].dx = 0;
+projectiles[slot + i].dy = -2;
+projectiles[slot + i].damage = 2;
 break;
 case PLASMA:
-projectiles[slot].symbol = '*';
-projectiles[slot].pierce = 5;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 0;
-projectiles[slot].dx = 0;
-projectiles[slot].dy = -2;
-projectiles[slot].damage = 4;
+projectiles[slot + i].symbol = '*';
+projectiles[slot + i].pierce = 5;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 0;
+projectiles[slot + i].dx = 0;
+projectiles[slot + i].dy = -2;
+projectiles[slot + i].damage = 4;
 break;
 case EMP:
-projectiles[slot].symbol = '-';
-projectiles[slot].pierce = 100;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 0;
-projectiles[slot].dx = 0;
-projectiles[slot].dy = 0;
-projectiles[slot].width = 1000;
-projectiles[slot].height = 1000;
-projectiles[slot].damage = 0;
+projectiles[slot + i].symbol = '-';
+projectiles[slot + i].pierce = 100;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 0;
+projectiles[slot + i].dx = 0;
+projectiles[slot + i].dy = 0;
+projectiles[slot + i].width = 1000;
+projectiles[slot + i].height = 1000;
+projectiles[slot + i].damage = 0;
 break;
 case CHAINLIGHTNING:
-projectiles[slot].symbol = '~';
-projectiles[slot].pierce = 10;
-projectiles[slot].strafe = 0;
-projectiles[slot].turn_rate = 0;
-projectiles[slot].dx = 10;
-projectiles[slot].dy = -10;
-projectiles[slot].damage = 3;
+projectiles[slot + i].symbol = '~';
+projectiles[slot + i].pierce = 10;
+projectiles[slot + i].strafe = 0;
+projectiles[slot + i].turn_rate = 0;
+projectiles[slot + i].dx = 10;
+projectiles[slot + i].dy = -10;
+projectiles[slot + i].damage = 3;
 break;
 }
 if (player_owned == TRUE){
-    projectiles[slot].player_owned = TRUE;
-    projectiles[slot].color = 4;
+    projectiles[slot + i].player_owned = TRUE;
+    projectiles[slot + i].color = 4;
 }
-else if (player_owned == FALSE){projectiles[slot].player_owned = FALSE;
-    projectiles[slot].color = 3;}
+else if (player_owned == FALSE){projectiles[slot + i].player_owned = FALSE;
+    projectiles[slot + i].color = 3;}
+}
+
 }
 // Function that moves and updates projectiles
 void move_projectiles(Projectile *projectiles, int max_x, int max_y){

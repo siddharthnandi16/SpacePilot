@@ -40,6 +40,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     while(quit != 1 && game_over != 1){
     tick++;
     ma_sound_start(&loaded_sounds[Level_1]);
+    handle_mute_toggle();
     erase_enemies(enemies);
     erase_projectiles(projectiles);
     scrollanddraw(&old_screen_px, &old_screen_py);

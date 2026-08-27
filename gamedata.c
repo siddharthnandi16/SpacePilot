@@ -31,7 +31,8 @@ struct Player player = {
     .q_was_down = false,
     .weapon_id = AUTOPISTOL_ID,
     .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, 
-        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID},
+        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID, SHOTGUN_ID, 
+        SPIRAL_CANNON_ID, LASERCANNON_ID},
     // For debug purposes, all implemented weapons are given to the player 
     .invuln_frames = 0,
     .score =0
@@ -50,7 +51,8 @@ struct Player player_backup = {
     .q_was_down = false,
     .weapon_id = AUTOPISTOL_ID,
     .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, 
-        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID},
+        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID,SHOTGUN_ID, 
+        SPIRAL_CANNON_ID, LASERCANNON_ID},
     // For debug purpose, all implemented weapons are given to the player 
     .invuln_frames = 0,
     .score = 0

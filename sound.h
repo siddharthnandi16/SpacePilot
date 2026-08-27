@@ -40,4 +40,5 @@ bool init_audio(void);
 void shutdown_audio(void);
 void InitialiseSoundEffects(ma_sound *loaded_sounds);
 void PlaySoundEffect(ma_sound *sound); 
+void handle_mute_toggle(void);
 #endif

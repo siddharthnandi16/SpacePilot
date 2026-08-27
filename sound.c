@@ -20,6 +20,18 @@ bool init_audio(void) {
 void shutdown_audio(void) {
     ma_engine_uninit(&engine);
 }
+void handle_mute_toggle(void) {
+    static bool m_was_down = false;
+    static bool audio_muted = false;
+
+    bool mute_key_down = (GetAsyncKeyState('M') & 0x8000) != 0;
+
+    if (mute_key_down && !m_was_down) {
+        audio_muted = !audio_muted;
+        ma_engine_set_volume(&engine, audio_muted ? 0.0f : 1.0f);
+    }
+    m_was_down = mute_key_down;
+}
 /* Commented out due to being uneccessary and overcomplicated
 //Stores all of the sounds used by the game
 typedef struct Sound_Pool{

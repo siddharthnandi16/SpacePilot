@@ -32,13 +32,15 @@ typedef struct Projectile{
 typedef enum weapon_id{EMPTY_ID, AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, BOMB_PLAYER_ID,
 PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID, 
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
- BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID}WeaponID;
+ BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID, SPIRAL_CANNON_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 const typedef struct WeaponType{
     char *display_name;
     int cooldown_frames;
     int number; //Number of projectiles fired
-    float angle; //Angle at which extra projectiles are offset from the main projectile
+    float angle; //Angle at which main projectile is fired
+    float offset_angle; //Angle at which secondary projectiles are offset from main projectile
+    bool omnidirectional; //Checks whether the weapon fires in all directions
     WeaponID weapon_id;
     ProjType type;
     FireModes modes;
@@ -71,7 +73,7 @@ typedef struct TileLayout {
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
 typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS, LASER_JET } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
-typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL, STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG } EnemyBehavior;
+typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL, STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR } EnemyBehavior;
 typedef struct Enemy{
 float px, py; //Stores current position
 float dx, dy; //Stores the enemy's speed

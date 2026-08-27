@@ -45,6 +45,8 @@ int game_starting = 0; //1= true, 0=false
 keypad(stdscr, TRUE);
 
 while(1) {
+    nodelay(stdscr, TRUE);
+    handle_mute_toggle();
     erase();  // Clear screen each frame
     
  for (int i = 0; i < num_lines; i++) {
@@ -62,7 +64,6 @@ while(1) {
             attroff(A_REVERSE);
         }
     }
-    
     refresh();
     
     int ch = getch();
@@ -91,6 +92,7 @@ while(1) {
         break;
     }
 }
+napms(8);
 return (GameMode)selected;
  //More functionality TBA 
 }
