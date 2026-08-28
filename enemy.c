@@ -207,20 +207,20 @@ static const Enemy laser_jet_template = {
 //Template for core of first boss
 // Carrier boss shape — turret sockets marked '.', aircraft bays marked 'o'
 // Use these positions (row, col) as reference offsets when placing turret/grunt-spawn subsystems relative to the core anchor
-static const int carrier_colors_row0[10] = {7,7,6,7,7,6,7,7,6,7};
-static const int carrier_colors_row1[10] = {2,2,2,2,2,2,2,2,2,2};
-static const int carrier_colors_row2[10] = {7,7,7,7,7,7,7,7,7,7};
-static const int carrier_colors_row3[10] = {7,7,2,7,7,7,7,2,7,7};
-static const int carrier_colors_row4[10] = {7,2,2,7,7,7,7,2,2,7};
-static const int carrier_colors_row5[10] = {2,2,2,2,2,2,2,2,2,2};
-static const TileLayout carrier_layout = {
+static  int carrier_colors_row0[10] = {7,7,6,7,7,6,7,7,6,7};
+static  int carrier_colors_row1[10] = {2,2,2,2,2,2,2,2,2,2};
+static  int carrier_colors_row2[10] = {7,7,7,7,7,7,7,7,7,7};
+static  int carrier_colors_row3[10] = {7,7,2,7,7,7,7,2,7,7};
+static  int carrier_colors_row4[10] = {7,2,2,7,7,7,7,2,2,7};
+static int carrier_colors_row5[10] = {2,2,2,2,2,2,2,2,2,2};
+static TileLayout carrier_layout = {
     .width = 10, .height = 6,
     .glyph_rows = {
         "  |  |  | ",
         "==========",
-        "##########",
-        "##.####.##",
-        "#..####..#",
+        "|########|",
+        "|#.####.#|",
+        "|..####..|",
         "=========="
     },
     .color_rows = {
@@ -228,10 +228,10 @@ static const TileLayout carrier_layout = {
         carrier_colors_row3, carrier_colors_row4, carrier_colors_row5
     }
 };
-static const Enemy carrier_boss_core_template = {
+static Enemy carrier_boss_core_template = {
     .px = 0, .py = 0,
     .dx = 0, .dy = 0,
-    .hp = 100,
+    .hp = 80,
     .symbol = '%',
     .width = 10, .height = 6,
     .cooldown_frames = -120,
@@ -243,13 +243,36 @@ static const Enemy carrier_boss_core_template = {
     .is_boss_part = 1, //Is part of the carrier boss
     .is_boss_core = 1 //Is core of the carrier boss
 };
+//Special layout to be used during the invuln state
+static const int carrier_invuln_colors_row0[10] = {7,7,6,7,7,6,7,7,6,7}; // contrails unchanged
+static const int carrier_invuln_colors_row1[10] = {9,9,9,9,9,9,9,9,9,9}; // top edge -> purple
+static const int carrier_invuln_colors_row2[10] = {7,7,7,7,7,7,7,7,7,7}; // hull unchanged
+static const int carrier_invuln_colors_row3[10] = {7,7,9,7,7,7,7,9,7,7}; // turret sockets -> purple
+static const int carrier_invuln_colors_row4[10] = {7,9,9,7,7,7,7,9,9,7}; // aircraft bays -> purple
+static const int carrier_invuln_colors_row5[10] = {9,9,9,9,9,9,9,9,9,9}; // bottom edge -> purple
+
+static TileLayout carrier_layout_invuln = {
+    .width = 10, .height = 6,
+    .glyph_rows = {
+        "  |  |  | ",
+        "==========",
+        "|########|",
+        "|#.####.#|",
+        "|..####..|",
+        "=========="
+    },
+    .color_rows = {
+        carrier_invuln_colors_row0, carrier_invuln_colors_row1, carrier_invuln_colors_row2,
+        carrier_invuln_colors_row3, carrier_invuln_colors_row4, carrier_invuln_colors_row5
+    }
+};
 //Layout for carrier's machine guns
 static const int mg_colors_row0[2] = {3, 3};
 static const int mg_colors_row1[2] = {2, 2};
 static const int mg_colors_row2[2] = {2, 2};
 static const int mg_colors_row3[2] = {3, 3};
 
-static const TileLayout flakgun_layout = {
+static TileLayout flakgun_layout = {
     .width = 2, .height = 4,
     .glyph_rows = {
         "^^",
@@ -261,10 +284,10 @@ static const TileLayout flakgun_layout = {
         mg_colors_row0, mg_colors_row1, mg_colors_row2, mg_colors_row3
     }
 };
-static const Enemy carrier_boss_FLAK_template = {
+static Enemy carrier_boss_FLAK_template = {
     .px = 0, .py = 0,
     .dx = 0, .dy = 0,
-    .hp = 30,
+    .hp = 15,
     .symbol = '%',
     .width = 2, .height = 4,
     .cooldown_frames = -60,
@@ -283,7 +306,7 @@ static const int bc_colors_row2[3] = {2, 2, 2};
 static const int bc_colors_row3[3] = {2, 2, 2};
 static const int bc_colors_row4[3] = {3, 3, 3};
 
-static const TileLayout bombcannon_layout = {
+static TileLayout bombcannon_layout = {
     .width = 3, .height = 5,
     .glyph_rows = {
         "/#\\",
@@ -296,10 +319,10 @@ static const TileLayout bombcannon_layout = {
         bc_colors_row0, bc_colors_row1, bc_colors_row2, bc_colors_row3, bc_colors_row4
     }
 };
-static const Enemy carrier_boss_bomb_template = {
+static Enemy carrier_boss_bomb_template = {
     .px = 0, .py = 0,
     .dx = 0, .dy = 0,
-    .hp = 30,
+    .hp = 15,
     .symbol = '%',
     .width = 3, .height = 5,
     .cooldown_frames = -60,
@@ -503,16 +526,31 @@ spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3),
  spawn_enemy(HUNTER, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 + 2),
  enemies[i].py + enemies[i].height + 2, 0);
 } 
-if (enemies[i].hp < 60 && state == BOSS_NORMAL) {
+if (enemies[i].hp < 50 && state == BOSS_NORMAL) {
     state = SPECIAL_ATTACK_1;
-spawn_enemy(CARRIER_BOSS_FLAK, STATIC, true, enemies[i].px + (enemies[i].width/3),
+    static int carrier_colors_row5[10] = {2,2,2,2,2,2,2,2,2,2};
+spawn_enemy(CARRIER_BOSS_FLAK, STATIC, false, enemies[i].px + (enemies[i].width/3),
  enemies[i].py + enemies[i].height + 2, 0);
 }
-if (enemies[i].hp < 10 && state == SPECIAL_ATTACK_1){
+if (enemies[i].hp < 20 && state == SPECIAL_ATTACK_1){
+for(int core = 0; core <= MAX_ENEMIES; core++){
+    if(enemies[core].is_boss_core == TRUE){
+    enemies[core].shape = &carrier_layout_invuln;
+    }
+}
     state = SPECIAL_ATTACK_2;
-    boss_invulnerable = TRUE;
+    boss_state_timer = 0;
+    boss_invulnerable = TRUE; 
 spawn_enemy(CARRIER_BOSS_BOMB, STATIC, false, enemies[i].px + (2*enemies[i].width/3 + 3),
  enemies[i].py + enemies[i].height + 3, 0);
+}
+if (boss_state_timer >= 240 && state == SPECIAL_ATTACK_2){
+boss_invulnerable = FALSE;
+for(int core = 0; core <= MAX_ENEMIES; core++){
+    if(enemies[core].is_boss_core == TRUE){
+    enemies[core].shape = &carrier_layout;
+    }
+}
 }
 default:
 break;

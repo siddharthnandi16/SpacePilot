@@ -87,7 +87,7 @@ int cooldown_frames; //Controls rate of fire
 EnemyType type;
 EnemyState state;
 EnemyBehavior behavior;
-const TileLayout *shape; //Shape of enemy. Is always NULL for single-tile enemies
+TileLayout *shape; //Shape of enemy. Is always NULL for single-tile enemies
 int age; //Increments every frame, determines some enemy behaviors
 float anchor_px, anchor_py; //Sets an "anchor point" for strafing enemies
 float strafe; //Sets how far a strafing enemy is willing to go from their anchor point
@@ -112,4 +112,5 @@ SPECIAL_ATTACK_3, INVULN, BOSS_DYING}BossState;
 extern BossState state;
 extern int boss_state_timer;
 extern bool boss_invulnerable;
+extern bool Level_Complete;
 #endif

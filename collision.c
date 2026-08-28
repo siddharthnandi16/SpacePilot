@@ -49,6 +49,9 @@ player->score++;
 }
 //Collision block for multi tile enemies
 if (enemies[i].shape != NULL){
+    if (boss_invulnerable == TRUE && enemies[i].is_boss_part > 0){
+        continue;
+    }
 if(projectiles[p].type != LASER){
 //Non-lenient collision for multi tile enemies
 int y_min_2 = (int)fminf(projectiles[p].old_py, projectiles[p].py);
@@ -83,7 +86,11 @@ if (hit_solid) {
     ma_sound_start(&loaded_sounds[Enemy_down]);
  enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
+
  if(enemies[i].hp <= 0){
+if(enemies[i].is_boss_core == TRUE){
+    Level_Complete = TRUE;
+}
 enemies[i].state = DEAD;
 player->score += 5;
  }

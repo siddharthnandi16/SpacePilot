@@ -57,6 +57,7 @@ struct Player player_backup = {
     .invuln_frames = 0,
     .score = 0
 };
+bool Level_Complete = FALSE;
 BossState state = BOSS_NORMAL;
 int boss_state_timer = 0;                
  bool boss_invulnerable = FALSE;               

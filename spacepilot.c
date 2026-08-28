@@ -84,6 +84,9 @@ void reset_all(int max_x, int max_y) {
     player.lives = 5;
     game_over = 0; 
     quit = 0;
+    boss_invulnerable = FALSE;
+    boss_state_timer = 0;
+    state = BOSS_NORMAL;
     memcpy(enemies, enemies_backup, sizeof(enemies_backup));
     memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
     for (int i = 0; i < level_1.spawn_count; i++) {
