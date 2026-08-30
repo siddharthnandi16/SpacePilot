@@ -47,7 +47,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
 };
 //List of player weapon types. All player weapons are in lowercase
   WeaponType autopistol = {
-   .display_name = "Autocannon", .cooldown_frames = 5, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+   .display_name = "Autocannon", .cooldown_frames = 4, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
 ,.weapon_id = AUTOPISTOL_ID
 };
   WeaponType machinegun = {
@@ -79,7 +79,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = LIGHTNING_ID
 };
   WeaponType shotgun = {
-   .display_name = "Flak Cannon", .cooldown_frames = 20, .number = 7, .angle= 90, .type= BULLET, .modes = NORMAL
+   .display_name = "Flak Cannon", .cooldown_frames = 15, .number = 7, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = SHOTGUN_ID, .offset_angle = 15
 };
   WeaponType lasercannon = {
@@ -87,7 +87,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = LASERCANNON_ID, .offset_angle = 15
 };
   WeaponType plasmacannon = {
-   .display_name = "Plasma Howitzer", .cooldown_frames = 10, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
+   .display_name = "Plasma Howitzer", .cooldown_frames = 30, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMACANNON_ID, .offset_angle = 15
 };
 WeaponType spiral_cannon = {
@@ -427,6 +427,7 @@ for (int p = start_row; p <= end_row; p++) {
       attron(COLOR_PAIR(projectiles[i].color));
     mvaddch(offset_y + p, offset_x + projectiles[i].px, projectiles[i].symbol);
      attroff(COLOR_PAIR(projectiles[i].color));
+     wnoutrefresh(stdscr);
 }
     }
     

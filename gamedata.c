@@ -37,6 +37,57 @@ struct Player player = {
     .invuln_frames = 0,
     .score =0
 };
+// Fast but with weaker weapons
+struct Player fighter_jet = {
+    .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H)/3*2,
+    .vx = 3, .vy = 3,
+    .dx = 3, .dy = 3,
+    .alive = 1,
+    .lives = 5,
+    .hasLasers = true, .hasBombs = true,
+    .fire_rate = 20,
+    .symbol = '@',
+    .speed_mode_fast = true,
+    .q_was_down = false,
+    .weapon_id = AUTOPISTOL_ID,
+    .inventory = {AUTOPISTOL_ID, LASRIFLE_PLAYER_ID, SHOTGUN_ID}, 
+    .invuln_frames = 0,
+    .score =0
+};
+//Slow but has access to many strong weapons
+struct Player flying_fortress= {
+    .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H)/3*2,
+    .vx = 1, .vy = 1,
+    .dx = 1, .dy = 1,
+    .alive = 1,
+    .lives = 5,
+    .hasLasers = true, .hasBombs = true,
+    .fire_rate = 20,
+    .symbol = '@',
+    .speed_mode_fast = true,
+    .q_was_down = false,
+    .weapon_id = BOMB_PLAYER_ID,
+    .inventory = {BOMB_PLAYER_ID, MACHINEGUN_ID, MISSILE_PLAYER_ID}, 
+    .invuln_frames = 0,
+    .score =0
+};
+//Supposed to have experimental and high-tech weapons like the plasma rifle, EMP and chain lightning
+struct Player experimental_fighter= {
+    .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H)/3*2,
+    .vx = 2, .vy = 2,
+    .dx = 2, .dy = 2,
+    .alive = 1,
+    .lives = 5,
+    .hasLasers = true, .hasBombs = true,
+    .fire_rate = 20,
+    .symbol = '@',
+    .speed_mode_fast = true,
+    .q_was_down = false,
+    .weapon_id = PLASMACANNON_ID,
+    .inventory = {PLASMACANNON_ID, SPIRAL_CANNON_ID}, 
+    .invuln_frames = 0,
+    .score =0
+};
 //Backup version of player struct. ALWAYS KEEP IT THE SAME AS THE PLAYER STRUCT
 struct Player player_backup = {
     .px = PLAYFIELD_W/2, .py = (PLAYFIELD_H/3) * 2,

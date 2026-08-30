@@ -7,8 +7,8 @@
 #include "gamedata.h"
 #include "sound.h"
 #include "window.h"
-#define NUM_MENU_OPTIONS (sizeof(menu_options) / sizeof(menu_options[0]))
-GameMode drawTitleScreen(void){
+#define NUM_CHAR_OPTIONS (sizeof(char_options) / sizeof(char_options[0]))
+GameMode drawTitleScreen(void){ 
    PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
     const char *menu_options[] = {
     "Story Mode",
@@ -17,7 +17,7 @@ GameMode drawTitleScreen(void){
     "Music Room",
     "Quit"
 };
-
+ #define NUM_MENU_OPTIONS (sizeof(menu_options) / sizeof(menu_options[0]))
     erase();
     start_color();
     init_pair(1, COLOR_GREEN, COLOR_BLACK);
@@ -71,17 +71,18 @@ while(1) {
         case KEY_RESIZE:
         erase();
         resize_term(0, 0);
-        getmaxyx(stdscr, max_x, max_y);
-        update_playfield_offset(max_y, max_x);
+        getmaxyx(stdscr, max_y, max_x);
+        update_playfield_offset(max_x, max_y);
         refresh();
         syncConsoleBufferToWindow();
+        break;
         case 60419:  // Up
             selected = (selected - 1 + NUM_MENU_OPTIONS) % NUM_MENU_OPTIONS;
             break;
         case 60418:  // Down
             selected = (selected + 1) % NUM_MENU_OPTIONS;
             break;
-        case '\n':  // Confirms selection
+        case '\n':  // Press enter to confirm selection
         ma_sound_stop(&loaded_sounds[Titlescreen_MUSIC]);
         game_starting = 1;
             return (GameMode)selected;
@@ -95,4 +96,72 @@ while(1) {
 napms(8);
 return (GameMode)selected;
  //More functionality TBA 
+}
+const char *char_options[] = {
+    "Fighter Jet",
+    "Flying Fortress",
+    "Experimental Fighter",
+    "Debug Player"
+};
+
+void Draw_Char_Select(Player *player){
+    int character_selected = 0; //1 for true, 0 for false
+    nodelay(stdscr, FALSE);
+    erase();
+    int char_selected = 0;
+    int ch, max_x, max_y;
+    while(1){
+ for (int i = 0; i < NUM_CHAR_OPTIONS; i++) {
+        if (i == char_selected) {
+            attron(A_REVERSE);
+        }
+        mvprintw(offset_y + i, offset_x + PLAYFIELD_W/3, "%s", char_options[i]);
+        if (i == char_selected) {
+            attroff(A_REVERSE);
+        }
+    }
+    refresh();
+    ch = getch();
+    switch(ch) {
+        case KEY_RESIZE:
+        erase();
+        resize_term(0, 0);
+        getmaxyx(stdscr, max_y, max_x);
+        update_playfield_offset(max_x, max_y);
+        refresh();
+        syncConsoleBufferToWindow();
+        break;
+        case 60419:  // Up
+            char_selected = (char_selected - 1 + NUM_CHAR_OPTIONS) % NUM_CHAR_OPTIONS;
+            break;
+        case 60418:  // Down
+            char_selected = (char_selected + 1) % NUM_CHAR_OPTIONS;
+            break;
+        case '\n':  // Press enter to confirm selection
+        character_selected = 1;
+        default:
+        break;
+    }
+     if (character_selected == 1){
+        nodelay(stdscr, TRUE);
+    switch(char_selected){
+        case 0: //Fighter jet
+        *player = fighter_jet;
+        break;
+        case 1: //Flying fortress
+        *player = flying_fortress;
+        break;
+        case 2: //Experimental fighter
+        *player = experimental_fighter;
+        break;
+        case 3: //Debug
+        break;
+        default:
+        break;
+    }
+    erase();
+     break;
+    }
+    }
+    napms(8);
 }

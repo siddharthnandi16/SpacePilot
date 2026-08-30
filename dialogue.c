@@ -6,17 +6,23 @@
 #include "hud.h"
 #define DIALOGUE_HEIGHT 1   
 #define DIALOGUE_WIDTH 102
+// Use 10 for green on black, 11 for red on black, 12 for amber on black
 dialogue_entry dialogue_table_1[MAX_DIALOGUE]={
     [0] ={
-.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 2, 
-.fired = FALSE, .trigger_time = 0, .text = "Placeholder",
+.trigger = ROW, .auto_scroll=TRUE, .bold = FALSE, .color = 10, 
+.fired = FALSE, .trigger_time = 0, .text = "Placeholder 1",
     },
     [1] ={
-.trigger = TICK, .auto_scroll=TRUE, .bold = TRUE, .color = 2, 
-.fired = FALSE, .trigger_time = 0, .text = "Placeholder",
-    }
+.trigger = TICK, .auto_scroll=TRUE, .bold = FALSE, .color = 10, 
+.fired = FALSE, .trigger_time = 20, .text = "Placeholder 2",
+    },
+    [2] ={
+.trigger = TICK, .auto_scroll=TRUE, .bold = TRUE, .color = 11, 
+.fired = FALSE, .trigger_time = 60, .text = "Testing",
+    },
+    
 };
-
+//Commented out since it is now redundant
 /* WINDOW *dialogue_win = NULL;
 void init_dialogue_window(int offset_y, int offset_x){
     fprintf(stderr, "newwin(%d, %d, %d, %d)\n",
@@ -29,26 +35,34 @@ void init_dialogue_window(int offset_y, int offset_x){
 void update_dialogue(dialogue_entry *dialogue_table){
 
     for (int i = 0; i < MAX_DIALOGUE; i++){
-        if (dialogue_table[i].fired == TRUE){
-        continue; // Skips entries that are already fired
+        if (dialogue_table[i].fired == TRUE || dialogue_table[i].text == NULL){
+        continue; // Skips entries that are already fired or are blank
         }
         switch(dialogue_table[i].trigger){
             case ROW: 
             if (rows_scrolled >= dialogue_table[i].trigger_time){
-                werase(hud_win);
+                if (dialogue_table[i].bold == TRUE) wattron(hud_win, A_BOLD);
+                wattron(hud_win, COLOR_PAIR(dialogue_table[i].color));
+                mvwprintw(hud_win, 2, 1, "%-100s", "");
                 dialogue_table[i].fired = TRUE;
-                mvwprintw(hud_win, 2, 0, 
+                mvwprintw(hud_win, 2, 1, 
                     "%s", dialogue_table[i].text);
-                wrefresh(hud_win);
+                wattroff(hud_win, COLOR_PAIR(dialogue_table[i].color));
+                 if (dialogue_table[i].bold == TRUE) wattroff(hud_win, A_BOLD);
+                wnoutrefresh(hud_win);
             }
             break;
             case TICK:
             if (tick >= dialogue_table[i].trigger_time){
-                werase(hud_win);
+                 if (dialogue_table[i].bold == TRUE) wattron(hud_win, A_BOLD);
+                wattron(hud_win, COLOR_PAIR(dialogue_table[i].color));
+                mvwprintw(hud_win, 2, 1, "%-100s", "");
                 dialogue_table[i].fired = TRUE;
-                mvwprintw(hud_win, 2, 0, 
+                mvwprintw(hud_win, 2, 1, 
                     "%s", dialogue_table[i].text);
-                wrefresh(hud_win);
+                wattroff(hud_win, COLOR_PAIR(dialogue_table[i].color));
+                if (dialogue_table[i].bold == TRUE) wattroff(hud_win, A_BOLD);
+                wnoutrefresh(hud_win);
             }
             break;
         }

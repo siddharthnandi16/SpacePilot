@@ -144,6 +144,9 @@ init_color(CRT_GREEN, 282, 910, 416);
     init_pair(8, ACID_GREEN_COLOR, COLOR_BLACK);
     init_pair(9,     PURPLE_COLOR,     COLOR_BLACK);
     init_pair(10, CRT_GREEN, CRT_BG); //Colors for future dialogue screen
+    init_pair(11, COLOR_RED, CRT_BG); 
+    init_pair(12, AMBER_COLOR, CRT_BG); 
+    init_pair(14, CRT_GREEN, CRT_BG); //Color for background
     
 refresh();
 keypad(stdscr, TRUE);
@@ -156,6 +159,7 @@ fprintf(stderr, "%d", max_x);
 fprintf(stderr, "%d %d", LINES, COLS);
 update_playfield_offset(max_x,max_y);
 init_hud(offset_y, offset_x);
+if (hud_win == NULL) fprintf(stderr, "hud_win is NULL! offset_y=%d\n", offset_y);
 refresh();
 init_audio();
 InitialiseSoundEffects(loaded_sounds);
@@ -167,10 +171,12 @@ InitialiseSoundEffects(loaded_sounds);
 switch(game_mode){
 case STORY_MODE:
 erase();
+Draw_Char_Select(&player);
 gameloop(&player, max_x, max_y, STORY_MODE);
 break;
 case ENDLESS_MODE:
 erase();
+Draw_Char_Select(&player);
 gameloop(&player, max_x, max_y, ENDLESS_MODE);
 break;
 //Placeholder case for unimplemented feature
@@ -184,7 +190,7 @@ default:
 }
 if (game_mode != MODE_QUIT){
     reset_all(max_x, max_y);
-     game_mode = drawTitleScreen();   
+     game_mode = drawTitleScreen(); 
 }
     }
     

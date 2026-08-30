@@ -67,6 +67,9 @@ typedef struct Player{
     int score; //Increments upon destroyed enemies
 }Player;
 extern Player player;
+extern Player fighter_jet;
+extern Player flying_fortress;
+extern Player experimental_fighter;
 extern Player player_backup;
 #define MAX_TILE_HEIGHT 8 //Max height of multi-tile enemies
 #define MAX_TILE_WIDTH  40 //Max width of multi-tile enemies
