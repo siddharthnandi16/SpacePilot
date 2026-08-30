@@ -89,6 +89,7 @@ projectiles[p].pierce--;
 
  if(enemies[i].hp <= 0){
 if(enemies[i].is_boss_core == TRUE){
+    current_level++;
     Level_Complete = TRUE;
 }
 enemies[i].state = DEAD;

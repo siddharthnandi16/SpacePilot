@@ -49,13 +49,13 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     *old_screen_py = screen_py;
 
     rows_scrolled++;
-    refresh();
+    wnoutrefresh(stdscr);
     return rows_scrolled;
 }
 //Data for level 1
 Level_Data level_1={
 .spawn_table = spawn_table_1,
-.spawn_count = 5,
+.spawn_count = 1,
     .sound_table = sound_table_1,
     .sound_count = 0,          
     .dialogue_table = dialogue_table_1,

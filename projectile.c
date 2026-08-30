@@ -419,7 +419,7 @@ for(int i=0; i < MAX_PROJECTILES; i++){
     attron(COLOR_PAIR(projectiles[i].color));
      mvaddch(offset_y + projectiles[i].py, offset_x + projectiles[i].px, projectiles[i].symbol);
      attroff(COLOR_PAIR(projectiles[i].color));
-     refresh();
+     wnoutrefresh(stdscr);
     }
     if (projectiles[i].state == NORMAL && projectiles[i].type == LASER){
 get_laser_bounds(&projectiles[i], max_y, max_x, &start_row, &end_row);

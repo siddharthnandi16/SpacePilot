@@ -2,7 +2,11 @@
 #define GAMEDATA_H
 //Defines for current size of playfield
 #define PLAYFIELD_W 100
-#define PLAYFIELD_H 27
+#define PLAYFIELD_H 26
+//Stores current game tick
+extern int unsigned long tick;
+//Stores current level
+extern int current_level;
 // This header file stores data about the game's current state
 extern bool moving_diagonally;
 //Enums for storing game modes

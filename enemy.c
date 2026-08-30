@@ -600,12 +600,12 @@ for(int i=0; i < MAX_ENEMIES; i++){
     attron(COLOR_PAIR(2));
      mvaddch(offset_y + enemies[i].py, offset_x + enemies[i].px, enemies[i].symbol);
      attroff(COLOR_PAIR(2));
-     refresh();
+     wnoutrefresh(stdscr);
      //This block renders all multi-tile enemies
     }
     
      if (enemies[i].shape != NULL && enemies[i].state ==ALIVE){
-        fprintf(stderr, "rendering shape enemy at %d\n", i);
+      //  fprintf(stderr, "rendering shape enemy at %d\n", i);
 const TileLayout *shape = enemies[i].shape;
     for (int row = 0; row < shape->height; row++) {
         for (int col = 0; col < shape->width; col++) {
@@ -618,6 +618,7 @@ const TileLayout *shape = enemies[i].shape;
             offset_x + (int)enemies[i].px + col,
             glyph);
             attroff(COLOR_PAIR(color));
+            wnoutrefresh(stdscr);
         }
     }
      }

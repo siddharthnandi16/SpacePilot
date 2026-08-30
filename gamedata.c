@@ -60,5 +60,7 @@ struct Player player_backup = {
 bool Level_Complete = FALSE;
 BossState state = BOSS_NORMAL;
 int boss_state_timer = 0;                
- bool boss_invulnerable = FALSE;               
+ bool boss_invulnerable = FALSE;  
+ int unsigned long tick = 0; 
+ int current_level = 1;            
   

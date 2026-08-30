@@ -7,6 +7,7 @@
 #include "window.h"
 #include "projectile.h"
 #include "hud.h"
+#include "dialogue.h"
 int quit = 0; //1= true, 0= false
 int move_player(Player *player){
     int max_x, max_y;
@@ -48,7 +49,7 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
         paused = TRUE;
         mvprintw(offset_y + PLAYFIELD_H/2, offset_x + PLAYFIELD_W/2, "PAUSED");
         mvprintw(offset_y + PLAYFIELD_H/2 + 2, offset_x + PLAYFIELD_W/2, "Press Q to return to title screen");
-        refresh();
+        wnoutrefresh(stdscr);
     }
     while (paused == TRUE){  
     nodelay(stdscr, FALSE);
@@ -59,29 +60,35 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
         nodelay(stdscr, TRUE);
         paused = FALSE;
         erase();
-        refresh();
+        wnoutrefresh(stdscr);
     }
     if (choice == 'p'){
         scrollok(stdscr, TRUE);
         nodelay(stdscr, TRUE);
         paused = FALSE;
         erase();
-        refresh();
+        wnoutrefresh(stdscr);
     }
     }
     
     if (choice == KEY_RESIZE){
-        erase();
-        resize_term(0, 0);
-        getmaxyx(stdscr, max_x, max_y);
-        update_playfield_offset(max_y, max_x);
-        werase(hud_win);
-        wresize(hud_win, offset_y-3, offset_x-1);
-        mvwin(hud_win, offset_y-3, offset_x-1);
-        box(hud_win, 0, 0);
-        wrefresh(hud_win);
-        refresh();
-        syncConsoleBufferToWindow();}
+     erase();
+    resize_term(0, 0);
+    getmaxyx(stdscr, max_x, max_y);
+    update_playfield_offset(max_y, max_x);
+
+    int hud_y = offset_y - 4;
+    int hud_x = offset_x - 1;
+    if (hud_y < 0) hud_y = 0;
+    if (hud_x < 0) hud_x = 0;
+
+    werase(hud_win);
+    mvwin(hud_win, hud_y, hud_x);
+    wresize(hud_win, HUD_HEIGHT, HUD_WIDTH);
+    box(hud_win, 0, 0);
+    wrefresh(hud_win);
+    wnoutrefresh(stdscr);
+    syncConsoleBufferToWindow();}
 //New movement code, allowing for diagonal movement
 bool upward_movement = (GetAsyncKeyState(VK_UP)& 0x8000) != 0;
 bool downward_movement = (GetAsyncKeyState(VK_DOWN)& 0x8000) != 0;

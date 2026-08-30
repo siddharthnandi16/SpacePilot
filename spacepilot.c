@@ -26,9 +26,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "collision.h"
 #include "hud.h"
 #include "miniaudio.h"
-
 int game_over =0; //1= true, 0=false
-int unsigned long tick=0;
 int spawn_table_1_count;
 //This function sets the player's current movement speed to their top speed
 void setplayermovement(struct Player *player){
@@ -72,7 +70,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         return 0;
     }
     drawHUD(player);
-    refresh();
+    doupdate();
     napms(34); //Controls frame rate and refresh rate
     }
     return 0;
@@ -153,7 +151,11 @@ keypad(stdscr, TRUE);
 setplayermovement(&player);
 player.px = PLAYFIELD_W/2, player.py = (PLAYFIELD_H)/3*2;
 getmaxyx(stdscr, max_y, max_x);
-    update_playfield_offset(max_x,max_y);
+fprintf(stderr, "%d", max_y);
+fprintf(stderr, "%d", max_x);
+fprintf(stderr, "%d %d", LINES, COLS);
+update_playfield_offset(max_x,max_y);
+init_hud(offset_y, offset_x);
 refresh();
 init_audio();
 InitialiseSoundEffects(loaded_sounds);
