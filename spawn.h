@@ -13,4 +13,7 @@ int trigger_time;
 bool aimed;
 }spawn_entry;
 extern spawn_entry spawn_table_1[];
+extern const int spawn_table_1_count;
+extern spawn_entry spawn_table_2[];
+extern const int spawn_table_2_count;
 #endif

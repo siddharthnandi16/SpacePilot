@@ -52,16 +52,33 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     wnoutrefresh(stdscr);
     return rows_scrolled;
 }
-//Data for level 1
+
+//Data for levels 1 and 2
+Level_Data level_2={
+.spawn_table = spawn_table_1,
+.spawn_count = 1,
+    .sound_table = sound_table_1,
+    .sound_count = 0,          
+    .dialogue_table = dialogue_table_1,
+    .dialogue_count = 0,
+    .next_level = NULL
+};
 Level_Data level_1={
 .spawn_table = spawn_table_1,
 .spawn_count = 1,
     .sound_table = sound_table_1,
     .sound_count = 0,          
     .dialogue_table = dialogue_table_1,
-    .dialogue_count = 0
+    .dialogue_count = 0,
+    .next_level = &level_2
 };
-//Function that handles level progression (enemy spawning, sound, dialogue)
+void init_levels(void) {
+    level_1.spawn_count    = spawn_table_1_count;
+    level_2.spawn_count    = spawn_table_2_count;
+}
+//Variable that stores the current level
+ Level_Data *Current_Level = &level_1;
+//Function that handles level progression (enemy spawning)
 void level(const Level_Data *level){
     for (int i = 0; i < level->spawn_count; i++) {
         if (level->spawn_table[i].fired){
@@ -93,7 +110,23 @@ void level(const Level_Data *level){
                 break;
         }
     }
-    // TBA: music and dialogue passes, same structure
+    // Section for moving to next level, if one exists
+    if (Level_Complete == TRUE && level->next_level != NULL){
+    fprintf(stderr, "Level completed.");
+    fprintf(stderr, "%d", Current_Level, "\n");
+    Current_Level = level->next_level;
+    fprintf(stderr, "%d", Current_Level, "\n");
+    Level_Complete = FALSE;     
+    tick = 0;
+    rows_scrolled = 0;
+    reset_level_tables(Current_Level);
+    }
+}
+//Function to reset spawn_tables after beating a level
+void reset_level_tables(Level_Data *level){
+    for (int i = 0; i < level->spawn_count; i++){
+        level->spawn_table[i].fired = FALSE;
+    }
 }
 static long double difficulty = 0;
 //Function which picks a type for each enemy

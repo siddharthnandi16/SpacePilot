@@ -88,12 +88,12 @@ if (hit_solid) {
 projectiles[p].pierce--;
 
  if(enemies[i].hp <= 0){
+enemies[i].state = DEAD;
+player->score += 5;
 if(enemies[i].is_boss_core == TRUE){
     current_level++;
     Level_Complete = TRUE;
 }
-enemies[i].state = DEAD;
-player->score += 5;
  }
 }
 }

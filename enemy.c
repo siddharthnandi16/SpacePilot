@@ -49,7 +49,7 @@ static const Enemy grunt_template = {
     .hp = 1,
     .symbol = '%',
     .width = 1, .height = 1,
-    .cooldown_frames = 120,
+    .cooldown_frames = -30,
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -64,7 +64,7 @@ static const Enemy rapidfire_template = {
     .hp = 2,
     .symbol = '&',
     .width = 1, .height = 1,
-    .cooldown_frames = 10,
+    .cooldown_frames = -30,
     .type = RAPIDFIRE,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -78,7 +78,7 @@ static const Enemy laser_template = {
     .hp = 2,
     .symbol = '!',
     .width = 1, .height = 1,
-    .cooldown_frames = 120,
+    .cooldown_frames = -30,
     .type = LASER_ENEMY,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -92,7 +92,7 @@ static const Enemy bomber_template = {
     .hp = 2,
     .symbol = '#',
     .width = 1, .height = 1,
-    .cooldown_frames = 180,
+    .cooldown_frames = -30,
     .type = BOMBER,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -106,7 +106,7 @@ static const Enemy hunter_template = {
     .hp = 4,
     .symbol = 'H',
     .width = 1, .height = 1,
-    .cooldown_frames = 30,
+    .cooldown_frames = -30,
     .type = HUNTER,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -137,7 +137,7 @@ static const Enemy jet_template = {
     .hp = 10,
     .symbol = '%',
     .width = 3, .height = 3,
-    .cooldown_frames = 30,
+    .cooldown_frames = -30,
     .type = JET,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -512,6 +512,7 @@ if  (enemies[i].py + enemies[i].height -1 <= 0){
 enemies[i].dy = -enemies[i].dy;
 enemies[i].py = 1;
 }
+break;
 case CARRIER_SPECIAL:
 if (BOSS_NORMAL == TRUE){
 break;}

@@ -49,8 +49,8 @@ struct Player fighter_jet = {
     .symbol = '@',
     .speed_mode_fast = true,
     .q_was_down = false,
-    .weapon_id = AUTOPISTOL_ID,
-    .inventory = {AUTOPISTOL_ID, LASRIFLE_PLAYER_ID, SHOTGUN_ID}, 
+    .weapon_id = MACHINEGUN_ID,
+    .inventory = {MACHINEGUN_ID, LASRIFLE_PLAYER_ID, SHOTGUN_ID}, 
     .invuln_frames = 0,
     .score =0
 };
@@ -113,5 +113,6 @@ BossState state = BOSS_NORMAL;
 int boss_state_timer = 0;                
  bool boss_invulnerable = FALSE;  
  int unsigned long tick = 0; 
- int current_level = 1;            
+ int current_level = 1;   
+         
   

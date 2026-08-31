@@ -6,14 +6,16 @@
 #include "gamedata.h"
 //Defintion of struct that stores level data
 extern int old_screen_py, old_screen_px;
-typedef struct {
+typedef struct Level_Data{
     spawn_entry *spawn_table;
     int spawn_count;
     sound_entry *sound_table;
     int sound_count;
     dialogue_entry *dialogue_table;
     int dialogue_count;
+    struct Level_Data *next_level;
 }Level_Data;
+extern Level_Data *Current_Level;
 extern Level_Data level_1;
 char bgchar(int max_x, int max_y);
 bool should_draw_cell(int max_y, int max_x);
@@ -26,6 +28,8 @@ EnemyConfig pick_enemy_config(long double difficulty);
 void spawn_wave(long double difficulty);
 int pick_music_track(long double difficulty);
 void endless_level(void);
+void init_levels(void);
+void reset_level_tables(Level_Data *level);
 extern Level_Data level_1;
 extern unsigned long int spawn_tick;
 #endif

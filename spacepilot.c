@@ -27,7 +27,6 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "hud.h"
 #include "miniaudio.h"
 int game_over =0; //1= true, 0=false
-int spawn_table_1_count;
 //This function sets the player's current movement speed to their top speed
 void setplayermovement(struct Player *player){
 player->dx = player->vx;
@@ -54,7 +53,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     render_projectiles(projectiles);
     switch(game_mode) {
     case STORY_MODE:
-        level(&level_1);
+        level(Current_Level);
         break;
     case ENDLESS_MODE:
     //Commented out as it is not not yet implemented
@@ -112,6 +111,7 @@ int main(){
     //Debug function used to check whether consoles resizing is working properly
 // forceConsoleSize_debug(100,30);
 initscr();
+init_levels();
 forceConsoleSize(100,30);
 int max_x, max_y;
 getmaxyx(stdscr, max_y, max_x);
