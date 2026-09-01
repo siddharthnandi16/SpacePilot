@@ -124,11 +124,11 @@ WeaponType FLYFORT_CANNON = {
     ,.weapon_id = FLYFORT_CANNON_ID
 };
  WeaponType CARRIER_CANNON = {
-  .display_name = "autocannon",  .cooldown_frames = 90, .number = 3, .angle= 90, .type= BOMB, .modes = NORMAL
+  .display_name = "autocannon",  .cooldown_frames = 150, .number = 3, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = BOMB_ENEMY_ID, .offset_angle = 45
 };
 WeaponType CARRIER_FLAK = {
-  .display_name = "autocannon",  .cooldown_frames = 40, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+  .display_name = "autocannon",  .cooldown_frames = 90, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = BOMB_ENEMY_ID, .offset_angle = 15
 };
 //Function to find a free slot in the enemy pool

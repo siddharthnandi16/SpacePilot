@@ -55,7 +55,7 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
 
 //Data for levels 1 and 2
 Level_Data level_2={
-.spawn_table = spawn_table_1,
+.spawn_table = spawn_table_2,
 .spawn_count = 1,
     .sound_table = sound_table_1,
     .sound_count = 0,          
@@ -103,9 +103,9 @@ void level(const Level_Data *level){
                                 level->spawn_table[i].strafe);
                     level->spawn_table[i].fired = TRUE;
                     //Debug code to check whether entities are spawning correctly
-                    fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
+                    //fprintf(stderr, "Entry %d fired, trigger_time=%d\n", i, level->spawn_table[i].trigger_time);
                     //Debug code to check if enemy characteristics are being correctly assinged
-                    fprintf(stderr, "Entry horizontal position is %d , shape=%d\n", enemies[i].px, enemies[i].shape );
+                    //fprintf(stderr, "Entry horizontal position is %d , shape=%d\n", enemies[i].px, enemies[i].shape );
                 }
                 break;
         }
@@ -113,13 +113,20 @@ void level(const Level_Data *level){
     // Section for moving to next level, if one exists
     if (Level_Complete == TRUE && level->next_level != NULL){
     fprintf(stderr, "Level completed.");
+    werase(stdscr);
+    for (int p= 0;p < MAX_ENEMIES; p++){
+        enemies[p].state = DEAD;
+    }
     fprintf(stderr, "%d", Current_Level, "\n");
     Current_Level = level->next_level;
     fprintf(stderr, "%d", Current_Level, "\n");
-    Level_Complete = FALSE;     
+    reset_level_tables(Current_Level);
+    Level_Complete = FALSE;   
+    state = BOSS_NORMAL;
+    boss_state_timer = 0;
+    boss_invulnerable = FALSE; 
     tick = 0;
     rows_scrolled = 0;
-    reset_level_tables(Current_Level);
     }
 }
 //Function to reset spawn_tables after beating a level
