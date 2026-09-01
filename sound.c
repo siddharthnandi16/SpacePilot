@@ -79,6 +79,15 @@ ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
 );
 ma_sound_set_looping(&loaded_sounds[Level_1], TRUE);
 ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
+   ma_result Level_2_result = ma_sound_init_from_file(
+    &engine,
+    "Venus.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Level_2]
+);
+ma_sound_set_looping(&loaded_sounds[Level_2], TRUE);
     ma_result BossBGM_result = ma_sound_init_from_file(
     &engine,
     "BossMain.wav",

@@ -51,11 +51,11 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
 ,.weapon_id = AUTOPISTOL_ID
 };
   WeaponType machinegun = {
-   .display_name = "Machine Gun", .cooldown_frames = 2, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
+   .display_name = "Machine Gun", .cooldown_frames = 3, .number = 1, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = MACHINEGUN_ID
 };
   WeaponType laserrifle = {
-   .display_name = "Las-Cannon 1000", .cooldown_frames = 20, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+   .display_name = "Las-Cannon 1000", .cooldown_frames = 15, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
     ,.weapon_id = LASRIFLE_PLAYER_ID
 };
   WeaponType bomblauncher = {
@@ -79,7 +79,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = LIGHTNING_ID
 };
   WeaponType shotgun = {
-   .display_name = "Flak Cannon", .cooldown_frames = 15, .number = 7, .angle= 90, .type= BULLET, .modes = NORMAL
+   .display_name = "Flak Cannon", .cooldown_frames = 8, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = SHOTGUN_ID, .offset_angle = 15
 };
   WeaponType lasercannon = {
@@ -120,7 +120,7 @@ WeaponType spiral_cannon = {
     ,.weapon_id = JET_CANNON_ID
 };
 WeaponType FLYFORT_CANNON = {
-   .display_name = "autocannon", .cooldown_frames = 10, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+   .display_name = "autocannon", .cooldown_frames = 45, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = FLYFORT_CANNON_ID
 };
  WeaponType CARRIER_CANNON = {

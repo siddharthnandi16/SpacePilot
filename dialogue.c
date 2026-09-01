@@ -9,16 +9,28 @@
 // Use 10 for green on black, 11 for red on black, 12 for amber on black
 dialogue_entry dialogue_table_1[MAX_DIALOGUE]={
     [0] ={
-.trigger = ROW, .auto_scroll=TRUE, .bold = FALSE, .color = 10, 
-.fired = FALSE, .trigger_time = 0, .text = "Placeholder 1",
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
+.fired = FALSE, .trigger_time = 0, .text = "Use the arrow keys to move your aircraft!",
     },
     [1] ={
-.trigger = TICK, .auto_scroll=TRUE, .bold = FALSE, .color = 10, 
-.fired = FALSE, .trigger_time = 20, .text = "Placeholder 2",
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
+.fired = FALSE, .trigger_time = 90, .text = "Press Z to fire your weapon!",
     },
     [2] ={
-.trigger = TICK, .auto_scroll=TRUE, .bold = TRUE, .color = 11, 
-.fired = FALSE, .trigger_time = 60, .text = "Testing",
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
+.fired = FALSE, .trigger_time = 180, .text = "Use 1,2 and 3 to switch between weapons!",
+    },
+    [3] ={
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
+.fired = FALSE, .trigger_time = 270, .text = "Press Q to switch between fast and slow movement.",
+    },
+    [4] ={
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 12, 
+.fired = FALSE, .trigger_time = 360, .text = "MISSION CONTROL:Shoot down any enemy aircraft you see.Beware the vast enemy fleet!",
+    },
+    [5] ={
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 11, 
+.fired = FALSE, .trigger_time = 520, .text = "MISSION CONTROL: WARNING! Enemy shrapnel bombers incoming! ",
     },
     
 };

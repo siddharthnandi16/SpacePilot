@@ -36,7 +36,16 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(quit != 1 && game_over != 1){
     tick++;
+    switch(current_level){
+        case 1: 
     ma_sound_start(&loaded_sounds[Level_1]);
+    break;
+        case 2:
+    ma_sound_stop(&loaded_sounds[Level_1]);
+    ma_sound_start(&loaded_sounds[Level_2]);
+        default:
+        break;
+    }
     handle_mute_toggle();
     erase_enemies(enemies);
     erase_projectiles(projectiles);

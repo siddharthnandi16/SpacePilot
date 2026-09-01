@@ -46,7 +46,7 @@ Enemy enemies_backup[MAX_ENEMIES] = {
 static const Enemy grunt_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 1,
+    .hp = 2,
     .symbol = '%',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -57,11 +57,11 @@ static const Enemy grunt_template = {
     .weapon = &GRUNT_RIFLE,
     
 };
-// Rapidly fires bullets and moves fast. Meant to be dangerous in swarms
+// Rapidly fires bullets. Meant to be dangerous in swarms
 static const Enemy rapidfire_template = {
     .px = 0, .py = 0,
-    .dx = 3, .dy = 3,
-    .hp = 2,
+    .dx = 1, .dy = 1,
+    .hp = 3,
     .symbol = '&',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -75,7 +75,7 @@ static const Enemy rapidfire_template = {
 static const Enemy laser_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 2,
+    .hp = 4,
     .symbol = '!',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -89,7 +89,7 @@ static const Enemy laser_template = {
 static const Enemy bomber_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 2,
+    .hp = 6,
     .symbol = '#',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -103,7 +103,7 @@ static const Enemy bomber_template = {
 static const Enemy hunter_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 4,
+    .hp = 8,
     .symbol = 'H',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -514,9 +514,9 @@ enemies[i].py = 1;
 }
 break;
 case CARRIER_SPECIAL:
+boss_state_timer++;
 if (BOSS_NORMAL == TRUE){
 break;}
-boss_state_timer++;
 if (boss_state_timer % 500 == 0){
 spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3),
  enemies[i].py + enemies[i].height + 2, 0);
@@ -524,7 +524,7 @@ spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3),
  enemies[i].py + enemies[i].height + 2, 0);
  spawn_enemy(GRUNT, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 + 2),
  enemies[i].py + enemies[i].height + 2, 0);
- spawn_enemy(HUNTER, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 + 2),
+ spawn_enemy(HUNTER, HUNT_PLAYER, false, enemies[i].px + (enemies[i].width/3 -1),
  enemies[i].py + enemies[i].height + 2, 0);
 } 
 if (enemies[i].hp < 50 && state == BOSS_NORMAL) {
@@ -545,7 +545,7 @@ for(int core = 0; core <= MAX_ENEMIES; core++){
 spawn_enemy(CARRIER_BOSS_BOMB, STATIC, false, enemies[i].px + (2*enemies[i].width/3 + 3),
  enemies[i].py + enemies[i].height + 3, 0);
 }
-if (boss_state_timer >= 240 && state == SPECIAL_ATTACK_2){
+if (boss_state_timer >= 180 && state == SPECIAL_ATTACK_2){
 boss_invulnerable = FALSE;
 for(int core = 0; core <= MAX_ENEMIES; core++){
     if(enemies[core].is_boss_core == TRUE){
