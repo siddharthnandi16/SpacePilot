@@ -73,7 +73,21 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
 }
     Check_Collisions(player, enemies, projectiles);
     if (player->lives <= 0 || quit == 1){
+        if (player->lives <=0){
+ nodelay(stdscr, FALSE);
+    mvprintw(PLAYFIELD_H/2 + offset_y, PLAYFIELD_W/2 + offset_x, "Continue? (y/n)");
+    refresh();
+    continue_choice = getch();
+    if (continue_choice == 'y'){
+        nodelay(stdscr, TRUE);
+        mvprintw(PLAYFIELD_H/2+ offset_y, PLAYFIELD_W/2 + offset_x, "%-15s", "");
+        continued = TRUE;
+        player->lives = 8;
+        continue;
+    }
+        }
     ma_sound_stop(&loaded_sounds[Level_1]);
+    ma_sound_stop(&loaded_sounds[Level_2]);
         game_over=1;
         return 0;
     }
@@ -93,6 +107,10 @@ void reset_all(int max_x, int max_y) {
     boss_invulnerable = FALSE;
     boss_state_timer = 0;
     state = BOSS_NORMAL;
+    current_level = 1;
+    Current_Level = &level_1;
+    rows_scrolled = 0;
+    tick = 0;
     memcpy(enemies, enemies_backup, sizeof(enemies_backup));
     memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
     for (int i = 0; i < level_1.spawn_count; i++) {

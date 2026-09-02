@@ -46,7 +46,7 @@ Enemy enemies_backup[MAX_ENEMIES] = {
 static const Enemy grunt_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 2,
+    .hp = 1,
     .symbol = '%',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -61,7 +61,7 @@ static const Enemy grunt_template = {
 static const Enemy rapidfire_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 3,
+    .hp = 2,
     .symbol = '&',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -89,7 +89,7 @@ static const Enemy laser_template = {
 static const Enemy bomber_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 6,
+    .hp =4,
     .symbol = '#',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -103,7 +103,7 @@ static const Enemy bomber_template = {
 static const Enemy hunter_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 8,
+    .hp = 6,
     .symbol = 'H',
     .width = 1, .height = 1,
     .cooldown_frames = -30,

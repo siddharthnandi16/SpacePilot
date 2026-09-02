@@ -23,7 +23,7 @@ struct Player player = {
     .vx = 2, .vy = 2,
     .dx = 2, .dy = 2,
     .alive = 1,
-    .lives = 5,
+    .lives = 8,
     .hasLasers = true, .hasBombs = true,
     .fire_rate = 20,
     .symbol = '@',
@@ -43,7 +43,7 @@ struct Player fighter_jet = {
     .vx = 3, .vy = 3,
     .dx = 3, .dy = 3,
     .alive = 1,
-    .lives = 5,
+    .lives = 8,
     .hasLasers = true, .hasBombs = true,
     .fire_rate = 20,
     .symbol = '@',
@@ -60,7 +60,7 @@ struct Player flying_fortress= {
     .vx = 1, .vy = 1,
     .dx = 1, .dy = 1,
     .alive = 1,
-    .lives = 5,
+    .lives = 8,
     .hasLasers = true, .hasBombs = true,
     .fire_rate = 20,
     .symbol = '@',
@@ -77,7 +77,7 @@ struct Player experimental_fighter= {
     .vx = 2, .vy = 2,
     .dx = 2, .dy = 2,
     .alive = 1,
-    .lives = 5,
+    .lives = 8,
     .hasLasers = true, .hasBombs = true,
     .fire_rate = 20,
     .symbol = '@',
@@ -94,7 +94,7 @@ struct Player player_backup = {
     .vx = 2, .vy = 2,
     .dx = 2, .dy = 2,
     .alive = 1,
-    .lives = 5,
+    .lives = 8,
     .hasLasers = true, .hasBombs = true,
     .fire_rate = 20,
     .symbol = '@',
@@ -114,5 +114,7 @@ int boss_state_timer = 0;
  bool boss_invulnerable = FALSE;  
  int unsigned long tick = 0; 
  int current_level = 1;   
+ char continue_choice = 'a';
+ bool continued = FALSE;
          
   

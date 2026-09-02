@@ -3,7 +3,8 @@
 #include "spawn.h"
 //Game runs at 30 ticks per second and scrolls at 5 rows per second
 //After editing spawn table, ALWAYS set spawn_count in level.c to the number of enemies in that table
-spawn_entry spawn_table_1[]={
+//Old version of level 1, commented out due to being unbalanced
+/*spawn_entry spawn_table_1[]={
     //Total time until reaching boss of level 1 = 1200
     [0] ={
 .trigger = ROW, .type = CARRIER_BOSS, .behavior = CARRIER_SPECIAL, .fired = FALSE, .px = 50, .py = 6, 
@@ -145,7 +146,172 @@ spawn_entry spawn_table_1[]={
 .trigger = ROW, .type = RAPIDFIRE, .behavior = MOVEHORIZONTALLY, .fired = FALSE, .px = 5, .py = 1, 
 .strafe = 20, .trigger_time=660, .aimed = TRUE
     },
-    
+}; */
+spawn_entry spawn_table_1[]={
+
+// ================= PHASE 1: Movement & basic dodging (rows 20-140) =================
+// Static, unaimed grunts only. Teaches "bullets exist" with zero real pressure.
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 20, .py = 2, .strafe = 0, .trigger_time = 20, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 35, .py = 2, .strafe = 0, .trigger_time = 45, .aimed = FALSE},
+
+// First moving enemy - horizontal sweep, still no aim
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 3, .strafe = 0, .trigger_time = 75, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 15, .py = 2, .strafe = 0, .trigger_time = 100, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 30, .py = 0, .strafe = 0, .trigger_time = 100, .aimed = FALSE},
+
+// ================= PHASE 2: Aimed fire introduced (rows 170-280) =================
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 25, .py = 2, .strafe = 0, .trigger_time = 170, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 10, .py = 2, .strafe = 0, .trigger_time = 195, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 45, .py = 3, .strafe = 0, .trigger_time = 220, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 4, .strafe = 0, .trigger_time = 220, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 30, .py = 2, .strafe = 0, .trigger_time = 250, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 15, .py = 0, .strafe = 0, .trigger_time = 280, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 35, .py = 0, .strafe = 0, .trigger_time = 280, .aimed = FALSE},
+
+// ================= PHASE 3: Rapidfire introduced (rows 330-450) =================
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE,
+ .px = 20, .py = 2, .strafe = 0, .trigger_time = 330, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 10, .py = 2, .strafe = 0, .trigger_time = 330, .aimed = TRUE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 3, .strafe = 0, .trigger_time = 365, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 40, .py = 0, .strafe = 0, .trigger_time = 365, .aimed = FALSE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STRAFE_HORIZONTAL, .fired = FALSE,
+ .px = 25, .py = 2, .strafe = 10, .trigger_time = 400, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 15, .py = 2, .strafe = 0, .trigger_time = 400, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 35, .py = 2, .strafe = 0, .trigger_time = 400, .aimed = TRUE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STRAFE_VERTICAL, .fired = FALSE,
+ .px = 10, .py = 1, .strafe = 8, .trigger_time = 450, .aimed = FALSE},
+
+// ================= PHASE 4: First bomber + mixed pressure (rows 500-620) =================
+
+{.trigger = ROW, .type = BOMBER, .behavior = STATIC, .fired = FALSE,
+ .px = 25, .py = 2, .strafe = 0, .trigger_time = 500, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 3, .strafe = 0, .trigger_time = 500, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 45, .py = 4, .strafe = 0, .trigger_time = 530, .aimed = FALSE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE,
+ .px = 15, .py = 2, .strafe = 0, .trigger_time = 560, .aimed = TRUE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE,
+ .px = 30, .py = 2, .strafe = 0, .trigger_time = 560, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 20, .py = 0, .strafe = 0, .trigger_time = 590, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 30, .py = 0, .strafe = 0, .trigger_time = 590, .aimed = FALSE},
+
+{.trigger = ROW, .type = BOMBER, .behavior = STRAFE_HORIZONTAL, .fired = FALSE,
+ .px = 20, .py = 2, .strafe = 10, .trigger_time = 620, .aimed = FALSE},
+
+// ================= PHASE 5: Full remix - everything combined (rows 680-820) =================
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 10, .py = 2, .strafe = 0, .trigger_time = 680, .aimed = TRUE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 3, .strafe = 0, .trigger_time = 680, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 40, .py = 0, .strafe = 0, .trigger_time = 710, .aimed = FALSE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STRAFE_HORIZONTAL, .fired = FALSE,
+ .px = 25, .py = 2, .strafe = 10, .trigger_time = 740, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 15, .py = 2, .strafe = 0, .trigger_time = 740, .aimed = TRUE},
+
+{.trigger = ROW, .type = BOMBER, .behavior = STATIC, .fired = FALSE,
+ .px = 30, .py = 2, .strafe = 0, .trigger_time = 770, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 45, .py = 4, .strafe = 0, .trigger_time = 800, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 4, .strafe = 0, .trigger_time = 800, .aimed = FALSE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE,
+ .px = 20, .py = 2, .strafe = 0, .trigger_time = 820, .aimed = TRUE},
+
+// ================= PHASE 6: Final gauntlet before the boss (rows 880-1020) =================
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STRAFE_VERTICAL, .fired = FALSE,
+ .px = 15, .py = 1, .strafe = 8, .trigger_time = 880, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 25, .py = 2, .strafe = 0, .trigger_time = 880, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = STATIC, .fired = FALSE,
+ .px = 35, .py = 2, .strafe = 0, .trigger_time = 880, .aimed = TRUE},
+
+{.trigger = ROW, .type = BOMBER, .behavior = STRAFE_VERTICAL, .fired = FALSE,
+ .px = 25, .py = 1, .strafe = 8, .trigger_time = 920, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 10, .py = 0, .strafe = 0, .trigger_time = 950, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEVERTICALLY, .fired = FALSE,
+ .px = 40, .py = 0, .strafe = 0, .trigger_time = 950, .aimed = FALSE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE,
+ .px = 15, .py = 2, .strafe = 0, .trigger_time = 980, .aimed = TRUE},
+
+{.trigger = ROW, .type = RAPIDFIRE, .behavior = STATIC, .fired = FALSE,
+ .px = 30, .py = 2, .strafe = 0, .trigger_time = 980, .aimed = TRUE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 5, .py = 3, .strafe = 0, .trigger_time = 1020, .aimed = FALSE},
+
+{.trigger = ROW, .type = GRUNT, .behavior = MOVEHORIZONTALLY, .fired = FALSE,
+ .px = 45, .py = 3, .strafe = 0, .trigger_time = 1020, .aimed = FALSE},
+
+// ================= Breather before the boss (rows 1020-1200) =================
+// Deliberately empty - lets the player catch their breath and clear the field
+// before the trigger_time = 1200 carrier boss spawn below.
+
+// ================= BOSS =================
+
+{.trigger = ROW, .type = CARRIER_BOSS, .behavior = CARRIER_SPECIAL, .fired = FALSE,
+ .px = 50, .py = 6, .strafe = 0, .trigger_time = 1200, .aimed = TRUE},
 
 };
 const int spawn_table_1_count = sizeof(spawn_table_1) / sizeof(spawn_table_1[0]);

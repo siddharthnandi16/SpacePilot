@@ -7,6 +7,7 @@
 #include "gamedata.h"
 #include "sound.h"
 #include "window.h"
+#include "hud.h"
 #define NUM_CHAR_OPTIONS (sizeof(char_options) / sizeof(char_options[0]))
 GameMode drawTitleScreen(void){ 
    PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
@@ -83,6 +84,10 @@ while(1) {
             selected = (selected + 1) % NUM_MENU_OPTIONS;
             break;
         case '\n':  // Press enter to confirm selection
+        delwin(hud_win);
+        getmaxyx(stdscr, max_y, max_x);
+        update_playfield_offset(max_x, max_y);
+        init_hud(offset_y, offset_x);
         ma_sound_stop(&loaded_sounds[Titlescreen_MUSIC]);
         game_starting = 1;
             return (GameMode)selected;
@@ -105,6 +110,7 @@ const char *char_options[] = {
 };
 
 void Draw_Char_Select(Player *player){
+    ma_sound_start(&loaded_sounds[Titlescreen_MUSIC]);
     int character_selected = 0; //1 for true, 0 for false
     nodelay(stdscr, FALSE);
     erase();
@@ -143,6 +149,7 @@ void Draw_Char_Select(Player *player){
         break;
     }
      if (character_selected == 1){
+        ma_sound_stop(&loaded_sounds[Titlescreen_MUSIC]);
         nodelay(stdscr, TRUE);
     switch(char_selected){
         case 0: //Fighter jet

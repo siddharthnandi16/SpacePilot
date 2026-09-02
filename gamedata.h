@@ -120,4 +120,6 @@ extern BossState state;
 extern int boss_state_timer;
 extern bool boss_invulnerable;
 extern bool Level_Complete;
+extern char continue_choice;
+extern bool continued;
 #endif
