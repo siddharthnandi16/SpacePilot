@@ -8,12 +8,15 @@
 #include "sound.h"
 #include "window.h"
 #include "hud.h"
+#include "level.h"
 #define NUM_CHAR_OPTIONS (sizeof(char_options) / sizeof(char_options[0]))
+#define NUM_LEVEL_OPTIONS (sizeof(Level_options) / sizeof(Level_options[0]))
 GameMode drawTitleScreen(void){ 
    PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
     const char *menu_options[] = {
     "Story Mode",
     "Endless Mode",
+    "Level Select",
     "High Scores",
     "Music Room",
     "Quit"
@@ -100,7 +103,6 @@ while(1) {
 }
 napms(8);
 return (GameMode)selected;
- //More functionality TBA 
 }
 const char *char_options[] = {
     "Fighter Jet",
@@ -171,4 +173,73 @@ void Draw_Char_Select(Player *player){
     }
     }
     napms(8);
+}
+const char *Level_options[] = {
+    "Level 1",
+    "Level 2",
+    "Level 3"
+};
+void Select_Level(Level_Data *Current_Level, int *current_level){
+    int ch, max_x, max_y, level_selected = 0;
+    bool level_selection_done = FALSE;
+    nodelay(stdscr, FALSE);
+    while(level_selection_done == FALSE){
+erase();
+for (int i = 0; i < NUM_LEVEL_OPTIONS; i++) {
+        if (i == level_selected) {
+            attron(A_REVERSE);
+        }
+        mvprintw(offset_y + i, offset_x + PLAYFIELD_W/3, "%s", Level_options[i]);
+        if (i == level_selected) {
+            attroff(A_REVERSE);
+        }
+    }
+    ch = getch();
+    switch(ch) {
+        case KEY_RESIZE:
+        erase();
+        resize_term(0, 0);
+        getmaxyx(stdscr, max_y, max_x);
+        update_playfield_offset(max_x, max_y);
+        refresh();
+        syncConsoleBufferToWindow();
+        break;
+        case 60419:  // Up
+            level_selected = (level_selected - 1 + NUM_LEVEL_OPTIONS) % NUM_LEVEL_OPTIONS;
+            break;
+        case 60418:  // Down
+            level_selected = (level_selected + 1) % NUM_LEVEL_OPTIONS;
+            break;
+        case '\n':  // Press enter to confirm selection
+        delwin(hud_win);
+        getmaxyx(stdscr, max_y, max_x);
+        update_playfield_offset(max_x, max_y);
+        init_hud(offset_y, offset_x);
+        ma_sound_stop(&loaded_sounds[Titlescreen_MUSIC]);
+        level_selection_done = TRUE;
+        break;
+        default:
+        break;
+    }
+    if (level_selection_done == TRUE){
+        nodelay(stdscr, TRUE);
+        switch(level_selected){
+        case 0: //Level 1
+        *Current_Level = level_1;
+        *current_level = 1;
+        break;
+        case 1: //Level 2
+        *Current_Level = level_2;
+        *current_level = 2;
+        break;
+        case 2: //Level 3, commented out due to being unimplemented
+       // *Current_Level = Level_2;
+       // *current_level = 3;
+        break;
+        default:
+        break;
+    }
+    }
+    }
+    
 }

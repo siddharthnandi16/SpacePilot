@@ -325,7 +325,7 @@ static Enemy carrier_boss_bomb_template = {
     .hp = 15,
     .symbol = '%',
     .width = 3, .height = 5,
-    .cooldown_frames = -60,
+    .cooldown_frames = -10,
     .type = CARRIER_BOSS_BOMB,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -333,6 +333,65 @@ static Enemy carrier_boss_bomb_template = {
     .weapon = &CARRIER_CANNON,
     .is_boss_part = 1, //Is part of the carrier boss
     .is_boss_core = 0 
+};
+//Miniboss of stage 2
+//Twin frigates that mirror each other's attacks and behaviours
+// Frigate hull colors
+static const int frigate_row0_colors[5] = {11, 11, 3, 11, 11};   // amber contrails, yellow turret
+static const int frigate_row1_colors[5] = {11, 2, 7, 2, 11};     // red outline, steel gray interior
+static const int frigate_row2_colors[5] = {2, 7, 7, 7, 2};       // red edges
+static const int frigate_row3_colors[5] = {11, 2, 7, 2, 11};     // red outline, steel gray interior
+static const int frigate_row4_colors[5] = {11, 11, 11, 11, 11};  // amber thruster exhaust
+
+TileLayout Frigate_Layout = {
+    .width = 5, .height = 5,
+    .glyph_rows = {
+        "  T  ",
+        " ### ",
+        "#####",
+        " ### ",
+        "  V  "
+    },
+    .color_rows = {
+        frigate_row0_colors,
+        frigate_row1_colors,
+        frigate_row2_colors,
+        frigate_row3_colors,
+        frigate_row4_colors
+    }
+};
+
+// Frigate 1 template
+static const Enemy frigate1_template = {
+    .px = 0, .py = 0,
+    .dx = 1, .dy = 1,
+    .hp = 25,
+    .symbol = '%',
+    .width = 5, .height = 5,
+    .cooldown_frames = -10,
+    .type = FRIGATE1,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Frigate_Layout,
+    .weapon = &FRIGATE_FLAK,
+    .is_boss_part = 1,
+    .is_boss_core = 0
+};
+// Frigate 1 template
+static const Enemy frigate2_template = {
+    .px = 0, .py = 0,
+    .dx = 1, .dy = 1,
+    .hp = 25,
+    .symbol = '%',
+    .width = 5, .height = 5,
+    .cooldown_frames = -10,
+    .type = FRIGATE2,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Frigate_Layout,
+    .weapon = &FRIGATE_LASER,
+    .is_boss_part = 1,
+    .is_boss_core = 0
 };
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
@@ -358,6 +417,8 @@ const Enemy* get_template(EnemyType type) {
         case CARRIER_BOSS: return &carrier_boss_core_template;
         case CARRIER_BOSS_FLAK: return &carrier_boss_FLAK_template;
         case CARRIER_BOSS_BOMB: return &carrier_boss_bomb_template;
+        case FRIGATE1:          return &frigate1_template;
+        case FRIGATE2:          return &frigate2_template;
         default:        return NULL;
     }
 }
@@ -479,7 +540,7 @@ enemies[i].px -=  enemies[i].dx;
 }
 if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
     enemies[i].dy = -enemies[i].dy;
-    enemies[i].py - PLAYFIELD_H - 1;
+    enemies[i].py = PLAYFIELD_H - 1;
 }
 if  (enemies[i].py + enemies[i].height -1 <= 0){
 enemies[i].dy = -enemies[i].dy;
@@ -506,7 +567,7 @@ enemies[i].px -=  enemies[i].dx;
 }
 if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
     enemies[i].dy = -enemies[i].dy;
-    enemies[i].py - PLAYFIELD_H - 1;
+    enemies[i].py = PLAYFIELD_H - 1;
 }
 if  (enemies[i].py + enemies[i].height -1 <= 0){
 enemies[i].dy = -enemies[i].dy;
@@ -553,6 +614,68 @@ for(int core = 0; core <= MAX_ENEMIES; core++){
     }
 }
 }
+break;
+case FRIGATE1_SPECIAL:
+static int frigate1_tick = 0;
+frigate1_tick++;
+if (frigate1_tick % 6 == 0){
+if (enemies[i].px < player->px) enemies[i].px +=  enemies[i].dx;
+if (enemies[i].px > player->px) enemies[i].px -=  enemies[i].dx;
+float target_py = player->py - 15;
+if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
+if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].px = PLAYFIELD_W - enemies[i].width - 1;
+}
+if (enemies[i].px <= 0){
+   enemies[i].px = 0 + enemies[i].width;
+}
+if ((int)enemies[i].py + enemies[i].height - 1 >= PLAYFIELD_H - 1){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py = PLAYFIELD_H - 1 - enemies[i].height;
+}
+if (enemies[i].py <= 0){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py = 0;
+}
+if (frigate1_tick % 180 == 0){
+if(enemies[i].weapon == &FRIGATE_FLAK)enemies[i].weapon = &FRIGATE_LASER;
+else if(enemies[i].weapon == &FRIGATE_LASER)enemies[i].weapon = &FRIGATE_FLAK;
+}
+break;
+case FRIGATE2_SPECIAL:
+static int frigate2_tick = 0;
+frigate2_tick++;
+if (frigate2_tick % 6 == 0){
+if (enemies[i].px < player->px + 30) enemies[i].px +=  enemies[i].dx;
+if (enemies[i].px > player->px + 30) enemies[i].px -=  enemies[i].dx;
+float target_py = player->py - 15;
+if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
+if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W -1;
+}
+if  (enemies[i].px + enemies[i].width -1 == 0 ){
+enemies[i].dx = -enemies[i].dx;
+enemies[i].px -=  enemies[i].dx;
+}
+if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py - PLAYFIELD_H - 1;
+}
+if  (enemies[i].py + enemies[i].height -1 <= 0){
+enemies[i].dy = -enemies[i].dy;
+enemies[i].py = 1;
+}
+if (frigate2_tick % 180 == 0){
+if(enemies[i].weapon == &FRIGATE_FLAK)enemies[i].weapon = &FRIGATE_LASER;
+else if(enemies[i].weapon == &FRIGATE_LASER)enemies[i].weapon = &FRIGATE_FLAK;
+
+}
+break;
 default:
 break;
 } 
@@ -636,7 +759,7 @@ if (enemies[i].aimed == TRUE) {
     float dy = player->py - (enemies[i].py - 1); // matches the py-1 fire origin you already use
 
     float ideal_rad = atan2f(-dy, dx); // negative dy since up = decreasing py, matches your missile code
-    float ideal_deg = ideal_rad * (180.0f / M_PI);
+    float ideal_deg = ideal_rad * (180.0f / 3.14159265358979323846f);
 
     int inaccuracy = 15; // degrees of max random offset, tune to taste
     float offset = (rand() % (inaccuracy * 2 + 1)) - inaccuracy;
@@ -649,7 +772,7 @@ if (enemies[i].aimed == TRUE) {
          if (weapon != NULL && enemies[i].cooldown_frames >= weapon->cooldown_frames) {
             fire_weapon(weapon, enemies[i].fire_px, enemies[i].fire_py + 1, fire_angle, FALSE);
             enemies[i].cooldown_frames = 0;
-            if (weapon->type == LASER) enemies[i].cooldown_frames = -300;
+            if (weapon->type == LASER) enemies[i].cooldown_frames = -30;
         }
     }
 }

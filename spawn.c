@@ -317,12 +317,12 @@ spawn_entry spawn_table_1[]={
 const int spawn_table_1_count = sizeof(spawn_table_1) / sizeof(spawn_table_1[0]);
 spawn_entry spawn_table_2[]={
     [0] ={
-.trigger = ROW, .type = FLYING_FORTRESS, .behavior = STATIC, .fired = FALSE, .px = 50, .py = 5, 
-.strafe = 0, .trigger_time=0, .aimed = TRUE
+.trigger = ROW, .type = FRIGATE1, .behavior = FRIGATE1_SPECIAL, .fired = FALSE, .px = 60, .py = 5, 
+.strafe = 0, .trigger_time=10, .aimed = FALSE
     },
     [1] ={
-.trigger = ROW, .type = HUNTER, .behavior = STATIC, .fired = FALSE, .px = 50, .py = 6, 
-.strafe = 0, .trigger_time=60, .aimed = TRUE
+.trigger = ROW, .type = FRIGATE2, .behavior = FRIGATE2_SPECIAL, .fired = FALSE, .px = 40, .py = 6, 
+.strafe = 0, .trigger_time=10, .aimed = FALSE
     }
 };
 const int spawn_table_2_count = sizeof(spawn_table_2) / sizeof(spawn_table_2[0]);

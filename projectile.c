@@ -108,7 +108,7 @@ WeaponType spiral_cannon = {
     ,.weapon_id = LASER_RIFLE_ENEMY_ID
 };
   WeaponType BOMB_ENEMY_WEAPON = {
-  .display_name = "autocannon",  .cooldown_frames = 120, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
+  .display_name = "autocannon",  .cooldown_frames = 75, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = BOMB_ENEMY_ID
 };
   WeaponType HUNTER_RIFLE = {
@@ -125,11 +125,19 @@ WeaponType FLYFORT_CANNON = {
 };
  WeaponType CARRIER_CANNON = {
   .display_name = "autocannon",  .cooldown_frames = 150, .number = 3, .angle= 90, .type= BOMB, .modes = NORMAL
-    ,.weapon_id = BOMB_ENEMY_ID, .offset_angle = 45
+    ,.weapon_id = CARRIER_CANNON_ID, .offset_angle = 45
 };
 WeaponType CARRIER_FLAK = {
   .display_name = "autocannon",  .cooldown_frames = 90, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
-    ,.weapon_id = BOMB_ENEMY_ID, .offset_angle = 15
+    ,.weapon_id = CARRIER_FLAK_ID, .offset_angle = 15
+};
+WeaponType FRIGATE_FLAK = {
+  .display_name = "autocannon",  .cooldown_frames =50, .number = 24, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = FRIGATE_FLAK_ID, .offset_angle = 15
+};
+ WeaponType FRIGATE_LASER = {
+  .display_name = "autocannon",  .cooldown_frames = 50, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
+    ,.weapon_id = FRIGATE_LASER_ID
 };
 //Function to find a free slot in the enemy pool
 int findfreeprojectileslot(void){
@@ -234,12 +242,12 @@ projectiles[slot + i].damage = 2;
 break;
 case PLASMA:
 projectiles[slot + i].symbol = '*';
-projectiles[slot + i].pierce = 5;
+projectiles[slot + i].pierce = 1;
 projectiles[slot + i].strafe = 0;
 projectiles[slot + i].turn_rate = 0;
 projectiles[slot + i].dx = 0;
-projectiles[slot + i].dy = -2;
-projectiles[slot + i].damage = 4;
+projectiles[slot + i].dy = -3;
+projectiles[slot + i].damage = 3;
 break;
 case EMP:
 projectiles[slot + i].symbol = '-';

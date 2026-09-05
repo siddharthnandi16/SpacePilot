@@ -35,7 +35,9 @@ player->dy = player->vy;
 int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(quit != 1 && game_over != 1){
+    if (boss_fight_ongoing = FALSE){
     tick++;
+    }
     switch(current_level){
         case 1: 
     ma_sound_start(&loaded_sounds[Level_1]);
@@ -46,6 +48,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         default:
         break;
     }
+    Check_Boss_Fight();
     handle_mute_toggle();
     erase_enemies(enemies);
     erase_projectiles(projectiles);
@@ -65,8 +68,10 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         level(Current_Level);
         break;
     case ENDLESS_MODE:
-    //Commented out as it is not not yet implemented
     endless_level();  
+    break;
+    case LEVEL_SELECT:
+    level(Current_Level);
         break;
     default:
         break;
@@ -100,8 +105,10 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
 int seed; //Variable that stores the RNG seed. Used for various rng calls
 //Function to reset all values to their defaults
 void reset_all(int max_x, int max_y) {
+    current_level = 1;
+    Current_Level = &level_1;
     player = player_backup;
-    player.lives = 5;
+    player.lives = 8;
     game_over = 0; 
     quit = 0;
     boss_invulnerable = FALSE;
@@ -111,6 +118,7 @@ void reset_all(int max_x, int max_y) {
     Current_Level = &level_1;
     rows_scrolled = 0;
     tick = 0;
+    boss_fight_ongoing = FALSE;
     memcpy(enemies, enemies_backup, sizeof(enemies_backup));
     memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
     for (int i = 0; i < level_1.spawn_count; i++) {
@@ -205,6 +213,12 @@ case ENDLESS_MODE:
 erase();
 Draw_Char_Select(&player);
 gameloop(&player, max_x, max_y, ENDLESS_MODE);
+break;
+case LEVEL_SELECT:
+erase();
+Select_Level(Current_Level, &current_level);
+Draw_Char_Select(&player);
+gameloop(&player, max_x, max_y, LEVEL_SELECT);
 break;
 //Placeholder case for unimplemented feature
 case HIGH_SCORES:

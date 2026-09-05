@@ -17,6 +17,7 @@ typedef struct Level_Data{
 }Level_Data;
 extern Level_Data *Current_Level;
 extern Level_Data level_1;
+extern Level_Data level_2;
 char bgchar(int max_x, int max_y);
 bool should_draw_cell(int max_y, int max_x);
 int scrollanddraw(int *old_screen_px, int *old_screen_py);
@@ -32,4 +33,5 @@ void init_levels(void);
 void reset_level_tables(Level_Data *level);
 extern Level_Data level_1;
 extern unsigned long int spawn_tick;
+void Check_Boss_Fight();
 #endif

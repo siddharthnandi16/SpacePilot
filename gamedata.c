@@ -116,5 +116,5 @@ int boss_state_timer = 0;
  int current_level = 1;   
  char continue_choice = 'a';
  bool continued = FALSE;
-         
+ bool boss_fight_ongoing = FALSE;
   

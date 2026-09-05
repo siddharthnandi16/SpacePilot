@@ -32,7 +32,7 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     }
 
     scrollok(stdscr, TRUE);
-    if (tick % 5 == 0){
+    if (tick % 5 == 0 && boss_fight_ongoing == FALSE){
         wscrl(stdscr, -1);
     }
 
@@ -251,4 +251,13 @@ spawn_wave(difficulty);
 pick_music_track(difficulty);
 }
 spawn_tick++;
+}
+//Function to check whether a boss fight is currently ongoing and set the appropriate flag
+void Check_Boss_Fight(){
+    for (int i = 0; i < MAX_ENEMIES; i++){
+        if(enemies[i].is_boss_part > 0){
+            boss_fight_ongoing = TRUE;
+        }
+        else boss_fight_ongoing = FALSE;
+    }
 }

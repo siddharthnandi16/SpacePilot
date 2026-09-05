@@ -10,7 +10,7 @@ extern int current_level;
 // This header file stores data about the game's current state
 extern bool moving_diagonally;
 //Enums for storing game modes
-typedef enum game_mode{STORY_MODE, ENDLESS_MODE, HIGH_SCORES, MUSIC_ROOM, MODE_QUIT}GameMode;
+typedef enum game_mode{STORY_MODE, ENDLESS_MODE,LEVEL_SELECT, HIGH_SCORES, MUSIC_ROOM, MODE_QUIT}GameMode;
 //Enums for types and states of projectiles
 typedef enum proj_type{BULLET,LASER,BOMB,MISSILE,PLASMA,EMP,CHAINLIGHTNING}ProjType;
 typedef enum proj_state{NORMAL,SPENT,EXPLODING}ProjState;
@@ -37,7 +37,7 @@ typedef enum weapon_id{EMPTY_ID, AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_I
 PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID, 
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
  BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID, SPIRAL_CANNON_ID,
-CARRIER_CANNON_ID, CARRIER_FLAK_ID}WeaponID;
+CARRIER_CANNON_ID, CARRIER_FLAK_ID, FRIGATE_FLAK_ID, FRIGATE_LASER_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 const typedef struct WeaponType{
     char *display_name;
@@ -80,10 +80,11 @@ typedef struct TileLayout {
 } TileLayout;
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
 typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS,
-     LASER_JET, CARRIER_BOSS, CARRIER_BOSS_FLAK, CARRIER_BOSS_BOMB } EnemyType;
+     LASER_JET, CARRIER_BOSS, CARRIER_BOSS_FLAK, CARRIER_BOSS_BOMB, FRIGATE1, FRIGATE2 } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
 typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL,
-     STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR, CARRIER_SPECIAL } EnemyBehavior;
+     STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR, CARRIER_SPECIAL, 
+    FRIGATE1_SPECIAL, FRIGATE2_SPECIAL } EnemyBehavior;
 typedef struct Enemy{
 float px, py; //Stores current position
 float dx, dy; //Stores the enemy's speed
@@ -119,6 +120,7 @@ SPECIAL_ATTACK_3, INVULN, BOSS_DYING}BossState;
 extern BossState state;
 extern int boss_state_timer;
 extern bool boss_invulnerable;
+extern bool boss_fight_ongoing;
 extern bool Level_Complete;
 extern char continue_choice;
 extern bool continued;
