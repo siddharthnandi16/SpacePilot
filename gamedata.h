@@ -71,8 +71,8 @@ extern Player fighter_jet;
 extern Player flying_fortress;
 extern Player experimental_fighter;
 extern Player player_backup;
-#define MAX_TILE_HEIGHT 8 //Max height of multi-tile enemies
-#define MAX_TILE_WIDTH  40 //Max width of multi-tile enemies
+#define MAX_TILE_HEIGHT 20 //Max height of multi-tile enemies
+#define MAX_TILE_WIDTH  80 //Max width of multi-tile enemies
 typedef struct TileLayout {
     int width, height;                          // Dimensions of the shape
     const char *glyph_rows[MAX_TILE_HEIGHT];     // ASCII art, one string per row
@@ -80,11 +80,12 @@ typedef struct TileLayout {
 } TileLayout;
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
 typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS,
-     LASER_JET, CARRIER_BOSS, CARRIER_BOSS_FLAK, CARRIER_BOSS_BOMB, FRIGATE1, FRIGATE2 } EnemyType;
+     LASER_JET, CARRIER_BOSS, CARRIER_BOSS_FLAK, CARRIER_BOSS_BOMB, FRIGATE1, FRIGATE2, JET_BOSS,
+    BATTLESHIP_BOSS } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
 typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL,
      STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR, CARRIER_SPECIAL, 
-    FRIGATE1_SPECIAL, FRIGATE2_SPECIAL } EnemyBehavior;
+    FRIGATE1_SPECIAL, FRIGATE2_SPECIAL, JET_SPECIAL, BATTLESHIP_SPECIAL } EnemyBehavior;
 typedef struct Enemy{
 float px, py; //Stores current position
 float dx, dy; //Stores the enemy's speed
@@ -116,7 +117,7 @@ typedef struct {
 } EnemyConfig;
 //Enum for boss states
 typedef enum {BOSS_NORMAL, TELEGRAPHING, SPECIAL_ATTACK_1, SPECIAL_ATTACK_2, 
-SPECIAL_ATTACK_3, INVULN, BOSS_DYING}BossState;
+SPECIAL_ATTACK_3, SPECIAL_ATTACK_4, SPECIAL_ATTACK_5, INVULN, BOSS_DYING}BossState;
 extern BossState state;
 extern int boss_state_timer;
 extern bool boss_invulnerable;

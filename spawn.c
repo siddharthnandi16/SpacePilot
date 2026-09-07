@@ -315,14 +315,80 @@ spawn_entry spawn_table_1[]={
 
 };
 const int spawn_table_1_count = sizeof(spawn_table_1) / sizeof(spawn_table_1[0]);
-spawn_entry spawn_table_2[]={
-    [0] ={
-.trigger = ROW, .type = FRIGATE1, .behavior = FRIGATE1_SPECIAL, .fired = FALSE, .px = 60, .py = 5, 
-.strafe = 0, .trigger_time=10, .aimed = FALSE
-    },
-    [1] ={
-.trigger = ROW, .type = FRIGATE2, .behavior = FRIGATE2_SPECIAL, .fired = FALSE, .px = 40, .py = 6, 
-.strafe = 0, .trigger_time=10, .aimed = FALSE
-    }
+spawn_entry spawn_table_2[] = {
+    // --- Rows 0-700: sparse intro ---
+    //Test battleship spawn
+    //{ .trigger = ROW, .trigger_time = 0, .type = BATTLESHIP_BOSS, .behavior = BATTLESHIP_SPECIAL, .aimed = TRUE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 30,  .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 8,  .py = 0, .strafe = 15, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 70,  .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 78, .py = 0, .strafe = 10, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 110, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 45, .py = 0, .strafe = 18, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 150, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 25, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 190, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 62, .py = 0, .strafe = 14, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 230, .type = BOMBER,     .behavior = STATIC,            .aimed = FALSE, .px = 90, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 270, .type = GRUNT,      .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 15, .py = 0, .strafe = 12, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 310, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 50, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 350, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 70, .py = 0, .strafe = 16, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 390, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 5,  .py = 0, .strafe = 10, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 430, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 82, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 470, .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 38, .py = 0, .strafe = 11, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 510, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 95, .py = 0, .strafe = 12, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 550, .type = BOMBER,     .behavior = STATIC,            .aimed = FALSE, .px = 30, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 590, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 55, .py = 0, .strafe = 18, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 630, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 12, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 670, .type = GRUNT,      .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 85, .py = 0, .strafe = 14, .fired = FALSE },
+
+    // --- Row 750: Jet miniboss ---
+    { .trigger = ROW, .trigger_time = 750, .type = JET_BOSS, .behavior = JET_SPECIAL, .aimed = TRUE, .px = 50, .py = 2, .strafe = 35, .fired = FALSE },
+
+    // --- Rows 800-1450: mid-density ---
+    { .trigger = ROW, .trigger_time = 820,  .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 10, .py = 0, .strafe = 15, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 850,  .type = GRUNT,      .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 88, .py = 0, .strafe = 12, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 880,  .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 48, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 910,  .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 68, .py = 0, .strafe = 14, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 940,  .type = BOMBER,     .behavior = STATIC,            .aimed = FALSE, .px = 22, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 970,  .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 40, .py = 0, .strafe = 16, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1000, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 75, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1030, .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 13, .py = 0, .strafe = 11, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1060, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 96, .py = 0, .strafe = 10, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1090, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 60, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1120, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 33, .py = 0, .strafe = 17, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1150, .type = GRUNT,      .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 52, .py = 0, .strafe = 12, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1180, .type = BOMBER,     .behavior = STATIC,            .aimed = FALSE, .px = 18, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1210, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 87, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1240, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 42, .py = 0, .strafe = 14, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1270, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 6,  .py = 0, .strafe = 15, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1300, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 72, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1330, .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 28, .py = 0, .strafe = 11, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1360, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 64, .py = 0, .strafe = 16, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1390, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 36, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1420, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 92, .py = 0, .strafe = 18, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1450, .type = GRUNT,      .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 58, .py = 0, .strafe = 10, .fired = FALSE },
+
+    // --- Row 1500: Frigates ---
+    { .trigger = ROW, .trigger_time = 1500, .type = FRIGATE1, .behavior = FRIGATE1_SPECIAL, .aimed = FALSE, .px = 35, .py = 2, .strafe = 0, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1500, .type = FRIGATE2, .behavior = FRIGATE2_SPECIAL, .aimed = FALSE, .px = 65, .py = 2, .strafe = 0, .fired = FALSE },
+
+    // --- Rows 1550-2050: dense final gauntlet ---
+    { .trigger = ROW, .trigger_time = 1570, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 14, .py = 0, .strafe = 18, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1600, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 78, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1630, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 46, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1660, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 8,  .py = 0, .strafe = 15, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1690, .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 85, .py = 0, .strafe = 12, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1720, .type = BOMBER,     .behavior = STATIC,            .aimed = FALSE, .px = 50, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1750, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 22, .py = 0, .strafe = 16, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1780, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 70, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1810, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 35, .py = 0, .strafe = 17, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1840, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 60, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1870, .type = GRUNT,      .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 10, .py = 0, .strafe = 11, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1900, .type = RAPIDFIRE,  .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 90, .py = 0, .strafe = 15, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1930, .type = HUNTER,     .behavior = HUNT_PLAYER,       .aimed = FALSE, .px = 42, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1960, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 18, .py = 0, .strafe = 14, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1990, .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 80, .py = 0, .strafe = 12, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 2020, .type = LASER_ENEMY,.behavior = STATIC,            .aimed = TRUE,  .px = 55, .py = 0, .strafe = 0,  .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 2050, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 30, .py = 0, .strafe = 18, .fired = FALSE },
+
+    // --- Row 2100: Battleship boss (placeholder, not yet implemented) ---
+    { .trigger = ROW, .trigger_time = 1800, .type = BATTLESHIP_BOSS, .behavior = BATTLESHIP_SPECIAL, .aimed = TRUE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
 };
+
 const int spawn_table_2_count = sizeof(spawn_table_2) / sizeof(spawn_table_2[0]);

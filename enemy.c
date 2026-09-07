@@ -131,6 +131,23 @@ TileLayout Jet_Layout = {
     jet_row2_colors
 }
 };
+static const int jet_row0_colors_invuln[] = {2, 6, 2}; //red, amber, red
+static const int jet_row1_colors_invuln[] = {9, 7, 9}; //red, steel gray, red
+static const int jet_row2_colors_invuln[] = {2, 9, 2}; //red, red, red
+// Anchor point is the # at its center
+TileLayout Jet_Layout_Invuln = {
+.width = 3, .height = 3,
+.glyph_rows = {
+    " | ",
+    "<#>",
+    " V "
+},
+.color_rows = {
+    jet_row0_colors_invuln,
+    jet_row1_colors_invuln,
+    jet_row2_colors_invuln
+}
+};
 static const Enemy jet_template = {
     .px = 0, .py = 0,
     .dx = 2, .dy = 2,
@@ -143,6 +160,22 @@ static const Enemy jet_template = {
     .behavior = STATIC,
     .shape = &Jet_Layout,
     .weapon = &JET_CANNON
+};
+//Special version of jet used as miniboss
+static const Enemy jet_boss_template = {
+    .px = 0, .py = 0,
+    .dx = 2, .dy = 2,
+    .hp = 20,
+    .symbol = '%',
+    .width = 3, .height = 3,
+    .cooldown_frames = -30,
+    .type = JET_BOSS,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Jet_Layout,
+    .weapon = &JET_CANNON,
+    .is_boss_part = 1,
+    .is_boss_core = 0
 };
 //Layout for flying fortresses
 static const int flyfort_row0_colors[] = {2, 6, 6, 6, 2}; //red, amber, amber,amber, red
@@ -393,6 +426,91 @@ static const Enemy frigate2_template = {
     .is_boss_part = 1,
     .is_boss_core = 0
 };
+// Battleship layout — underside bristling with 3 cannon types
+static const int bship_row0[40] = {[0 ... 39] = 6}; // contrails - amber
+static const int bship_row1[40] = {[0 ... 39] = 7}; // hull edge - steel gray
+static const int bship_row2[40] = {[0 ... 39] = 2}; // hull - red
+static const int bship_row3[40] = {[0 ... 39] = 2};
+static const int bship_row4[40] = {
+    [0 ... 39] = 2, [15 ... 24] = 9 // core section - purple
+};
+static const int bship_row5[40] = {[0 ... 39] = 2};
+static const int bship_row6[40] = {[0 ... 39] = 7}; // turret socket band
+static const int bship_row7[40] = {
+    [0 ... 39] = 2,
+    [3]=6, [9]=3, [15]=6, [21]=6, [27]=3, [33]=6 // socket colors per cannon type
+};
+static const int bship_row8[40] = {
+    [0 ... 39] = 0,
+    [4]=6, [10]=3, [16]=6, [22]=6, [28]=3, [34]=6
+};
+static const int bship_row9[40] = {
+    [0 ... 39] = 0,
+    [4]=6, [10]=3, [16]=6, [22]=6, [28]=3, [34]=6
+};
+
+static TileLayout Battleship_Layout = {
+    .width = 40, .height = 10,
+    .glyph_rows = {
+        "   |   |   |   |   |   |   |   |   |   |",
+        "/======================================\\",
+        "|######################################|",
+        "|######################################|",
+        "|##############@@@@@@@@@@##############|",
+        "|######################################|",
+        "|###.###.###.###.###.###.###.###.###.##|",
+        "|###v#####!#####%#####v#####!#####%####|",
+        "    #     !     %     #     !     %     ",
+        "    V     !     o     V     !     o     "
+    },
+    .color_rows = {
+        bship_row0, bship_row1, bship_row2, bship_row3, bship_row4,
+        bship_row5, bship_row6, bship_row7, bship_row8, bship_row9
+    }
+};
+
+static const int bship_invuln_row1[40] = {[0 ... 39] = 9}; // hull edge -> purple
+static const int bship_invuln_row6[40] = {[0 ... 39] = 9}; // socket band -> purple
+static const int bship_invuln_row7[40] = {
+    [0 ... 39] = 2,
+    [3]=9, [9]=9, [15]=9, [21]=9, [27]=9, [33]=9 // all turret sockets -> purple
+};
+static TileLayout Battleship_Layout_Invuln = {
+    .width = 40, .height = 10,
+    .glyph_rows = {
+        "   |   |   |   |   |   |   |   |   |   |",
+        "/======================================\\",
+        "|######################################|",
+        "|######################################|",
+        "|##############@@@@@@@@@@##############|",
+        "|######################################|",
+        "|###.###.###.###.###.###.###.###.###.##|",
+        "|###v#####!#####%#####v#####!#####%####|",
+        "    #     !     %     #     !     %     ",
+        "    V     !     o     V     !     o     "
+    },
+    .color_rows = {
+        bship_row0, bship_invuln_row1, bship_row2, bship_row3, bship_row4,
+        bship_row5, bship_invuln_row6, bship_invuln_row7, bship_row8, bship_row9
+    }
+};
+// Template for battleship, boss of stage 2
+static const Enemy Battleship_template = {
+    .px = 0, .py = 0,
+    .dx = 0.2, .dy = 0.2,
+    .hp = 200,
+    .symbol = '%',
+    .width = 40, .height = 10,
+    .cooldown_frames = -30,
+    .type = BATTLESHIP_BOSS,
+    .state = INACTIVE,
+    .behavior = BATTLESHIP_SPECIAL,
+    .shape = &Battleship_Layout,
+    .weapon = &CARRIER_FLAK,
+    .is_boss_part = 1,
+    .is_boss_core = 1
+};
+
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
     for(int i=0; i < MAX_ENEMIES; i++){
@@ -419,6 +537,8 @@ const Enemy* get_template(EnemyType type) {
         case CARRIER_BOSS_BOMB: return &carrier_boss_bomb_template;
         case FRIGATE1:          return &frigate1_template;
         case FRIGATE2:          return &frigate2_template;
+        case JET_BOSS:          return &jet_boss_template;
+        case BATTLESHIP_BOSS:    return &Battleship_template;
         default:        return NULL;
     }
 }
@@ -621,7 +741,7 @@ frigate1_tick++;
 if (frigate1_tick % 6 == 0){
 if (enemies[i].px < player->px) enemies[i].px +=  enemies[i].dx;
 if (enemies[i].px > player->px) enemies[i].px -=  enemies[i].dx;
-float target_py = player->py - 15;
+float target_py = player->py - 10;
 if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
 if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
 }
@@ -633,11 +753,11 @@ if (enemies[i].px <= 0){
 }
 if ((int)enemies[i].py + enemies[i].height - 1 >= PLAYFIELD_H - 1){
     enemies[i].dy = -enemies[i].dy;
-    enemies[i].py = PLAYFIELD_H - 1 - enemies[i].height;
+    enemies[i].py = PLAYFIELD_H - enemies[i].height;
 }
-if (enemies[i].py <= 0){
+if (enemies[i].py + enemies[i].height <= 0){
     enemies[i].dy = -enemies[i].dy;
-    enemies[i].py = 0;
+    enemies[i].py = 0 + enemies[i].height;
 }
 if (frigate1_tick % 180 == 0){
 if(enemies[i].weapon == &FRIGATE_FLAK)enemies[i].weapon = &FRIGATE_LASER;
@@ -650,7 +770,7 @@ frigate2_tick++;
 if (frigate2_tick % 6 == 0){
 if (enemies[i].px < player->px + 30) enemies[i].px +=  enemies[i].dx;
 if (enemies[i].px > player->px + 30) enemies[i].px -=  enemies[i].dx;
-float target_py = player->py - 15;
+float target_py = player->py - 10;
 if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
 if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
 }
@@ -664,17 +784,140 @@ enemies[i].px -=  enemies[i].dx;
 }
 if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
     enemies[i].dy = -enemies[i].dy;
-    enemies[i].py - PLAYFIELD_H - 1;
+    enemies[i].py = PLAYFIELD_H - enemies[i].height;
+}
+if  (enemies[i].py + enemies[i].height -1 <= 0){
+enemies[i].dy = -enemies[i].dy;
+enemies[i].py = 0 + enemies[i].height;
+}
+if (frigate2_tick % 180 == 0){
+if(enemies[i].weapon == &FRIGATE_FLAK)enemies[i].weapon = &FRIGATE_LASER;
+else if(enemies[i].weapon == &FRIGATE_LASER)enemies[i].weapon = &FRIGATE_FLAK;
+}
+break;
+case JET_SPECIAL:
+static int jet_state_timer;
+jet_state_timer++;
+static int hunt_tick_jet = 0;
+hunt_tick_jet++;
+if (hunt_tick_jet % 12 == 0){
+if (enemies[i].px < player->px) enemies[i].px +=  enemies[i].dx;
+if (enemies[i].px > player->px) enemies[i].px -=  enemies[i].dx;
+float target_py = player->py - 10;
+if (enemies[i].py < target_py ) enemies[i].py += enemies[i].dy;
+if (enemies[i].py > target_py ) enemies[i].py -= enemies[i].dy;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W -1;
+}
+if  (enemies[i].px + enemies[i].width -1 == 0 ){
+enemies[i].dx = -enemies[i].dx;
+enemies[i].px -=  enemies[i].dx;
+}
+if ((int)enemies[i].py + enemies[i].height -1 >= PLAYFIELD_H-1){
+    enemies[i].dy = -enemies[i].dy;
+    enemies[i].py = PLAYFIELD_H + enemies[i].height - 1;
 }
 if  (enemies[i].py + enemies[i].height -1 <= 0){
 enemies[i].dy = -enemies[i].dy;
 enemies[i].py = 1;
 }
-if (frigate2_tick % 180 == 0){
-if(enemies[i].weapon == &FRIGATE_FLAK)enemies[i].weapon = &FRIGATE_LASER;
-else if(enemies[i].weapon == &FRIGATE_LASER)enemies[i].weapon = &FRIGATE_FLAK;
-
+if (jet_state_timer % 120 == 0 && boss_invulnerable != TRUE){
+    if (enemies[i].weapon == &JET_CANNON) enemies[i].weapon = &BOMB_ENEMY_WEAPON;
+    else if (enemies[i].weapon == &BOMB_ENEMY_WEAPON) enemies[i].weapon = &JET_CANNON;
 }
+static bool jet_invuln_used = FALSE;
+if (enemies[i].hp < 5 && boss_invulnerable != TRUE && jet_invuln_used == FALSE){
+    jet_invuln_used = TRUE;
+    boss_invulnerable = TRUE;
+    enemies[i].shape  = &Jet_Layout_Invuln;
+    enemies[i].weapon = &FLYFORT_CANNON;
+    jet_state_timer = 0;
+}
+if (boss_invulnerable == TRUE && jet_state_timer >= 90){
+    boss_invulnerable = FALSE;
+    enemies[i].shape  = &Jet_Layout;
+    jet_state_timer = 0;
+}
+break;
+case BATTLESHIP_SPECIAL:
+static bool boss_invuln_used1= FALSE, boss_invuln_used2= FALSE, boss_invuln_used3= FALSE;
+static int battleship_state_tick = 0, laser_cannon_tick =0, bomb_cannon_tick =0;
+battleship_state_tick++;
+laser_cannon_tick++;
+bomb_cannon_tick++;
+if(state == BOSS_NORMAL){
+if(laser_cannon_tick % 150 == 0) 
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +30, enemies[i].py +8, 270, FALSE);
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +10, enemies[i].py +8, 270, FALSE);
+if (bomb_cannon_tick % 100 == 0){
+    fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px + 5, enemies[i].py +8, 270, FALSE);
+}
+}
+if (enemies[i].hp < 125 && boss_invuln_used1 == FALSE){
+    boss_invuln_used1 = TRUE;
+    state = SPECIAL_ATTACK_1;
+    boss_invulnerable = TRUE;
+    enemies[i].shape = &Battleship_Layout_Invuln;
+    battleship_state_tick = 0;
+     //Special laser barrage attack  
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +20 , enemies[i].py +8, 210, FALSE);
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +25, enemies[i].py +8, 240, FALSE); 
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +15, enemies[i].py +8, 270, FALSE);
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +30 , enemies[i].py +8, 300, FALSE);
+fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +10, enemies[i].py +8, 330, FALSE);  
+enemies[i].weapon = &RAPIDFIRE_RIFLE;
+}
+if (enemies[i].hp < 50 && boss_invuln_used2 == FALSE){
+    boss_invuln_used2 = TRUE;
+    state = SPECIAL_ATTACK_2;
+    boss_invulnerable = TRUE;
+    enemies[i].shape = &Battleship_Layout_Invuln;
+    battleship_state_tick = 0;
+    
+}
+
+if (enemies[i].hp < 10 && boss_invuln_used3 == FALSE){
+    boss_invuln_used3 = TRUE;
+    state = SPECIAL_ATTACK_3;
+    boss_invulnerable = TRUE;
+    enemies[i].shape = &Battleship_Layout_Invuln;
+    battleship_state_tick = 0;
+    enemies[i].weapon = &FLYFORT_CANNON;
+}
+if(battleship_state_tick >= 180 && boss_invulnerable == TRUE){
+    boss_invulnerable = FALSE;
+    enemies[i].shape = &Battleship_Layout;
+}
+if(state == SPECIAL_ATTACK_1){
+if(battleship_state_tick % 25 == 0){
+fire_weapon(&spiral_cannon, enemies[i].px +20, enemies[i].py + 8, 270, FALSE);  }}
+if(state == SPECIAL_ATTACK_2){
+if(battleship_state_tick%50 == 0){
+    fire_weapon(&CARRIER_CANNON, enemies[i].px +20, enemies[i].py +8, 270, FALSE);
+    fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px + 30, enemies[i].py +8, 270, FALSE);
+    fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px + 10, enemies[i].py +8, 270, FALSE);
+    }
+if(battleship_state_tick % 20 == 0){ 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px , enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 40, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 30, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 10, enemies[i].py +8, 270, FALSE);  }
+}
+if (state == SPECIAL_ATTACK_3){
+    if(battleship_state_tick % 20 == 0){   
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px , enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 40, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 15, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 25, enemies[i].py +8, 270, FALSE);   
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 30, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 10, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 15, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 25, enemies[i].py +8, 270, FALSE); 
+    }
+}
+
 break;
 default:
 break;

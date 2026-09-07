@@ -32,8 +32,9 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     }
 
     scrollok(stdscr, TRUE);
-    if (tick % 5 == 0 && boss_fight_ongoing == FALSE){
+    if (tick % 5 == 0 && boss_fight_ongoing != TRUE){
         wscrl(stdscr, -1);
+    rows_scrolled++;
     }
 
     int screen_px = offset_x + (int)player.px;
@@ -48,7 +49,6 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     *old_screen_px = screen_px;
     *old_screen_py = screen_py;
 
-    rows_scrolled++;
     wnoutrefresh(stdscr);
     return rows_scrolled;
 }
@@ -254,10 +254,11 @@ spawn_tick++;
 }
 //Function to check whether a boss fight is currently ongoing and set the appropriate flag
 void Check_Boss_Fight(){
+    boss_fight_ongoing = FALSE;
     for (int i = 0; i < MAX_ENEMIES; i++){
-        if(enemies[i].is_boss_part > 0){
+        if(enemies[i].is_boss_part > 0 && enemies[i].state == ALIVE){
             boss_fight_ongoing = TRUE;
+            break;
         }
-        else boss_fight_ongoing = FALSE;
     }
 }

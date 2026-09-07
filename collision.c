@@ -90,7 +90,9 @@ projectiles[p].pierce--;
  if(enemies[i].hp <= 0){
 enemies[i].state = DEAD;
 player->score += 5;
+if (enemies[i].is_boss_part == TRUE) player->score += 20;
 if(enemies[i].is_boss_core == TRUE){
+    player->score += 50;
     current_level++;
     Level_Complete = TRUE;
 }
