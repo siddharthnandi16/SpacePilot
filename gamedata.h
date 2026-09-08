@@ -37,7 +37,8 @@ typedef enum weapon_id{EMPTY_ID, AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_I
 PLASMARIFLE_PLAYER_ID,MISSILE_PLAYER_ID, EMP_ID, LIGHTNING_ID, SHOTGUN_ID, 
 GRUNT_WEAPON_ID, LASERCANNON_ID, PLASMACANNON_ID, RAPIDFIRE_RIFLE_ID, LASER_RIFLE_ENEMY_ID,
  BOMB_ENEMY_ID, HUNTER_RIFLE_ID, JET_CANNON_ID, FLYFORT_CANNON_ID, SPIRAL_CANNON_ID,
-CARRIER_CANNON_ID, CARRIER_FLAK_ID, FRIGATE_FLAK_ID, FRIGATE_LASER_ID}WeaponID;
+CARRIER_CANNON_ID, CARRIER_FLAK_ID, FRIGATE_FLAK_ID, FRIGATE_LASER_ID,
+MINIGUN_ID, GRAND_CANNON_ID, PLASMA_STORM_ID, MISSILE_STORM_ID}WeaponID;
 typedef enum modes{REGULAR, BURST_FIRE, RAPID_FIRE, SUPERCHARGE, CHARGING}FireModes;
 const typedef struct WeaponType{
     char *display_name;
@@ -50,6 +51,7 @@ const typedef struct WeaponType{
     ProjType type;
     FireModes modes;
 }WeaponType;
+typedef enum PlayerClass{PLAYER_DEBUG, PLAYER_FIGHTER, PLAYER_FORTRESS, PLAYER_EXPERIMENTAL}PlayerClass;
 typedef struct Player{
     float px, py; //Stores the player's position
     float vx, vy; // Stores the player's standard movement speed
@@ -65,6 +67,7 @@ typedef struct Player{
     WeaponID inventory[10]; 
     int invuln_frames; //Period of invulnerability granted after taking a hit
     int score; //Increments upon destroyed enemies
+    enum PlayerClass class;
 }Player;
 extern Player player;
 extern Player fighter_jet;

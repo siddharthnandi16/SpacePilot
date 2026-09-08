@@ -67,7 +67,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = MISSILE_PLAYER_ID, .offset_angle = 10
 };
  const WeaponType plasmarifle = {
-   .display_name = "Plasma Gun", .cooldown_frames = 3, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+   .display_name = "Plasma Gun", .cooldown_frames = 6, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMARIFLE_PLAYER_ID
 };
   const WeaponType empbomb = {
@@ -91,8 +91,20 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = PLASMACANNON_ID, .offset_angle = 15
 };
 const WeaponType spiral_cannon = {
-   .display_name = "Starburst Cannon", .cooldown_frames = 60, .number = 24, .angle= 90, .type= BULLET, .modes = NORMAL
+   .display_name = "Starburst Cannon", .cooldown_frames = 20, .number = 24, .angle= 90, .type= BULLET, .modes = NORMAL
     ,.weapon_id = PLASMACANNON_ID, .offset_angle = 15, .omnidirectional = TRUE
+};
+const WeaponType Minigun = {
+   .display_name = "Minigun", .cooldown_frames = 5, .number = 5, .angle= 90, .type= BULLET, .modes = NORMAL
+    ,.weapon_id = MINIGUN_ID, .offset_angle = 4, .omnidirectional = FALSE
+};
+const WeaponType Grand_Cannon = {
+   .display_name = "Grand Cannon", .cooldown_frames = 45, .number = 7, .angle= 90, .type= BOMB, .modes = NORMAL
+    ,.weapon_id = GRAND_CANNON_ID, .offset_angle = 20, .omnidirectional = FALSE
+};
+const WeaponType Plasma_Storm = {
+   .display_name = "Storm of Plasma", .cooldown_frames = 10, .number = 9, .angle= 90, .type= PLASMA, .modes = NORMAL
+    ,.weapon_id = GRAND_CANNON_ID, .offset_angle = 7.5, .omnidirectional = FALSE
 };
 //List of enemy weapon types. All enemy weapon types are capitalised
 const WeaponType GRUNT_RIFLE = {
@@ -139,6 +151,10 @@ const WeaponType FRIGATE_LASER = {
   .display_name = "autocannon",  .cooldown_frames = 50, .number = 1, .angle= 90, .type= LASER, .modes = NORMAL
     ,.weapon_id = FRIGATE_LASER_ID
 };
+  const WeaponType missilestorm = {
+   .display_name = "Missile Barrage", .cooldown_frames = 120, .number = 5, .angle= 90, .type= MISSILE, .modes = NORMAL
+    ,.weapon_id = MISSILE_STORM_ID, .offset_angle = 20
+};
 //Function to find a free slot in the enemy pool
 int findfreeprojectileslot(void){
     for(int i=0; i < MAX_PROJECTILES; i++){
@@ -175,6 +191,10 @@ const WeaponType* get_weapon_template(WeaponID weapon_id) {
         case SPIRAL_CANNON_ID:       return &spiral_cannon;
         case CARRIER_CANNON_ID:      return &CARRIER_CANNON;
         case CARRIER_FLAK_ID:        return &CARRIER_FLAK;
+        case MINIGUN_ID:             return &Minigun;
+        case GRAND_CANNON_ID:        return &Grand_Cannon;
+        case PLASMA_STORM_ID:        return &Plasma_Storm;
+        case MISSILE_STORM_ID:       return &missilestorm;
         default:                     return NULL;
     }
 }

@@ -281,3 +281,34 @@ void Check_Boss_Fight(){
         }
     }
 }
+//Function to grant the player new weapons upon completing a stage
+void New_Weapons(Player *player){
+    if(current_level >= 2){
+        switch(player->class){
+            case PLAYER_FIGHTER:
+            player->inventory[3] = SPIRAL_CANNON_ID;
+            break;
+            case PLAYER_FORTRESS:
+            player->inventory[3] = MISSILE_STORM_ID;
+            break;
+            case PLAYER_EXPERIMENTAL:
+            player->inventory[3] = PLASMARIFLE_PLAYER_ID;
+            default: 
+            break;
+        }
+    }
+    if(current_level >= 3){
+        switch(player->class){
+            case PLAYER_FIGHTER:
+            player->inventory[4] = MINIGUN_ID;
+            break;
+            case PLAYER_FORTRESS:
+            player->inventory[4] = GRAND_CANNON_ID;
+            break;
+            case PLAYER_EXPERIMENTAL:
+            player->inventory[4] = PLASMA_STORM_ID;
+            default: 
+            break;
+        }
+    }
+}

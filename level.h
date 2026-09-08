@@ -36,4 +36,5 @@ void reset_level_tables(Level_Data *level);
 extern Level_Data level_1;
 extern unsigned long int spawn_tick;
 void Check_Boss_Fight();
+void New_Weapons(Player *player);
 #endif

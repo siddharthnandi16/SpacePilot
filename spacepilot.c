@@ -51,6 +51,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         default:
         break;
     }
+    New_Weapons(player);
     Check_Boss_Fight();
     handle_mute_toggle();
     erase_enemies(enemies);

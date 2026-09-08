@@ -119,7 +119,7 @@ static const Enemy hunter_template = {
 static const Enemy reflector_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 2,
+    .hp = 1,
     .symbol = 'R',
     .width = 1, .height = 1,
     .cooldown_frames = -30,

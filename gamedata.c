@@ -31,11 +31,12 @@ struct Player player = {
     .q_was_down = false,
     .weapon_id = AUTOPISTOL_ID,
     .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, 
-        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID, SHOTGUN_ID, 
-        SPIRAL_CANNON_ID, LASERCANNON_ID},
+        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID,PLASMA_STORM_ID, 
+     GRAND_CANNON_ID, MINIGUN_ID},
     // For debug purposes, all implemented weapons are given to the player 
     .invuln_frames = 0,
-    .score =0
+    .score =0,
+    .class = PLAYER_DEBUG
 };
 // Fast but with weaker weapons
 struct Player fighter_jet = {
@@ -52,7 +53,8 @@ struct Player fighter_jet = {
     .weapon_id = MACHINEGUN_ID,
     .inventory = {MACHINEGUN_ID, LASRIFLE_PLAYER_ID, SHOTGUN_ID}, 
     .invuln_frames = 0,
-    .score =0
+    .score =0,
+    .class = PLAYER_FIGHTER
 };
 //Slow but has access to many strong weapons
 struct Player flying_fortress= {
@@ -69,7 +71,8 @@ struct Player flying_fortress= {
     .weapon_id = BOMB_PLAYER_ID,
     .inventory = {BOMB_PLAYER_ID, MACHINEGUN_ID, MISSILE_PLAYER_ID}, 
     .invuln_frames = 0,
-    .score =0
+    .score =0,
+    .class = PLAYER_FORTRESS
 };
 //Supposed to have experimental and high-tech weapons like the plasma rifle, EMP and chain lightning
 struct Player experimental_fighter= {
@@ -86,7 +89,8 @@ struct Player experimental_fighter= {
     .weapon_id = PLASMACANNON_ID,
     .inventory = {PLASMACANNON_ID, SPIRAL_CANNON_ID}, 
     .invuln_frames = 0,
-    .score =0
+    .score =0,
+    .class = PLAYER_EXPERIMENTAL
 };
 //Backup version of player struct. ALWAYS KEEP IT THE SAME AS THE PLAYER STRUCT
 struct Player player_backup = {
@@ -102,11 +106,12 @@ struct Player player_backup = {
     .q_was_down = false,
     .weapon_id = AUTOPISTOL_ID,
     .inventory = {AUTOPISTOL_ID, MACHINEGUN_ID, LASRIFLE_PLAYER_ID, 
-        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID,SHOTGUN_ID, 
-        SPIRAL_CANNON_ID, LASERCANNON_ID},
+        BOMB_PLAYER_ID, PLASMARIFLE_PLAYER_ID, MISSILE_PLAYER_ID,PLASMA_STORM_ID, 
+     GRAND_CANNON_ID, MINIGUN_ID},
     // For debug purpose, all implemented weapons are given to the player 
     .invuln_frames = 0,
-    .score = 0
+    .score = 0,
+    .class = PLAYER_DEBUG
 };
 bool Level_Complete = FALSE;
 BossState state = BOSS_NORMAL;
