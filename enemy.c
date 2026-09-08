@@ -76,7 +76,7 @@ static const Enemy rapidfire_template = {
 static const Enemy laser_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 4,
+    .hp = 3,
     .symbol = '!',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -90,7 +90,7 @@ static const Enemy laser_template = {
 static const Enemy bomber_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp =4,
+    .hp =3,
     .symbol = '#',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -104,7 +104,7 @@ static const Enemy bomber_template = {
 static const Enemy hunter_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 6,
+    .hp = 4,
     .symbol = 'H',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -119,7 +119,7 @@ static const Enemy hunter_template = {
 static const Enemy reflector_template = {
     .px = 0, .py = 0,
     .dx = 1, .dy = 1,
-    .hp = 8,
+    .hp = 2,
     .symbol = 'R',
     .width = 1, .height = 1,
     .cooldown_frames = -30,
@@ -984,8 +984,8 @@ if (enemies[i].shape == NULL){
             if (glyph == ' ') continue;
             int color = shape->color_rows[row][col];
             attron(COLOR_PAIR(color));
-            mvaddch(offset_y + (int)enemies[i].old_py + row,
-                    offset_x + (int)enemies[i].old_px + col,
+            mvaddch(offset_y + (int)enemies[i].py + row,
+                    offset_x + (int)enemies[i].px + col,
                     ' ');
             attroff(COLOR_PAIR(color));
         }
