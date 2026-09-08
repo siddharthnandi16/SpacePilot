@@ -233,8 +233,8 @@ for (int i = 0; i < NUM_LEVEL_OPTIONS; i++) {
         *current_level = 2;
         break;
         case 2: //Level 3, commented out due to being unimplemented
-       // *Current_Level = Level_2;
-       // *current_level = 3;
+       *Current_Level = level_3;
+       *current_level = 3;
         break;
         default:
         break;

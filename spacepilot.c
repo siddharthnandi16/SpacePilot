@@ -45,6 +45,9 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         case 2:
     ma_sound_stop(&loaded_sounds[Level_1]);
     ma_sound_start(&loaded_sounds[Level_2]);
+    case 3:
+    ma_sound_stop(&loaded_sounds[Level_2]);
+    ma_sound_start(&loaded_sounds[Level_3]);
         default:
         break;
     }
@@ -93,6 +96,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         }
     ma_sound_stop(&loaded_sounds[Level_1]);
     ma_sound_stop(&loaded_sounds[Level_2]);
+    ma_sound_stop(&loaded_sounds[Level_3]);
         game_over=1;
         return 0;
     }

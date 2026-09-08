@@ -53,6 +53,24 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     return rows_scrolled;
 }
 
+Level_Data level_4={
+.spawn_table = spawn_table_4,
+.spawn_count = 1,
+    .sound_table = sound_table_1,
+    .sound_count = 0,          
+    .dialogue_table = dialogue_table_1,
+    .dialogue_count = 0,
+    .next_level = NULL
+};
+Level_Data level_3={
+.spawn_table = spawn_table_3,
+.spawn_count = 1,
+    .sound_table = sound_table_1,
+    .sound_count = 0,          
+    .dialogue_table = dialogue_table_1,
+    .dialogue_count = 0,
+    .next_level = NULL
+};
 //Data for levels 1 and 2
 Level_Data level_2={
 .spawn_table = spawn_table_2,
@@ -61,7 +79,7 @@ Level_Data level_2={
     .sound_count = 0,          
     .dialogue_table = dialogue_table_1,
     .dialogue_count = 0,
-    .next_level = NULL
+    .next_level = &level_3
 };
 Level_Data level_1={
 .spawn_table = spawn_table_1,
@@ -75,6 +93,7 @@ Level_Data level_1={
 void init_levels(void) {
     level_1.spawn_count    = spawn_table_1_count;
     level_2.spawn_count    = spawn_table_2_count;
+    level_3.spawn_count    = spawn_table_3_count;
 }
 //Variable that stores the current level
  Level_Data *Current_Level = &level_1;

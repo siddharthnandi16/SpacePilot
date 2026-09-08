@@ -88,6 +88,15 @@ ma_sound_set_looping(&loaded_sounds[Titlescreen_MUSIC], TRUE);
     &loaded_sounds[Level_2]
 );
 ma_sound_set_looping(&loaded_sounds[Level_2], TRUE);
+ma_result Level_3_result = ma_sound_init_from_file(
+    &engine,
+    "BossMain.wav",
+    0,
+    NULL,
+    NULL,
+    &loaded_sounds[Level_3]
+);
+ma_sound_set_looping(&loaded_sounds[Level_3], TRUE);
     ma_result BossBGM_result = ma_sound_init_from_file(
     &engine,
     "BossMain.wav",

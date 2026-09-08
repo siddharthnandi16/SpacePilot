@@ -18,6 +18,8 @@ typedef struct Level_Data{
 extern Level_Data *Current_Level;
 extern Level_Data level_1;
 extern Level_Data level_2;
+extern Level_Data level_3;
+extern Level_Data level_4;
 char bgchar(int max_x, int max_y);
 bool should_draw_cell(int max_y, int max_x);
 int scrollanddraw(int *old_screen_px, int *old_screen_py);

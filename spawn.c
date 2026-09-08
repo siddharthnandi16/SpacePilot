@@ -392,3 +392,10 @@ spawn_entry spawn_table_2[] = {
 };
 
 const int spawn_table_2_count = sizeof(spawn_table_2) / sizeof(spawn_table_2[0]);
+spawn_entry spawn_table_3[] = {
+   { .trigger = ROW, .trigger_time = 30,  .type = REFLECTOR, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 8,  .py = 0, .strafe = 15, .fired = FALSE },
+     
+};
+const int spawn_table_3_count = sizeof(spawn_table_3) / sizeof(spawn_table_3[0]);
+spawn_entry spawn_table_4[] = {};
+const int spawn_table_4_count = sizeof(spawn_table_4) / sizeof(spawn_table_4[0]);

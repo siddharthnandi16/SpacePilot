@@ -114,6 +114,21 @@ static const Enemy hunter_template = {
     .shape = NULL,
     .weapon = &HUNTER_RIFLE
 };
+
+//Reflects bullets. Designed to shield other enemies from player bullets
+static const Enemy reflector_template = {
+    .px = 0, .py = 0,
+    .dx = 1, .dy = 1,
+    .hp = 8,
+    .symbol = 'R',
+    .width = 1, .height = 1,
+    .cooldown_frames = -30,
+    .type = REFLECTOR,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = NULL,
+    .weapon = &GRUNT_RIFLE
+};
 //Layout for jets
 static const int jet_row0_colors[] = {2, 6, 2}; //red, amber, red
 static const int jet_row1_colors[] = {2, 7, 2}; //red, steel gray, red
@@ -540,6 +555,7 @@ const Enemy* get_template(EnemyType type) {
         case FRIGATE2:          return &frigate2_template;
         case JET_BOSS:          return &jet_boss_template;
         case BATTLESHIP_BOSS:    return &Battleship_template;
+        case REFLECTOR:         return &reflector_template;
         default:        return NULL;
     }
 }

@@ -81,7 +81,7 @@ typedef struct TileLayout {
 typedef enum trigger{ROW, TICK} TriggerType; //Stores whether an event is triggered by rows_scrolled or ticks that have passed
 typedef enum type{ GRUNT, RAPIDFIRE, LASER_ENEMY, BOMBER, HUNTER, JET, FLYING_FORTRESS,
      LASER_JET, CARRIER_BOSS, CARRIER_BOSS_FLAK, CARRIER_BOSS_BOMB, FRIGATE1, FRIGATE2, JET_BOSS,
-    BATTLESHIP_BOSS } EnemyType;
+    BATTLESHIP_BOSS, REFLECTOR } EnemyType;
 typedef enum state{INACTIVE, DEAD, ALIVE, DYING } EnemyState;
 typedef enum behavior{ STATIC, MOVEHORIZONTALLY, MOVEVERTICALLY, STRAFE_HORIZONTAL,
      STRAFE_VERTICAL, HUNT_PLAYER, ZIGZAG, HUNT_PLAYER_FAR, CARRIER_SPECIAL, 

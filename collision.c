@@ -23,6 +23,17 @@ int x_max = (int)fmaxf(projectiles[p].old_px, projectiles[p].px) +PROJ_HITBOX_MA
 if ( abs((int)enemies[i].px - (int)projectiles[p].px) <= PROJ_HITBOX_MARGIN &&
     (int)enemies[i].py >= y_min && (int)enemies[i].py <= y_max
 && (int)enemies[i].px >= x_min && (int)enemies[i].px <= x_max){
+if (enemies[i].type == REFLECTOR) {
+    projectiles[p].player_owned = FALSE;   
+    projectiles[p].color = 3;
+    projectiles[p].dx = -projectiles[p].dx;
+    projectiles[p].dy = -projectiles[p].dy;
+    projectiles[p].old_px = enemies[i].px;
+    projectiles[p].old_py = enemies[i].py;
+    projectiles[p].angle += 180.0f;
+    enemies[i].hp = enemies[i].hp - projectiles[p].damage;
+    continue;
+}
 enemies[i].hp = enemies[i].hp - projectiles[p].damage;
 projectiles[p].pierce--;
 if (projectiles[p].type == BOMB){
