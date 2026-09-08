@@ -33,7 +33,7 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
 
     scrollok(stdscr, TRUE);
     if (tick % 5 == 0 && boss_fight_ongoing != TRUE){
-        wscrl(stdscr, -1);
+     wscrl(stdscr, -1);
     rows_scrolled++;
     }
 

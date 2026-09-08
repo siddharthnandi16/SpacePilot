@@ -318,7 +318,7 @@ const int spawn_table_1_count = sizeof(spawn_table_1) / sizeof(spawn_table_1[0])
 spawn_entry spawn_table_2[] = {
     // --- Rows 0-700: sparse intro ---
     //Test battleship spawn
-    //{ .trigger = ROW, .trigger_time = 0, .type = BATTLESHIP_BOSS, .behavior = BATTLESHIP_SPECIAL, .aimed = TRUE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
+   // { .trigger = ROW, .trigger_time = 0, .type = BATTLESHIP_BOSS, .behavior = BATTLESHIP_SPECIAL, .aimed = TRUE, .px = 50, .py = 6, .strafe = 20, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 30,  .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 8,  .py = 0, .strafe = 15, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 70,  .type = RAPIDFIRE,  .behavior = STRAFE_VERTICAL,   .aimed = FALSE, .px = 78, .py = 0, .strafe = 10, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 110, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 45, .py = 0, .strafe = 18, .fired = FALSE },
@@ -388,7 +388,7 @@ spawn_entry spawn_table_2[] = {
     { .trigger = ROW, .trigger_time = 2050, .type = GRUNT,      .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 30, .py = 0, .strafe = 18, .fired = FALSE },
 
     // --- Row 2100: Battleship boss (placeholder, not yet implemented) ---
-    { .trigger = ROW, .trigger_time = 1800, .type = BATTLESHIP_BOSS, .behavior = BATTLESHIP_SPECIAL, .aimed = TRUE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1800, .type = BATTLESHIP_BOSS, .behavior = BATTLESHIP_SPECIAL, .aimed = TRUE, .px = 50, .py = 6, .strafe = 20, .fired = FALSE },
 };
 
 const int spawn_table_2_count = sizeof(spawn_table_2) / sizeof(spawn_table_2[0]);

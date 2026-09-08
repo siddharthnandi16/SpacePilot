@@ -71,7 +71,7 @@ extern Player fighter_jet;
 extern Player flying_fortress;
 extern Player experimental_fighter;
 extern Player player_backup;
-#define MAX_TILE_HEIGHT 20 //Max height of multi-tile enemies
+#define MAX_TILE_HEIGHT 26 //Max height of multi-tile enemies
 #define MAX_TILE_WIDTH  80 //Max width of multi-tile enemies
 typedef struct TileLayout {
     int width, height;                          // Dimensions of the shape

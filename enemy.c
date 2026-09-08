@@ -1,6 +1,7 @@
 #include <pdcurses.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "gamedata.h"
 #include "projectile.h"
 #include "window.h"
@@ -441,11 +442,11 @@ static const int bship_row7[40] = {
     [3]=6, [9]=3, [15]=6, [21]=6, [27]=3, [33]=6 // socket colors per cannon type
 };
 static const int bship_row8[40] = {
-    [0 ... 39] = 0,
+    [0 ... 39] = 2,
     [4]=6, [10]=3, [16]=6, [22]=6, [28]=3, [34]=6
 };
 static const int bship_row9[40] = {
-    [0 ... 39] = 0,
+    [0 ... 39] = 2,
     [4]=6, [10]=3, [16]=6, [22]=6, [28]=3, [34]=6
 };
 
@@ -459,8 +460,8 @@ static TileLayout Battleship_Layout = {
         "|##############@@@@@@@@@@##############|",
         "|######################################|",
         "|###.###.###.###.###.###.###.###.###.##|",
-        "|###v#####!#####%#####v#####!#####%####|",
-        "    #     !     %     #     !     %     ",
+        "|###v#####!###########v#####!##########|",
+        "    #     !     #     #     !     #     ",
         "    V     !     o     V     !     o     "
     },
     .color_rows = {
@@ -497,7 +498,7 @@ static TileLayout Battleship_Layout_Invuln = {
 // Template for battleship, boss of stage 2
 static const Enemy Battleship_template = {
     .px = 0, .py = 0,
-    .dx = 0.2, .dy = 0.2,
+    .dx = 0.1, .dy = 0.1,
     .hp = 200,
     .symbol = '%',
     .width = 40, .height = 10,
@@ -506,7 +507,7 @@ static const Enemy Battleship_template = {
     .state = INACTIVE,
     .behavior = BATTLESHIP_SPECIAL,
     .shape = &Battleship_Layout,
-    .weapon = &CARRIER_FLAK,
+    .weapon = &shotgun,
     .is_boss_part = 1,
     .is_boss_core = 1
 };
@@ -842,17 +843,38 @@ if (boss_invulnerable == TRUE && jet_state_timer >= 90){
 }
 break;
 case BATTLESHIP_SPECIAL:
+for (int row = 0; row < Battleship_Layout.height; row++) {
+    int len = strlen(Battleship_Layout.glyph_rows[row]);
+    if (len != Battleship_Layout.width) {
+        fprintf(stderr, "Row %d has length %d, expected %d\n", row, len, Battleship_Layout.width);
+    }
+}
+enemies[i].px = enemies[i].px + enemies[i].dx;
+//Reverses direction if it goes too far from its anchor point or hits a border
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe){
+  enemies[i].dx = -enemies[i].dx; 
+  enemies[i].px = enemies[i].px + enemies[i].dx;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W - enemies[i].width;
+}
+if  (enemies[i].px + enemies[i].width -1 <= 0 ){
+enemies[i].dx = -enemies[i].dx;
+enemies[i].px =  enemies[i].width;
+}
 static bool boss_invuln_used1= FALSE, boss_invuln_used2= FALSE, boss_invuln_used3= FALSE;
 static int battleship_state_tick = 0, laser_cannon_tick =0, bomb_cannon_tick =0;
 battleship_state_tick++;
 laser_cannon_tick++;
 bomb_cannon_tick++;
 if(state == BOSS_NORMAL){
-if(laser_cannon_tick % 150 == 0) 
-fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +30, enemies[i].py +8, 270, FALSE);
-fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +10, enemies[i].py +8, 270, FALSE);
-if (bomb_cannon_tick % 100 == 0){
-    fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px + 5, enemies[i].py +8, 270, FALSE);
+if(bomb_cannon_tick % 80 == 0){
+fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px +30, enemies[i].py +8, 270, FALSE);
+fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px +10, enemies[i].py +8, 270, FALSE);
+} 
+if (bomb_cannon_tick % 120 == 0){
+    fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px + 20, enemies[i].py +8, 270, FALSE);
 }
 }
 if (enemies[i].hp < 125 && boss_invuln_used1 == FALSE){
@@ -861,13 +883,12 @@ if (enemies[i].hp < 125 && boss_invuln_used1 == FALSE){
     boss_invulnerable = TRUE;
     enemies[i].shape = &Battleship_Layout_Invuln;
     battleship_state_tick = 0;
-     //Special laser barrage attack  
-fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +20 , enemies[i].py +8, 210, FALSE);
-fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +25, enemies[i].py +8, 240, FALSE); 
-fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +15, enemies[i].py +8, 270, FALSE);
+     //Special bomb barrage attack  
+fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px +20 , enemies[i].py +8, 210, FALSE);
+fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px +25, enemies[i].py +8, 240, FALSE); 
+fire_weapon(&BOMB_ENEMY_WEAPON, enemies[i].px +15, enemies[i].py +8, 270, FALSE);
 fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +30 , enemies[i].py +8, 300, FALSE);
 fire_weapon(&LASER_RIFLE_ENEMY, enemies[i].px +10, enemies[i].py +8, 330, FALSE);  
-enemies[i].weapon = &RAPIDFIRE_RIFLE;
 }
 if (enemies[i].hp < 50 && boss_invuln_used2 == FALSE){
     boss_invuln_used2 = TRUE;
@@ -878,7 +899,7 @@ if (enemies[i].hp < 50 && boss_invuln_used2 == FALSE){
     
 }
 
-if (enemies[i].hp < 10 && boss_invuln_used3 == FALSE){
+if (enemies[i].hp < 25 && boss_invuln_used3 == FALSE){
     boss_invuln_used3 = TRUE;
     state = SPECIAL_ATTACK_3;
     boss_invulnerable = TRUE;
@@ -890,6 +911,7 @@ if(battleship_state_tick >= 180 && boss_invulnerable == TRUE){
     boss_invulnerable = FALSE;
     enemies[i].shape = &Battleship_Layout;
 }
+if (state= SPECIAL_ATTACK_3 && boss_invulnerable == FALSE) state = BOSS_NORMAL;
 if(state == SPECIAL_ATTACK_1){
 if(battleship_state_tick % 25 == 0){
 fire_weapon(&spiral_cannon, enemies[i].px +20, enemies[i].py + 8, 270, FALSE);  }}
@@ -902,8 +924,8 @@ if(battleship_state_tick%50 == 0){
 if(battleship_state_tick % 20 == 0){ 
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px , enemies[i].py +8, 270, FALSE); 
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 40, enemies[i].py +8, 270, FALSE); 
-fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 30, enemies[i].py +8, 270, FALSE); 
-fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 10, enemies[i].py +8, 270, FALSE);  }
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 30, enemies[i].py +8, 315, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 10, enemies[i].py +8, 225, FALSE);  }
 }
 if (state == SPECIAL_ATTACK_3){
     if(battleship_state_tick % 20 == 0){   
@@ -911,8 +933,8 @@ fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px , enemies[i].py +8, 270, FALSE);
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 40, enemies[i].py +8, 270, FALSE); 
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 15, enemies[i].py +8, 270, FALSE); 
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 25, enemies[i].py +8, 270, FALSE);   
-fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 30, enemies[i].py +8, 270, FALSE); 
-fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 10, enemies[i].py +8, 270, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 30, enemies[i].py +8, 315, FALSE); 
+fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 10, enemies[i].py +8, 225, FALSE); 
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 15, enemies[i].py +8, 270, FALSE); 
 fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 25, enemies[i].py +8, 270, FALSE); 
     }
@@ -938,22 +960,26 @@ if (enemies[i].shape == NULL){
     }
      }
              }
-             if (enemies[i].shape != NULL && (enemies[i].state ==ALIVE || enemies[i].state == DEAD)){
-const TileLayout *shape = enemies[i].shape;
+     if (enemies[i].shape != NULL && (enemies[i].state == ALIVE || enemies[i].state == DEAD)){
+    const TileLayout *shape = enemies[i].shape;
     for (int row = 0; row < shape->height; row++) {
         for (int col = 0; col < shape->width; col++) {
             char glyph = shape->glyph_rows[row][col];
-            // Does not render anything in blank cells
             if (glyph == ' ') continue;
             int color = shape->color_rows[row][col];
             attron(COLOR_PAIR(color));
-            mvaddch(offset_y + (int)enemies[i].py + row,
-            offset_x + (int)enemies[i].px + col,
-            ' ');
+            mvaddch(offset_y + (int)enemies[i].old_py + row,
+                    offset_x + (int)enemies[i].old_px + col,
+                    ' ');
             attroff(COLOR_PAIR(color));
         }
     }
-     }
+    enemies[i].old_px = enemies[i].px;
+    enemies[i].old_py = enemies[i].py;
+    if (enemies[i].state == DEAD) {
+        enemies[i].state = INACTIVE;
+    }
+}
 
     }
 }
@@ -968,9 +994,9 @@ for(int i=0; i < MAX_ENEMIES; i++){
      mvaddch(offset_y + enemies[i].py, offset_x + enemies[i].px, enemies[i].symbol);
      attroff(COLOR_PAIR(2));
      wnoutrefresh(stdscr);
-     //This block renders all multi-tile enemies
+     
     }
-    
+    //This block renders all multi-tile enemies
      if (enemies[i].shape != NULL && enemies[i].state ==ALIVE){
       //  fprintf(stderr, "rendering shape enemy at %d\n", i);
 const TileLayout *shape = enemies[i].shape;

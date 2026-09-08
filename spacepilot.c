@@ -105,8 +105,6 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
 int seed; //Variable that stores the RNG seed. Used for various rng calls
 //Function to reset all values to their defaults
 void reset_all(int max_x, int max_y) {
-    current_level = 1;
-    Current_Level = &level_1;
     player = player_backup;
     player.lives = 8;
     game_over = 0; 
@@ -124,12 +122,13 @@ void reset_all(int max_x, int max_y) {
     for (int i = 0; i < level_1.spawn_count; i++) {
         spawn_table_1[i].fired = FALSE;
     }
-    
+    for (int i = 0; i < level_2.spawn_count; i++) {
+        spawn_table_2[i].fired = FALSE;
+    }
     // Reset dialogue tables
     for (int i = 0; i < level_1.dialogue_count; i++) {
         dialogue_table_1[i].fired = FALSE;
     }
-    
     // Reset sound tables
     for (int i = 0; i < level_1.sound_count; i++) {
         sound_table_1[i].fired = FALSE;
