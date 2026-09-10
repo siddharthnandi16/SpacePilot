@@ -32,6 +32,52 @@ void setplayermovement(struct Player *player){
 player->dx = player->vx;
 player->dy = player->vy;
 }
+//Function to reset all values to their defaults
+void reset_all(int max_x, int max_y) {
+    player = player_backup;
+    player.lives = 8;
+    game_over = 0; 
+    quit = 0;
+    boss_invulnerable = FALSE;
+    boss_state_timer = 0;
+    state = BOSS_NORMAL;
+    current_level = 1;
+    Current_Level = &level_1;
+    rows_scrolled = 0;
+    tick = 0;
+    boss_fight_ongoing = FALSE;
+    memcpy(enemies, enemies_backup, sizeof(enemies_backup));
+    memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
+    for (int i = 0; i < level_1.spawn_count; i++) {
+        spawn_table_1[i].fired = FALSE;
+    }
+    for (int i = 0; i < level_2.spawn_count; i++) {
+        spawn_table_2[i].fired = FALSE;
+    }
+    for (int i = 0; i < level_3.spawn_count; i++) {
+        spawn_table_3[i].fired = FALSE;
+    }
+    // Reset dialogue tables
+    for (int i = 0; i < level_1.dialogue_count; i++) {
+        dialogue_table_1[i].fired = FALSE;
+    }
+     for (int i = 0; i < level_2.dialogue_count; i++) {
+        dialogue_table_2[i].fired = FALSE;
+    }
+    for (int i = 0; i < level_3.dialogue_count; i++) {
+        dialogue_table_3[i].fired = FALSE;
+    }
+    // Reset sound tables
+    for (int i = 0; i < level_1.sound_count; i++) {
+        sound_table_1[i].fired = FALSE;
+    }
+    spawn_tick = 0;
+     fprintf(stderr, "Before update: offset_x=%d, offset_y=%d\n", offset_x, offset_y);
+update_playfield_offset(max_x,max_y);
+fprintf(stderr, "After update: offset_x=%d, offset_y=%d\n", offset_x, offset_y);
+old_screen_py =-1;
+old_screen_px= -1;
+}
 int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     //spawn_enemy(GRUNT, STATIC, 10, 10, 10); Debug code to test enemy spawning
     while(quit != 1 && game_over != 1){
@@ -86,21 +132,31 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
  nodelay(stdscr, FALSE);
     mvprintw(PLAYFIELD_H/2 + offset_y, PLAYFIELD_W/2 + offset_x, "Continue? (y/n)");
     refresh();
+    char continue_choice = 'a';
+    while(continue_choice != 'y' && continue_choice != 'n'){
+        scrollok(stdscr, FALSE);
+        nodelay(stdscr, FALSE);
     continue_choice = getch();
-    if(continue_choice != 'y' || 'n') continue;
     if (continue_choice == 'y'){
         nodelay(stdscr, TRUE);
+        scrollok(stdscr, TRUE);
         mvprintw(PLAYFIELD_H/2+ offset_y, PLAYFIELD_W/2 + offset_x, "%-15s", "");
         continued = TRUE;
         player->lives = 8;
         continue;
     }
-        }
+    if(continue_choice == 'n'){
+        nodelay(stdscr, TRUE);
+        scrollok(stdscr, TRUE);
+        reset_all(max_x, max_y);
     ma_sound_stop(&loaded_sounds[Level_1]);
     ma_sound_stop(&loaded_sounds[Level_2]);
     ma_sound_stop(&loaded_sounds[Level_3]);
         game_over=1;
         return 0;
+    }
+    }
+        }
     }
     drawHUD(player);
     doupdate();
@@ -109,43 +165,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     return 0;
 }
 int seed; //Variable that stores the RNG seed. Used for various rng calls
-//Function to reset all values to their defaults
-void reset_all(int max_x, int max_y) {
-    player = player_backup;
-    player.lives = 8;
-    game_over = 0; 
-    quit = 0;
-    boss_invulnerable = FALSE;
-    boss_state_timer = 0;
-    state = BOSS_NORMAL;
-    current_level = 1;
-    Current_Level = &level_1;
-    rows_scrolled = 0;
-    tick = 0;
-    boss_fight_ongoing = FALSE;
-    memcpy(enemies, enemies_backup, sizeof(enemies_backup));
-    memcpy(projectiles, projectiles_backup, sizeof(projectiles_backup));
-    for (int i = 0; i < level_1.spawn_count; i++) {
-        spawn_table_1[i].fired = FALSE;
-    }
-    for (int i = 0; i < level_2.spawn_count; i++) {
-        spawn_table_2[i].fired = FALSE;
-    }
-    // Reset dialogue tables
-    for (int i = 0; i < level_1.dialogue_count; i++) {
-        dialogue_table_1[i].fired = FALSE;
-    }
-    // Reset sound tables
-    for (int i = 0; i < level_1.sound_count; i++) {
-        sound_table_1[i].fired = FALSE;
-    }
-    spawn_tick = 0;
-     fprintf(stderr, "Before update: offset_x=%d, offset_y=%d\n", offset_x, offset_y);
-update_playfield_offset(max_x,max_y);
-fprintf(stderr, "After update: offset_x=%d, offset_y=%d\n", offset_x, offset_y);
-old_screen_py =-1;
-old_screen_px= -1;
-}
+
 int main(){    
      srand((unsigned)time(NULL));
     //Debug function used to check whether consoles resizing is working properly

@@ -55,14 +55,18 @@ else speed = player->dx;
 mvwprintw(hud_win,1,64,"%.2f", speed);
 mvwprintw(hud_win,1,70, "m/s");
 wattroff(hud_win,COLOR_PAIR(12));
-update_dialogue(dialogue_table_1);
-/* update_dialogue(dialogue_table_1);
     switch(current_level){
         case 1:
         update_dialogue(dialogue_table_1);
         break;
+        case 2:
+        update_dialogue(dialogue_table_2);
+        break;
+        case 3:
+        update_dialogue(dialogue_table_3);
+        break;
         default:
         break;
-    } */
+    } 
 wrefresh(hud_win);
 }

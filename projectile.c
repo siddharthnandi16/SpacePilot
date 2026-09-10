@@ -99,7 +99,7 @@ const WeaponType Minigun = {
     ,.weapon_id = MINIGUN_ID, .offset_angle = 4, .omnidirectional = FALSE
 };
 const WeaponType Grand_Cannon = {
-   .display_name = "Grand Cannon", .cooldown_frames = 45, .number = 7, .angle= 90, .type= BOMB, .modes = NORMAL
+   .display_name = "Grand Cannon", .cooldown_frames = 50, .number = 5, .angle= 90, .type= BOMB, .modes = NORMAL
     ,.weapon_id = GRAND_CANNON_ID, .offset_angle = 20, .omnidirectional = FALSE
 };
 const WeaponType Plasma_Storm = {

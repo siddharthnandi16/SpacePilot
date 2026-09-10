@@ -399,7 +399,7 @@ const int spawn_table_2_count = sizeof(spawn_table_2)/sizeof(spawn_table_2[0]);
 // Mothership / Corvette Pair / Pulse Cannon / Interceptor).
 spawn_entry spawn_table_3[] = {
     //Test mothership spawn
-    { .trigger = ROW, .trigger_time = 0, .type = MOTHERSHIP, .behavior = MOTHERSHIP_SPECIAL, .aimed = FALSE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
+    //{ .trigger = ROW, .trigger_time = 0, .type = MOTHERSHIP, .behavior = MOTHERSHIP_SPECIAL, .aimed = FALSE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 10, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 12, .py = 3.5999999999999996, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 10, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 14, .py = 2.4, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 10, .type = RAPIDFIRE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 16, .py = 1.2, .strafe = 6, .fired = FALSE },

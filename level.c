@@ -67,7 +67,7 @@ Level_Data level_3={
 .spawn_count = 1,
     .sound_table = sound_table_1,
     .sound_count = 0,          
-    .dialogue_table = dialogue_table_1,
+    .dialogue_table = dialogue_table_3,
     .dialogue_count = 0,
     .next_level = NULL
 };
@@ -86,7 +86,7 @@ Level_Data level_1={
 .spawn_count = 1,
     .sound_table = sound_table_1,
     .sound_count = 0,          
-    .dialogue_table = dialogue_table_3,
+    .dialogue_table = dialogue_table_1,
     .dialogue_count = 0,
     .next_level = &level_2
 };
