@@ -6,6 +6,7 @@
 #include "projectile.h"
 #include "window.h"
 #include "enemy.h"
+
 //Spawning pool for enemies. Values here are placeholders that will be overwritten during spawning
 Enemy enemies[MAX_ENEMIES] = {
     [0] = {
@@ -46,11 +47,11 @@ Enemy enemies_backup[MAX_ENEMIES] = {
 //Slowly fires bullets. Low-threat enemy, mostly just scoring fodder
 static const Enemy grunt_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.2,
     .hp = 1,
     .symbol = '%',
     .width = 1, .height = 1,
-    .cooldown_frames = -30,
+    .cooldown_frames = -5,
     .type = GRUNT,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -61,11 +62,11 @@ static const Enemy grunt_template = {
 // Rapidly fires bullets. Meant to be dangerous in swarms
 static const Enemy rapidfire_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.2,
     .hp = 2,
     .symbol = '&',
     .width = 1, .height = 1,
-    .cooldown_frames = -30,
+    .cooldown_frames = -5,
     .type = RAPIDFIRE,
     .state = INACTIVE,
     .behavior = STATIC,
@@ -75,7 +76,7 @@ static const Enemy rapidfire_template = {
 //Shoots lasers that travel in a straight line. A dangerous, high-priority target
 static const Enemy laser_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.25,
     .hp = 3,
     .symbol = '!',
     .width = 1, .height = 1,
@@ -89,7 +90,7 @@ static const Enemy laser_template = {
 //Fire bombs that explode into circles of bullets.A dangerous, high-priority target
 static const Enemy bomber_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.25,
     .hp =3,
     .symbol = '#',
     .width = 1, .height = 1,
@@ -103,7 +104,7 @@ static const Enemy bomber_template = {
 //Hunts the player while rapidly firing bullets. The most dangerous basic enemy
 static const Enemy hunter_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.6,
     .hp = 4,
     .symbol = 'H',
     .width = 1, .height = 1,
@@ -118,7 +119,7 @@ static const Enemy hunter_template = {
 //Reflects bullets. Designed to shield other enemies from player bullets
 static const Enemy reflector_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.5,
     .hp = 1,
     .symbol = 'R',
     .width = 1, .height = 1,
@@ -128,6 +129,58 @@ static const Enemy reflector_template = {
     .behavior = STATIC,
     .shape = NULL,
     .weapon = &GRUNT_RIFLE
+};
+//An enemy that does nothing but acts as a shield for other enemies
+static const Enemy barrier_template = {
+    .px = 0, .py = 0,
+    .dx = 1, .dy = 1,
+    .hp = 20,
+    .symbol = '=',
+    .width = 1, .height = 1,
+    .cooldown_frames = -30,
+    .type = BARRIER,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = NULL,
+    .weapon = NULL
+};
+//Layout for corvettes
+static const int corvette_row0_colors[] = {2, 6, 2}; // red, amber, red
+
+TileLayout Corvette_Layout = {
+.width = 3, .height = 1,
+.glyph_rows = {
+    "<#>"
+},
+.color_rows = {
+    corvette_row0_colors
+}
+};
+static const Enemy corvette_template = {
+    .px = 0, .py = 0,
+    .dx = 4, .dy = 0.5,
+    .hp = 10,
+    .symbol = '%',
+    .width = 3, .height = 1,
+    .cooldown_frames = 0,
+    .type = CORVETTE,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Corvette_Layout,
+    .weapon = &RAPIDFIRE_RIFLE
+};
+static const Enemy corvette_bomber_template = {
+    .px = 0, .py = 0,
+    .dx = 4, .dy = 0.5,
+    .hp = 10,
+    .symbol = '%',
+    .width = 3, .height = 1,
+    .cooldown_frames = 0,
+    .type = CORVETTE_BOMBER,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Corvette_Layout,
+    .weapon = &BOMB_ENEMY_WEAPON
 };
 //Layout for jets
 static const int jet_row0_colors[] = {2, 6, 2}; //red, amber, red
@@ -213,7 +266,7 @@ TileLayout Flying_Fortress_Layout = {
 };
 static const Enemy Flying_Fortress_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.3,
     .hp = 20,
     .symbol = '%',
     .width = 5, .height = 3,
@@ -223,6 +276,37 @@ static const Enemy Flying_Fortress_template = {
     .behavior = STATIC,
     .shape = &Flying_Fortress_Layout,
     .weapon = &FLYFORT_CANNON
+};
+static const int flyfort_invuln_row0_colors[] = {9, 6, 6, 6, 9}; //purple, amber, amber, amber, purple
+static const int flyfort_invuln_row1_colors[] = {9, 7, 7, 7, 9}; //purple, steel gray, steel gray, steel gray, purple
+static const int flyfort_invuln_row2_colors[] = {9, 9, 7, 9, 9}; //purple, purple, steel gray, purple, purple
+
+TileLayout Flying_Fortress_Layout_Invuln = {
+.width = 5, .height = 3,
+.glyph_rows = {
+    " ||| ",
+    "<###>",
+    " \\#/ "
+},
+.color_rows = {
+    flyfort_invuln_row0_colors, flyfort_invuln_row1_colors, flyfort_invuln_row2_colors
+}
+};
+//Special version of flying fortress to be used as miniboss
+static const Enemy Flying_Fortress_Boss_template = {
+    .px = 0, .py = 0,
+    .dx = 0.4, .dy = 0.4,
+    .hp = 40,
+    .symbol = '%',
+    .width = 5, .height = 3,
+    .cooldown_frames = -60,
+    .type = FLYFORT_SPECIAL,
+    .state = INACTIVE,
+    .behavior = STATIC,
+    .shape = &Flying_Fortress_Layout,
+    .weapon = &FLYFORT_CANNON,
+    .is_boss_part = 1,
+    .is_boss_core = 0
 };
 static const int laser_jet_row0_colors[] = {2, 6, 6, 2}; //red, amber, red
 static const int laser_jet_row1_colors[] = {2, 7, 7, 2}; //red, steel gray, red
@@ -242,7 +326,7 @@ TileLayout Laser_Jet_Layout = {
 };
 static const Enemy laser_jet_template = {
     .px = 0, .py = 0,
-    .dx = 3, .dy = 1,
+    .dx = 3, .dy = 0.5,
     .hp = 8,
     .symbol = '%',
     .width = 4, .height = 3,
@@ -413,7 +497,7 @@ TileLayout Frigate_Layout = {
 // Frigate 1 template
 static const Enemy frigate1_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.4,
     .hp = 25,
     .symbol = '%',
     .width = 5, .height = 5,
@@ -429,7 +513,7 @@ static const Enemy frigate1_template = {
 // Frigate 1 template
 static const Enemy frigate2_template = {
     .px = 0, .py = 0,
-    .dx = 1, .dy = 1,
+    .dx = 1, .dy = 0.4,
     .hp = 25,
     .symbol = '%',
     .width = 5, .height = 5,
@@ -510,6 +594,7 @@ static TileLayout Battleship_Layout_Invuln = {
         bship_row5, bship_invuln_row6, bship_invuln_row7, bship_row8, bship_row9
     }
 };
+
 // Template for battleship, boss of stage 2
 static const Enemy Battleship_template = {
     .px = 0, .py = 0,
@@ -526,7 +611,75 @@ static const Enemy Battleship_template = {
     .is_boss_part = 1,
     .is_boss_core = 1
 };
+//Tile layout for the mothership, the game's final boss
+static const int mship_row0_colors[30] = {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9};
+static const int mship_row1_colors[30] = {9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9};
+static const int mship_row2_colors[30] = {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9};
+static const int mship_row3_colors[30] = {9,9,9,9,9,8,9,9,9,9,9,9,2,2,2,2,2,2,9,9,9,9,9,9,9,9,9,9,9,9};
+static const int mship_row4_colors[30] = {9,9,9,9,9,9,9,9,9,9,9,9,2,2,2,2,2,2,9,9,9,9,9,8,9,9,9,9,9,9};
+static const int mship_row5_colors[30] = {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9};
+static const int mship_row6_colors[30] = {9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9};
+static const int mship_row7_colors[30] = {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9};
 
+static TileLayout Mothership_Layout = {
+    .width = 30, .height = 8,
+    .glyph_rows = {
+        "        ##############        ",
+        "    ######~###############    ",
+        "  ##################~#######  ",
+        " #####~#####......########### ",
+        " ###########......#####~##### ",
+        "  #############~############  ",
+        "    ##########~###########    ",
+        "        ##############        "
+    },
+    .color_rows = {
+        mship_row0_colors, mship_row1_colors, mship_row2_colors, mship_row3_colors,
+        mship_row4_colors, mship_row5_colors, mship_row6_colors, mship_row7_colors
+    }
+};
+static const int mship_invuln_row0_colors[30] = {0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0};
+static const int mship_invuln_row1_colors[30] = {0,0,0,0,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,0,0,0,0};
+static const int mship_invuln_row2_colors[30] = {0,0,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,0,0};
+static const int mship_invuln_row3_colors[30] = {0,9,9,9,9,9,8,9,9,9,9,9,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,0};
+static const int mship_invuln_row4_colors[30] = {0,9,9,9,9,9,9,9,9,9,9,9,8,8,8,8,8,8,9,9,9,9,9,8,9,9,9,9,9,0};
+static const int mship_invuln_row5_colors[30] = {0,0,9,9,9,9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9,9,9,9,0,0};
+static const int mship_invuln_row6_colors[30] = {0,0,0,0,9,9,9,9,9,9,9,9,9,9,8,9,9,9,9,9,9,9,9,9,9,9,0,0,0,0};
+static const int mship_invuln_row7_colors[30] = {0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0};
+
+static TileLayout Mothership_Layout_Invuln = {
+    .width = 30, .height = 8,
+    .glyph_rows = {
+        "        ##############        ",
+        "    ######~###############    ",
+        "  ##################~#######  ",
+        " #####~#####......########### ",
+        " ###########......#####~##### ",
+        "  #############~############  ",
+        "    ##########~###########    ",
+        "        ##############        "
+    },
+    .color_rows = {
+        mship_invuln_row0_colors, mship_invuln_row1_colors, mship_invuln_row2_colors, mship_invuln_row3_colors,
+        mship_invuln_row4_colors, mship_invuln_row5_colors, mship_invuln_row6_colors, mship_invuln_row7_colors
+    }
+};
+
+static const Enemy Mothership_template = {
+    .px = 0, .py = 0,
+    .dx = 0.1, .dy = 0.1,
+    .hp = 75,
+    .symbol = '%',
+    .width = 30, .height = 8,
+    .cooldown_frames = -30,
+    .type = MOTHERSHIP,
+    .state = INACTIVE,
+    .behavior = MOTHERSHIP_SPECIAL,
+    .shape = &Mothership_Layout,
+    .weapon = NULL,
+    .is_boss_part = 1,
+    .is_boss_core = 1
+};
 //Function to find a free slot in the enemy pool
 int findfreeslot(void){
     for(int i=0; i < MAX_ENEMIES; i++){
@@ -536,7 +689,71 @@ int findfreeslot(void){
     }
 return -1; //No valid slot found
 }
+//Helper functions to spawn specific waves of enemies
+//Meant for use by the mothership boss
+//Spawns barriers along three sides of the boss
+void Spawn_Barrier(Enemy caller){
+    for(int i = 0; i < caller.width; i++){
+spawn_enemy(BARRIER, STATIC, false, caller.px + i,
+caller.py + caller.height + 1, 0);
+    }
+     for(int i = 0; i < caller.height; i++){
+spawn_enemy(BARRIER, STATIC, false, caller.px -1,
+caller.py + i, 0);
+    }
+     for(int i = 0; i < caller.height; i++){
+spawn_enemy(BARRIER, STATIC, false, caller.px + caller.width + 1,
+caller.py + i, 0);
+    }
+}
+void Delete_Barriers(Enemy *enemies){
+    for(int i = 0; i < MAX_ENEMIES; i++){
+if(enemies[i].type == BARRIER) enemies[i].state = DEAD;
+    }
+}
+//Spawns waves of weak fodder enemies
+void Rapidfire_Wave(Enemy caller, float number, float spacing){
+    for(int i = 0; i < number; i++){
+spawn_enemy(RAPIDFIRE, MOVEVERTICALLY, false, caller.px + i * (caller.width/spacing),
+caller.py + caller.height + 2, 0);
+    }
+}
 
+//Spawns dangerous hunters
+void Hunter_Wave(Enemy caller, float number, float spacing){
+    for(int i = 1; i < (number/2); i++){
+spawn_enemy(HUNTER, HUNT_PLAYER_FAR, false, caller.px ,
+caller.py + i* (caller.height/spacing), 0);
+spawn_enemy(HUNTER, HUNT_PLAYER_FAR, false, caller.px ,
+caller.py + i* (caller.height/spacing), 0);
+    }
+}
+
+//Spawns lots of stationary bombers
+void Bomber_Wave(Enemy caller, float number, float spacing){
+    for(int i = 1; i < number; i++){
+spawn_enemy(BOMBER, STATIC, false, caller.px + i* (caller.width/spacing),
+caller.py + caller.height + 3, 0);
+    }
+}
+
+//Spawns 4 corvettes along the edges of the screen that try to flank the player
+void Corvettes_flanking(Enemy caller){
+    for(int i = 1; i < 2; i++){
+spawn_enemy(CORVETTE, STRAFE_VERTICAL, TRUE, 5,
+caller.py + caller.height + 1, 20);
+spawn_enemy(CORVETTE, STRAFE_VERTICAL, TRUE, 95,
+caller.py + caller.height + 1, 20);
+    }   
+}
+
+//Spawns some corvettes that strafe below the mothershi[]
+void Corvette_Wave(Enemy caller, float number, float spacing){
+    for(int i = 1; i < number; i++){
+spawn_enemy(CORVETTE, STRAFE_HORIZONTAL, false, caller.px + i*(caller.width/spacing),
+caller.py + caller.height + 3, 100);
+    }
+}
 //Finds the address of a template and returns it. Add a new case each time a new template is made
 const Enemy* get_template(EnemyType type) {
     switch (type) {
@@ -556,6 +773,10 @@ const Enemy* get_template(EnemyType type) {
         case JET_BOSS:          return &jet_boss_template;
         case BATTLESHIP_BOSS:    return &Battleship_template;
         case REFLECTOR:         return &reflector_template;
+        case BARRIER:           return &barrier_template;
+        case CORVETTE:          return &corvette_template;
+        case FLYFORT_BOSS:      return &Flying_Fortress_Boss_template;
+        case MOTHERSHIP:        return &Mothership_template;
         default:        return NULL;
     }
 }
@@ -845,14 +1066,14 @@ if (jet_state_timer % 120 == 0 && boss_invulnerable != TRUE){
     else if (enemies[i].weapon == &BOMB_ENEMY_WEAPON) enemies[i].weapon = &JET_CANNON;
 }
 static bool jet_invuln_used = FALSE;
-if (enemies[i].hp < 5 && boss_invulnerable != TRUE && jet_invuln_used == FALSE){
+if (enemies[i].hp < 15 && boss_invulnerable != TRUE && jet_invuln_used == FALSE){
     jet_invuln_used = TRUE;
     boss_invulnerable = TRUE;
     enemies[i].shape  = &Jet_Layout_Invuln;
     enemies[i].weapon = &FLYFORT_CANNON;
     jet_state_timer = 0;
 }
-if (boss_invulnerable == TRUE && jet_state_timer >= 90){
+if (boss_invulnerable == TRUE && jet_state_timer >= 120){
     boss_invulnerable = FALSE;
     enemies[i].shape  = &Jet_Layout;
     jet_state_timer = 0;
@@ -957,12 +1178,127 @@ fire_weapon(&RAPIDFIRE_RIFLE, enemies[i].px + 25, enemies[i].py +8, 270, FALSE);
 }
 
 break;
+case FLYFORT_SPECIAL:
+enemies[i].px = enemies[i].px + enemies[i].dx;
+//Reverses direction if it goes too far from its anchor point or hits a border
+if (fabs(enemies[i].anchor_px - enemies[i].px) > enemies[i].strafe){
+  enemies[i].dx = -enemies[i].dx; 
+  enemies[i].px = enemies[i].px + enemies[i].dx;
+}
+if ((int)enemies[i].px + enemies[i].width - 1 >= PLAYFIELD_W){
+   enemies[i].dx = -enemies[i].dx;
+   enemies[i].px = PLAYFIELD_W - enemies[i].width;
+}
+if  (enemies[i].px + enemies[i].width -1 <= 0 ){
+enemies[i].dx = -enemies[i].dx;
+enemies[i].px =  enemies[i].width;
+}
+static bool flyfort_invuln_used = FALSE;
+static int flyfort_tick = 0;
+flyfort_tick++;
+if (flyfort_tick % 180 == 0){
+if(enemies[i].weapon == &FLYFORT_CANNON)enemies[i].weapon = &shotgun;
+else if(enemies[i].weapon == &shotgun)enemies[i].weapon = &FLYFORT_CANNON;
+}
+if(enemies[i].hp < 10 && flyfort_invuln_used == FALSE){
+    flyfort_invuln_used = TRUE;
+    boss_invulnerable = TRUE;
+    flyfort_tick = 0;
+}
+if(flyfort_tick % 180 == 0) boss_invulnerable = FALSE; 
+break;
+case MOTHERSHIP_SPECIAL:
+static int mothership_tick = 0;
+mothership_tick++;
+#define MOTHERSHIP_INVULN_TIME 300
+static bool mothership_invuln_used1= FALSE, mothership_invuln_used2= FALSE, mothership_invuln_used3= FALSE,
+mothership_invuln_used4= FALSE, mothership_invuln_used5= FALSE;
+if(enemies[i].hp < 60 && mothership_invuln_used1 == FALSE){
+    mothership_tick = 0;
+    mothership_invuln_used1 = TRUE;
+    boss_invulnerable = TRUE;
+    Delete_Barriers(enemies);
+    Spawn_Barrier(enemies[i]);
+    state = SPECIAL_ATTACK_1;
+    enemies[i].shape = &Mothership_Layout_Invuln;
+}
+if(enemies[i].hp < 50 && mothership_invuln_used2 == FALSE){
+    mothership_tick = 0;
+    mothership_invuln_used2 = TRUE;
+    boss_invulnerable = TRUE;
+    Delete_Barriers(enemies);
+    Spawn_Barrier(enemies[i]);
+    state = SPECIAL_ATTACK_2;
+    enemies[i].shape = &Mothership_Layout_Invuln;
+}
+if(enemies[i].hp < 40 && mothership_invuln_used3 == FALSE){
+    mothership_tick = 0;
+    mothership_invuln_used3 = TRUE;
+    boss_invulnerable = TRUE;
+    Delete_Barriers(enemies);
+    Spawn_Barrier(enemies[i]);
+    state = SPECIAL_ATTACK_3;
+    enemies[i].shape = &Mothership_Layout_Invuln;
+}
+if(enemies[i].hp < 20 && mothership_invuln_used4 == FALSE){
+    mothership_tick = 0;
+    mothership_invuln_used4 = TRUE;
+    boss_invulnerable = TRUE;
+    Delete_Barriers(enemies);
+    Spawn_Barrier(enemies[i]);
+    state = SPECIAL_ATTACK_4;
+    enemies[i].shape = &Mothership_Layout_Invuln;
+}
+if(enemies[i].hp < 10 && mothership_invuln_used5 == FALSE){
+    mothership_tick = 0;
+    mothership_invuln_used5 = TRUE;
+    boss_invulnerable = TRUE;
+    Delete_Barriers(enemies);
+    Spawn_Barrier(enemies[i]);
+    state = SPECIAL_ATTACK_5;
+    enemies[i].shape = &Mothership_Layout_Invuln;
+}
+if(mothership_tick >= MOTHERSHIP_INVULN_TIME && boss_invulnerable == TRUE){
+    boss_invulnerable = FALSE;
+    mothership_tick = 0;
+    enemies[i].shape = &Mothership_Layout;
+}
+if(mothership_tick % 150 == 0) Rapidfire_Wave(enemies[i], 8, 8);
+if(mothership_tick % 240 == 0) Corvette_Wave(enemies[i],1,1);
+if(state == SPECIAL_ATTACK_1){
+ if(mothership_tick == 100) Bomber_Wave(enemies[i],3,3);  
+ if(mothership_tick == 200) Corvettes_flanking(enemies[i]);  
+ if(mothership_tick == 200) Hunter_Wave(enemies[i],4,4);  
+ if(mothership_tick == 299) Hunter_Wave(enemies[i],4,4);   
+}
+if(state == SPECIAL_ATTACK_2){
+ if(mothership_tick == 100) Hunter_Wave(enemies[i],4,6);   
+ if(mothership_tick == 200) Corvettes_flanking(enemies[i]); 
+ if(mothership_tick == 299) Corvette_Wave(enemies[i],2,2); 
+}
+if(state == SPECIAL_ATTACK_3){
+ if(mothership_tick == 100) Bomber_Wave(enemies[i],5,5);   
+ if(mothership_tick == 200) Corvettes_flanking(enemies[i]);
+}
+if(state == SPECIAL_ATTACK_4){
+    if(mothership_tick == 50)Hunter_Wave(enemies[i],2,2);
+    if(mothership_tick == 100)Bomber_Wave(enemies[i],2,2);
+    if(mothership_tick == 200) Corvettes_flanking(enemies[i]);
+    if(mothership_tick == 250)Hunter_Wave(enemies[i],2,2);
+}
+if(state == SPECIAL_ATTACK_5){
+    if(mothership_tick == 50)Hunter_Wave(enemies[i],3,3);
+    if(mothership_tick == 100)Bomber_Wave(enemies[i],2,2);
+    if(mothership_tick == 200) Corvettes_flanking(enemies[i]);
+    if(mothership_tick == 250)Hunter_Wave(enemies[i],3,3);
+}
 default:
 break;
 } 
 }
 }
 }
+
 //Function that erases the old positions of enemies each frame
 void erase_enemies(Enemy *enemies){
     for(int i=0; i < MAX_ENEMIES; i++){
@@ -1038,7 +1374,7 @@ void fire_enemies(Enemy *enemies, Player *player){
     
     for (int i =0 ; i < MAX_ENEMIES ; i++){
     float fire_angle = 270; // default downward angle, same as current behavior
-
+if(enemies[i].weapon == NULL) continue;
 if (enemies[i].aimed == TRUE) {
     float dx = player->px - enemies[i].px;
     float dy = player->py - (enemies[i].py - 1); // matches the py-1 fire origin you already use

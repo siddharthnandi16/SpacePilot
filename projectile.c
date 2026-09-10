@@ -132,8 +132,8 @@ const WeaponType RAPIDFIRE_RIFLE = {
     ,.weapon_id = JET_CANNON_ID
 };
 const WeaponType FLYFORT_CANNON = {
-   .display_name = "autocannon", .cooldown_frames = 45, .number = 1, .angle= 90, .type= BOMB, .modes = NORMAL
-    ,.weapon_id = FLYFORT_CANNON_ID
+   .display_name = "autocannon", .cooldown_frames = 75, .number = 3, .angle= 90, .type= BOMB, .modes = NORMAL
+    ,.weapon_id = FLYFORT_CANNON_ID, .offset_angle = 45
 };
  const WeaponType CARRIER_CANNON = {
   .display_name = "autocannon",  .cooldown_frames = 150, .number = 3, .angle= 90, .type= BOMB, .modes = NORMAL

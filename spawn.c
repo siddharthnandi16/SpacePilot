@@ -398,6 +398,8 @@ const int spawn_table_2_count = sizeof(spawn_table_2)/sizeof(spawn_table_2[0]);
 // Orbital Defense Station / Alien Hive / Gravity Well Generator / Drone Swarm
 // Mothership / Corvette Pair / Pulse Cannon / Interceptor).
 spawn_entry spawn_table_3[] = {
+    //Test mothership spawn
+    { .trigger = ROW, .trigger_time = 0, .type = MOTHERSHIP, .behavior = MOTHERSHIP_SPECIAL, .aimed = FALSE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 10, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 12, .py = 3.5999999999999996, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 10, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 14, .py = 2.4, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 10, .type = RAPIDFIRE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 16, .py = 1.2, .strafe = 6, .fired = FALSE },
@@ -489,8 +491,12 @@ spawn_entry spawn_table_3[] = {
     { .trigger = ROW, .trigger_time = 960, .type = BOMBER, .behavior = STRAFE_VERTICAL, .aimed = FALSE, .px = 44, .py = 3, .strafe = 6, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 960, .type = RAPIDFIRE, .behavior = STRAFE_VERTICAL, .aimed = FALSE, .px = 48, .py = 3, .strafe = 6, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 960, .type = BOMBER, .behavior = STRAFE_VERTICAL, .aimed = FALSE, .px = 52, .py = 3, .strafe = 6, .fired = FALSE },
-    // ---- STAGE 3 MINIBOSS 1 PLACEHOLDER ----
-    // { .trigger = ROW, .trigger_time = 1000, .type = <BOSS_TYPE>, .behavior = <BOSS_BEHAVIOR>, .aimed = FALSE, .px = 50, .py = 2, .strafe = 0, .fired = FALSE },
+    // ---- STAGE 3 MINIBOSS 1: 2 special jet and three corvettes
+    { .trigger = ROW, .trigger_time = 1000, .type = JET_BOSS, .behavior = JET_SPECIAL, .aimed = TRUE, .px = 60, .py = 2, .strafe = 0, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1000, .type = CORVETTE, .behavior = STRAFE_HORIZONTAL, .aimed = TRUE, .px = 50, .py = 5, .strafe = 80, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1000, .type = CORVETTE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 60, .py = 5, .strafe = 80, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 1000, .type = CORVETTE_BOMBER, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 40, .py = 5, .strafe = 80, .fired = FALSE },
+    // End of boss wave 1
     { .trigger = ROW, .trigger_time = 1010, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 69, .py = 0, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 1010, .type = RAPIDFIRE, .behavior = STATIC, .aimed = FALSE, .px = 69, .py = 2, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 1010, .type = BOMBER, .behavior = STATIC, .aimed = FALSE, .px = 69, .py = 4, .strafe = 0, .fired = FALSE },
@@ -575,8 +581,12 @@ spawn_entry spawn_table_3[] = {
     { .trigger = ROW, .trigger_time = 1900, .type = RAPIDFIRE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 51, .py = 1.2, .strafe = 6, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 1900, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 53, .py = 2.4, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 1900, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 55, .py = 3.5999999999999996, .strafe = 0, .fired = FALSE },
-    // ---- STAGE 3 MINIBOSS 2 PLACEHOLDER ----
-    // { .trigger = ROW, .trigger_time = 2000, .type = <BOSS_TYPE>, .behavior = <BOSS_BEHAVIOR>, .aimed = FALSE, .px = 50, .py = 2, .strafe = 0, .fired = FALSE },
+    // ---- STAGE 3 MINIBOSS 2: One flying fortress, one jet, two corvettes
+    { .trigger = ROW, .trigger_time = 2000, .type = FLYFORT_BOSS, .behavior = FLYFORT_SPECIAL, .aimed = FALSE, .px = 50, .py = 2, .strafe = 80, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 2000, .type = JET_BOSS, .behavior = JET_SPECIAL, .aimed = FALSE, .px = 40, .py = 2, .strafe = 0, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 2000, .type = CORVETTE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 60, .py = 5, .strafe = 80, .fired = FALSE },
+    { .trigger = ROW, .trigger_time = 2000, .type = CORVETTE_BOMBER, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 40, .py = 5, .strafe = 80, .fired = FALSE },
+    //End of 2nd boss wave
     { .trigger = ROW, .trigger_time = 2010, .type = GRUNT, .behavior = STATIC, .aimed = FALSE, .px = 91, .py = 0, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 2040, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 49, .py = 0, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 2040, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 52, .py = 0, .strafe = 0, .fired = FALSE },
@@ -666,8 +676,8 @@ spawn_entry spawn_table_3[] = {
     { .trigger = ROW, .trigger_time = 2950, .type = RAPIDFIRE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 66, .py = 1.2, .strafe = 6, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 2950, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 68, .py = 2.4, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 2950, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 70, .py = 3.5999999999999996, .strafe = 0, .fired = FALSE },
-    // ---- STAGE 3 BOSS PLACEHOLDER (e.g. BATTLESHIP_BOSS) ----
-    // { .trigger = ROW, .trigger_time = 3000, .type = <BOSS_TYPE>, .behavior = <BOSS_BEHAVIOR>, .aimed = FALSE, .px = 50, .py = 2, .strafe = 0, .fired = FALSE },
+  // ---- STAGE 3 BOSS (Mothership)
+    { .trigger = ROW, .trigger_time = 3000, .type = MOTHERSHIP, .behavior = MOTHERSHIP_SPECIAL, .aimed = FALSE, .px = 50, .py = 6, .strafe = 0, .fired = FALSE },
 };
 const int spawn_table_3_count = sizeof(spawn_table_3) / sizeof(spawn_table_3[0]);
 spawn_entry spawn_table_4[] = {};

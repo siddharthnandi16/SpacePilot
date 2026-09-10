@@ -1,6 +1,6 @@
 #ifndef ENEMY_H
 #define ENEMY_H
-#define MAX_ENEMIES 50
+#define MAX_ENEMIES 250
 //Backup of enemy spawning pool 
 extern Enemy enemies_backup[MAX_ENEMIES];   
 int findfreeslot(void);

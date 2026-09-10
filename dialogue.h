@@ -11,6 +11,8 @@ int color;
 char *text; 
 }dialogue_entry;
 extern dialogue_entry dialogue_table_1[];
+extern dialogue_entry dialogue_table_2[];
+extern dialogue_entry dialogue_table_3[];
 // Commented out because it was inexplicably failing to work
 //extern WINDOW *dialogue_win;
 #define DIALOGUE_HEIGHT 1   

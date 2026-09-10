@@ -27,12 +27,19 @@ dialogue_entry dialogue_table_1[MAX_DIALOGUE]={
     [4] ={
 .trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 12, 
 .fired = FALSE, .trigger_time = 360, .text = "MISSION CONTROL:Shoot down any enemy aircraft you see.Beware the vast enemy fleet!",
-    },
-    [5] ={
-.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 11, 
-.fired = FALSE, .trigger_time = 520, .text = "MISSION CONTROL: WARNING! Enemy shrapnel bombers incoming! ",
-    },
-    
+    }   
+};
+dialogue_entry dialogue_table_2[MAX_DIALOGUE]={
+    [0] ={
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
+.fired = FALSE, .trigger_time = 0, .text = "Press 4 to try out your new weapon!"
+    }
+};
+dialogue_entry dialogue_table_3[MAX_DIALOGUE]={
+    [0] ={
+.trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
+.fired = FALSE, .trigger_time = 0, .text = "Press 5 to try out your new weapon!"
+    }
 };
 //Commented out since it is now redundant
 /* WINDOW *dialogue_win = NULL;

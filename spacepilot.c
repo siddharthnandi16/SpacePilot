@@ -87,6 +87,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
     mvprintw(PLAYFIELD_H/2 + offset_y, PLAYFIELD_W/2 + offset_x, "Continue? (y/n)");
     refresh();
     continue_choice = getch();
+    if(continue_choice != 'y' || 'n') continue;
     if (continue_choice == 'y'){
         nodelay(stdscr, TRUE);
         mvprintw(PLAYFIELD_H/2+ offset_y, PLAYFIELD_W/2 + offset_x, "%-15s", "");
@@ -181,7 +182,7 @@ init_color(CRT_GREEN, 282, 910, 416);
     init_pair(6, AMBER_COLOR, COLOR_BLACK); //Color for HUD
     init_pair(7, STEEL_GRAY_COLOR, COLOR_BLACK); //Used for borders
     init_pair(8, ACID_GREEN_COLOR, COLOR_BLACK);
-    init_pair(9,     PURPLE_COLOR,     COLOR_BLACK);
+    init_pair(9,  PURPLE_COLOR,     COLOR_BLACK);
     init_pair(10, CRT_GREEN, CRT_BG); //Colors for future dialogue screen
     init_pair(11, COLOR_RED, CRT_BG); 
     init_pair(12, AMBER_COLOR, CRT_BG); 
@@ -220,6 +221,7 @@ gameloop(&player, max_x, max_y, ENDLESS_MODE);
 break;
 case LEVEL_SELECT:
 erase();
+reset_level_tables(Current_Level);
 Select_Level(Current_Level, &current_level);
 Draw_Char_Select(&player);
 gameloop(&player, max_x, max_y, LEVEL_SELECT);
