@@ -26,6 +26,7 @@ Planned additional features: Music, Power-Ups, unlockable upgrades, screen-clear
 #include "collision.h"
 #include "hud.h"
 #include "miniaudio.h"
+#include "highscores.h"
 int game_over =0; //1= true, 0=false
 //This function sets the player's current movement speed to their top speed
 void setplayermovement(struct Player *player){
@@ -146,6 +147,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         continue;
     }
     if(continue_choice == 'n'){
+        Write_high_scores(player);
         nodelay(stdscr, TRUE);
         scrollok(stdscr, TRUE);
         reset_all(max_x, max_y);
@@ -225,7 +227,7 @@ init_audio();
 InitialiseSoundEffects(loaded_sounds);
 //Placeholder from old audio system, now superseded by miniaudio
 //PlaySoundA("Mars.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
- GameMode game_mode = drawTitleScreen();
+ game_mode = drawTitleScreen();
  erase();
     while(game_mode != MODE_QUIT){
 switch(game_mode){
@@ -251,6 +253,7 @@ case HIGH_SCORES:
 break;
 //Placeholder case for unimplemented feature
 case MUSIC_ROOM:
+Music_Room();
 break;
 default:
  break; 

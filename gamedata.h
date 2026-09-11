@@ -128,5 +128,6 @@ extern bool boss_invulnerable;
 extern bool boss_fight_ongoing;
 extern bool Level_Complete;
 extern char continue_choice;
-extern bool continued;
+extern bool continued; //Meant to gate access to a secret level that will be added later
+extern GameMode game_mode;
 #endif

@@ -11,6 +11,7 @@
 #include "level.h"
 #define NUM_CHAR_OPTIONS (sizeof(char_options) / sizeof(char_options[0]))
 #define NUM_LEVEL_OPTIONS (sizeof(Level_options) / sizeof(Level_options[0]))
+#define NUM_MUSIC_OPTIONS (sizeof(Song_options) / sizeof(Song_options[0]))
 GameMode drawTitleScreen(void){ 
    PlaySoundEffect(&loaded_sounds[Titlescreen_MUSIC]);
     const char *menu_options[] = {
@@ -179,7 +180,9 @@ const char *Level_options[] = {
     "Level 2",
     "Level 3"
 };
+//Function to select a level
 void Select_Level(Level_Data *Current_Level, int *current_level){
+    ma_sound_start(&loaded_sounds[Titlescreen_MUSIC]);
     int ch, max_x, max_y, level_selected = 0;
     bool level_selection_done = FALSE;
     nodelay(stdscr, FALSE);
@@ -242,4 +245,77 @@ for (int i = 0; i < NUM_LEVEL_OPTIONS; i++) {
     }
     }
     
+}
+const char *Song_options[] = {
+    "Titlescreen - Map",
+    "Level 1 - Mars",
+    "Level 2 - Venus",
+    "Level 3 - Boss Fight",
+    "Exit Music Room" //Here corresponds to case 4
+};
+// Function to play selected music
+void Music_Room(){
+int ch, max_x, max_y, song_selected = 0;
+    bool music_room_active = TRUE;
+    nodelay(stdscr, TRUE);
+    int current_soundtrack = Titlescreen_MUSIC;
+    erase();
+    while(music_room_active == TRUE){
+for (int i = 0; i < NUM_MUSIC_OPTIONS; i++) {
+        if (i == song_selected) {
+            attron(A_REVERSE);
+        }
+        mvprintw(offset_y + i, offset_x + PLAYFIELD_W/3, "%s", Song_options[i]);
+        if (i == song_selected) {
+            attroff(A_REVERSE);
+        }
+    }
+    ch = getch();
+    switch(ch) {
+        case KEY_RESIZE:
+        erase();
+        resize_term(0, 0);
+        getmaxyx(stdscr, max_y, max_x);
+        update_playfield_offset(max_x, max_y);
+        refresh();
+        syncConsoleBufferToWindow();
+        break;
+        case 60419:  // Up
+            song_selected = (song_selected - 1 + NUM_MUSIC_OPTIONS) % NUM_MUSIC_OPTIONS;
+            break;
+        case 60418:  // Down
+            song_selected = (song_selected + 1) % NUM_MUSIC_OPTIONS;
+            break;
+        default:
+        break;
+    }
+    switch(song_selected){
+        case Titlescreen_MUSIC:
+        ma_sound_stop(&loaded_sounds[current_soundtrack]);
+        current_soundtrack = Titlescreen_MUSIC;
+        ma_sound_start(&loaded_sounds[current_soundtrack]);
+        break;
+        case Level_1:
+        ma_sound_stop(&loaded_sounds[current_soundtrack]);
+        current_soundtrack = Level_1;
+        ma_sound_start(&loaded_sounds[current_soundtrack]);
+        break;
+        case Level_2:
+        ma_sound_stop(&loaded_sounds[current_soundtrack]);
+        current_soundtrack = Level_2;
+        ma_sound_start(&loaded_sounds[current_soundtrack]);
+        break;
+        case Level_3:
+        ma_sound_stop(&loaded_sounds[current_soundtrack]);
+        current_soundtrack = Level_3;
+        ma_sound_start(&loaded_sounds[current_soundtrack]);
+        break;
+        case 4: //Quit music room
+        ma_sound_stop(&loaded_sounds[current_soundtrack]);
+        music_room_active = FALSE;
+        break;
+        default:
+        break;
+    }
+    }
 }

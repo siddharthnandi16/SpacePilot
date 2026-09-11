@@ -5,4 +5,5 @@
 GameMode drawTitleScreen(void);
 void Draw_Char_Select(Player *player);
 void Select_Level(Level_Data *Current_Level, int *current_level);
+void Music_Room();
 #endif
