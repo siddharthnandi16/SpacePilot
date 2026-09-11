@@ -52,7 +52,8 @@ int scrollanddraw(int *old_screen_px, int *old_screen_py){
     wnoutrefresh(stdscr);
     return rows_scrolled;
 }
-
+//Sound count and sound table currently do nothing and should be ignored
+//Functionality for them is planned at a later date
 Level_Data level_4={
 .spawn_table = spawn_table_4,
 .spawn_count = 1,
@@ -94,6 +95,9 @@ void init_levels(void) {
     level_1.spawn_count    = spawn_table_1_count;
     level_2.spawn_count    = spawn_table_2_count;
     level_3.spawn_count    = spawn_table_3_count;
+    level_1.dialogue_count = dialogue_table_1_count;
+    level_2.dialogue_count = dialogue_table_2_count;
+    level_3.dialogue_count = dialogue_table_3_count;
 }
 //Variable that stores the current level
  Level_Data *Current_Level = &level_1;

@@ -189,7 +189,7 @@ touchwin(stdscr);
 #define ACID_GREEN_COLOR  10
 #define PURPLE_COLOR      11
 #define CRT_BG 12
-#define CRT_GREEN 13
+#define CRT_GREEN 14
 init_color(AMBER_COLOR, 1000, 690, 0);
 init_color(STEEL_GRAY_COLOR, 541, 608, 659);
     init_color(ACID_GREEN_COLOR, 651, 1000, 0);
@@ -250,6 +250,9 @@ gameloop(&player, max_x, max_y, LEVEL_SELECT);
 break;
 //Placeholder case for unimplemented feature
 case HIGH_SCORES:
+Read_Scores();
+Sort_Score_Array(scores_story, scores_endless);
+Display_High_Scores();
 break;
 //Placeholder case for unimplemented feature
 case MUSIC_ROOM:

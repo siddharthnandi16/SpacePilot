@@ -29,18 +29,21 @@ dialogue_entry dialogue_table_1[MAX_DIALOGUE]={
 .fired = FALSE, .trigger_time = 360, .text = "MISSION CONTROL:Shoot down any enemy aircraft you see.Beware the vast enemy fleet!",
     }   
 };
+const int dialogue_table_1_count = sizeof(dialogue_table_1)/sizeof(dialogue_table_1[0]);
 dialogue_entry dialogue_table_2[MAX_DIALOGUE]={
     [0] ={
 .trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
 .fired = FALSE, .trigger_time = 0, .text = "Press 4 to try out your new weapon!"
     }
 };
+const int dialogue_table_2_count = sizeof(dialogue_table_2)/sizeof(dialogue_table_2[0]);
 dialogue_entry dialogue_table_3[MAX_DIALOGUE]={
     [0] ={
 .trigger = ROW, .auto_scroll=TRUE, .bold = TRUE, .color = 10, 
 .fired = FALSE, .trigger_time = 0, .text = "Press 5 to try out your new weapon!"
     }
 };
+const int dialogue_table_3_count = sizeof(dialogue_table_3)/sizeof(dialogue_table_3[0]);
 //Commented out since it is now redundant
 /* WINDOW *dialogue_win = NULL;
 void init_dialogue_window(int offset_y, int offset_x){
