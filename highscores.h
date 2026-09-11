@@ -1,6 +1,6 @@
 #ifndef SCORES_H
 #define SCORES_H
-#define MAX_SCORES_ALLOWED 1000
+#define MAX_SCORES_ALLOWED 500
 #define NAME_MAX_LEN 40
 #define MAX_SCORES_DISPLAYED 20
 //Struct for storing high scores once they have been read
