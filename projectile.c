@@ -67,7 +67,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = MISSILE_PLAYER_ID, .offset_angle = 10
 };
  const WeaponType plasmarifle = {
-   .display_name = "Plasma Gun", .cooldown_frames = 6, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
+   .display_name = "Plasma Gun", .cooldown_frames = 4, .number = 1, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMARIFLE_PLAYER_ID
 };
   const WeaponType empbomb = {
@@ -87,7 +87,7 @@ Projectile projectiles_backup[MAX_PROJECTILES] = {
     ,.weapon_id = LASERCANNON_ID, .offset_angle = 15
 };
   const WeaponType plasmacannon = {
-   .display_name = "Plasma Howitzer", .cooldown_frames = 30, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
+   .display_name = "Plasma Howitzer", .cooldown_frames = 18, .number = 5, .angle= 90, .type= PLASMA, .modes = NORMAL
     ,.weapon_id = PLASMACANNON_ID, .offset_angle = 15
 };
 const WeaponType spiral_cannon = {
@@ -103,8 +103,8 @@ const WeaponType Grand_Cannon = {
     ,.weapon_id = GRAND_CANNON_ID, .offset_angle = 20, .omnidirectional = FALSE
 };
 const WeaponType Plasma_Storm = {
-   .display_name = "Storm of Plasma", .cooldown_frames = 10, .number = 9, .angle= 90, .type= PLASMA, .modes = NORMAL
-    ,.weapon_id = GRAND_CANNON_ID, .offset_angle = 7.5, .omnidirectional = FALSE
+   .display_name = "Storm of Plasma", .cooldown_frames = 12, .number = 7, .angle= 90, .type= PLASMA, .modes = NORMAL
+    ,.weapon_id = GRAND_CANNON_ID, .offset_angle = 5, .omnidirectional = FALSE
 };
 //List of enemy weapon types. All enemy weapon types are capitalised
 const WeaponType GRUNT_RIFLE = {
@@ -267,7 +267,7 @@ projectiles[slot + i].strafe = 0;
 projectiles[slot + i].turn_rate = 0;
 projectiles[slot + i].dx = 0;
 projectiles[slot + i].dy = -3;
-projectiles[slot + i].damage = 3;
+projectiles[slot + i].damage = 2;
 break;
 case EMP:
 projectiles[slot + i].symbol = '-';

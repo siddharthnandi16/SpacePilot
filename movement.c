@@ -8,6 +8,7 @@
 #include "projectile.h"
 #include "hud.h"
 #include "dialogue.h"
+#include "sound.h"
 int quit = 0; //1= true, 0= false
 int move_player(Player *player){
     int max_x, max_y;
@@ -60,6 +61,9 @@ new_py = fminf(fmaxf(new_py, 0), PLAYFIELD_H - 1);
         nodelay(stdscr, TRUE);
         paused = FALSE;
         erase();
+     ma_sound_stop(&loaded_sounds[Level_1]);
+    ma_sound_stop(&loaded_sounds[Level_2]);
+    ma_sound_stop(&loaded_sounds[Level_3]);
         wnoutrefresh(stdscr);
     }
     if (choice == 'p'){

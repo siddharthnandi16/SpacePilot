@@ -583,7 +583,6 @@ spawn_entry spawn_table_3[] = {
     { .trigger = ROW, .trigger_time = 1900, .type = REFLECTOR, .behavior = STATIC, .aimed = FALSE, .px = 55, .py = 3.5999999999999996, .strafe = 0, .fired = FALSE },
     // ---- STAGE 3 MINIBOSS 2: One flying fortress, one jet, two corvettes
     { .trigger = ROW, .trigger_time = 2000, .type = FLYFORT_BOSS, .behavior = FLYFORT_SPECIAL, .aimed = FALSE, .px = 50, .py = 2, .strafe = 80, .fired = FALSE },
-    { .trigger = ROW, .trigger_time = 2000, .type = JET_BOSS, .behavior = JET_SPECIAL, .aimed = FALSE, .px = 40, .py = 2, .strafe = 0, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 2000, .type = CORVETTE, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 60, .py = 5, .strafe = 80, .fired = FALSE },
     { .trigger = ROW, .trigger_time = 2000, .type = CORVETTE_BOMBER, .behavior = STRAFE_HORIZONTAL, .aimed = FALSE, .px = 40, .py = 5, .strafe = 80, .fired = FALSE },
     //End of 2nd boss wave

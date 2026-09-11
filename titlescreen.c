@@ -9,6 +9,7 @@
 #include "window.h"
 #include "hud.h"
 #include "level.h"
+#include "highscores.h"
 #define NUM_CHAR_OPTIONS (sizeof(char_options) / sizeof(char_options[0]))
 #define NUM_LEVEL_OPTIONS (sizeof(Level_options) / sizeof(Level_options[0]))
 #define NUM_MUSIC_OPTIONS (sizeof(Song_options) / sizeof(Song_options[0]))
@@ -109,7 +110,7 @@ const char *char_options[] = {
     "Fighter Jet",
     "Flying Fortress",
     "Experimental Fighter",
-    "Debug Player"
+  
 };
 
 void Draw_Char_Select(Player *player){
@@ -164,8 +165,9 @@ void Draw_Char_Select(Player *player){
         case 2: //Experimental fighter
         *player = experimental_fighter;
         break;
-        case 3: //Debug
-        break;
+        //Debug player commented out
+       // case 3: 
+       // break;
         default:
         break;
     }
@@ -319,3 +321,48 @@ for (int i = 0; i < NUM_MUSIC_OPTIONS; i++) {
     }
     }
 }
+
+//Function to print congratulations upon completing the game
+const char *congrats_art[] = {
+    "  ____                            _         _       _   _                 _ ",
+    " / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___| |",
+    "| |   / _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |",
+    "| |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|",
+    " \\____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)",
+    "                  |___/                                                     "
+};
+#define CONGRATS_ROWS (sizeof(congrats_art) / sizeof(congrats_art[0]))
+//Win= window where you want it to be printed, area_w and area_h are the width and height of that window respectively
+void Draw_End_Screen(WINDOW *win, int area_w, int area_h)
+{
+    char choice = 'a';
+    while(choice != '\n'){
+        erase();
+   
+int art_h = CONGRATS_ROWS;
+    int art_w = (int)strlen(congrats_art[0]);
+
+    int start_y = (offset_y + area_h - art_h) / 2;
+    int start_x = (offset_x + area_w - art_w) / 2;
+
+    wattron(win, COLOR_PAIR(10));
+    for (int i = 0; i < art_h; i++) {
+        mvwaddstr(win, start_y + i, start_x, congrats_art[i]);
+    }
+    wattroff(win, COLOR_PAIR(10));
+
+    const char *line1 = "You have beaten SpacePilot! Thanks for playing.";
+    const char *line2 = "Press Enter to continue.";
+
+    mvwaddstr(win, start_y + art_h + 1, (area_w - (int)strlen(line1)) / 2, line1);
+    mvwaddstr(win, start_y + art_h + 3, (area_w - (int)strlen(line2)) / 2, line2);
+
+    wnoutrefresh(win);
+    doupdate();
+    nodelay(stdscr, FALSE);
+    choice = getch();
+    }
+    if(choice = '\n') nodelay(stdscr, TRUE);
+    
+}
+

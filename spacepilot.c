@@ -33,6 +33,16 @@ void setplayermovement(struct Player *player){
 player->dx = player->vx;
 player->dy = player->vy;
 }
+//Function to check whether the game has been beaten, and to present the end screen if it has
+#define FINAL_LEVEL 3
+void Check_Game_Completion(){
+if(Level_Complete == TRUE && Current_Level->next_level == NULL){
+    Draw_End_Screen(stdscr, (offset_x + PLAYFIELD_W/2), (offset_y + PLAYFIELD_H/2));
+    Write_high_scores(&player);
+    ma_sound_stop(&loaded_sounds[Level_3]);
+    game_over = 1;
+}
+}
 //Function to reset all values to their defaults
 void reset_all(int max_x, int max_y) {
     player = player_backup;
@@ -98,6 +108,7 @@ int gameloop(Player *player, int max_x, int max_y, GameMode game_mode){
         default:
         break;
     }
+    Check_Game_Completion();
     New_Weapons(player);
     Check_Boss_Fight();
     handle_mute_toggle();
